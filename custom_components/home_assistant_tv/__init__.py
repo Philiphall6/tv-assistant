@@ -39,9 +39,9 @@ async def async_setup_entry(hass, entry):
         hass.data[DOMAIN + "_registered"] = True
     await panel_custom.async_register_panel(hass, PANEL, "home-assistant-tv-panel",
         sidebar_title="TV Assistant", sidebar_icon="mdi:television-dashboard",
-        module_url="/home_assistant_tv/panel.js?v=0.7.0", require_admin=True)
+        module_url="/home_assistant_tv/panel.js?v=0.7.1", require_admin=True)
     await panel_custom.async_register_panel(hass, CARDS_PANEL, "home-assistant-tv-cards",
-        module_url="/home_assistant_tv/cards.js?v=0.7.0", require_admin=False)
+        module_url="/home_assistant_tv/cards.js?v=0.7.1", require_admin=False)
     return True
 
 

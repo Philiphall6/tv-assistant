@@ -1,5 +1,14 @@
 # Versions
 
+## Intégration 0.7.1 / Android 2.13.1
+
+- Nouvelle identité d’installation : télévision blanche avec branche connectée sur fond bleu, accompagnée du nom « TV Assistant ».
+- Icône du package Android, bannière Android TV et visuels HA/HACS en SVG et PNG, avec variantes haute résolution.
+- Logo de la barre, interface du launcher et interface de l’éditeur HA inchangés ; aucun réglage utilisateur modifié.
+- Tests de cohérence des visuels et de rendu Android. Même identifiant d’application et même clé de signature pour les mises à jour.
+
+La publication n’installe rien sur les TV existantes et ne redémarre pas Home Assistant. L’admission au catalogue HACS reste soumise à la validation de ses mainteneurs.
+
 ## Intégration 0.7.0 / Android 2.13.0
 
 - Langue automatique dans le launcher et l’éditeur HA : français, anglais et repli anglais pour les langues non traduites.

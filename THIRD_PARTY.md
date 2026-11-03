@@ -15,4 +15,8 @@ Le code original du projet est sous GPL-3.0-only. Les dépendances conservent le
 
 Le logomark Home Assistant affiché pour la connexion et la barre est issu de [OpenHomeFoundation/brand-assets](https://github.com/OpenHomeFoundation/brand-assets). Il appartient à l’Open Home Foundation et reste soumis à ses [directives de marque](https://brands.openhomefoundation.org/). Aucun droit de marque n’est accordé par la GPL ; ce projet n’est ni officiel ni approuvé par la fondation. Le nom Google TV et les icônes des applications installées appartiennent à leurs détenteurs.
 
-Le fond « Salon zen » inclus est une illustration d’ambiance, pas une photographie de l’installation d’un utilisateur. Le symbole TV du répertoire `brand/` de l’intégration est un dessin vectoriel original fourni sous la licence du projet.
+Le fond « Salon zen » inclus est une illustration d’ambiance, pas une photographie de l’installation d’un utilisateur.
+
+L’identité d’installation TV Assistant représente une télévision blanche et une branche connectée, inspirée du motif de connexion Home Assistant. Ses fichiers vectoriels et PNG sont dans `custom_components/home_assistant_tv/brand/` ; les variantes Android sont `installation_icon.xml` et `tv_banner.xml`. Cette identité ne remplace pas le logomark utilisé à l’intérieur du launcher et n’implique aucune affiliation officielle.
+
+Le texte « TV Assistant » utilise les contours de Noto Sans Regular, police du [projet Noto](https://github.com/notofonts/latin-greek-cyrillic) sous SIL Open Font License 1.1. Les visuels contiennent uniquement les contours du texte ; aucun fichier de police Noto n’est distribué dans l’APK.

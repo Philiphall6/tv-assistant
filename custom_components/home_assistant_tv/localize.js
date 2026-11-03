@@ -1,4 +1,4 @@
-import {EN} from "./ui-catalog.js?v=0.7.0";
+import {EN} from "./ui-catalog.js?v=0.7.1";
 
 // User data is explicitly marked at the rendering boundary, never translated.
 export const raw = value => Object.freeze({literal: String(value ?? "")});

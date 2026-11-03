@@ -1,6 +1,6 @@
 /* Persistent, authenticated HA card surface. No polling or periodic page reload. */
-import {languageOf, translate} from "/home_assistant_tv/localize.js?v=0.7.0";
-const VERSION = "0.7.0";
+import {languageOf, translate} from "/home_assistant_tv/localize.js?v=0.7.1";
+const VERSION = "0.7.1";
 const loadedResources = new Map();
 let helpersPromise;
 

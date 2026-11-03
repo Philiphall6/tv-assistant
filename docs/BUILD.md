@@ -33,10 +33,23 @@ export TVA_SIGNING_KEYSTORE=/chemin/prive/signing.p12
 export TVA_SIGNING_ALIAS=release
 export TVA_STORE_PASSWORD_FILE=/chemin/prive/password
 export TVA_KEY_PASSWORD_FILE=/chemin/prive/password
-./scripts/sign-apk.sh release/TVAssistant-2.13.0-release-unsigned.apk release/TVAssistant-2.13.0.apk
+./scripts/sign-apk.sh release/TVAssistant-2.13.1-release-unsigned.apk release/TVAssistant-2.13.1.apk
 ```
 
 Ces fichiers doivent avoir le mode `600` ou `400`, hors de ce dépôt. Le script refuse d’écraser un résultat signé existant. Vérifiez l’empreinte SHA-256 du certificat avec une précédente version avant publication. Ne confondez pas l’empreinte du fichier APK et celle du certificat.
+
+## Visuels d’installation
+
+Les icônes et bannières sont incluses dans le dépôt : la compilation habituelle ne nécessite ni police externe ni générateur d’images. Pour les régénérer, utilisez Noto Sans Regular et un environnement Python séparé :
+
+```sh
+python3 -m venv /chemin/vers/venv-brand
+/chemin/vers/venv-brand/bin/pip install fonttools==4.68.0 cairosvg==2.9.1
+/chemin/vers/venv-brand/bin/python scripts/generate-brand.py --font /chemin/vers/NotoSans-Regular.ttf
+python3 tests/test_brand_assets.py
+```
+
+Ce générateur modifie uniquement les ressources d’installation Android et les visuels HA/HACS. Le logo et l’interface à l’intérieur du launcher restent distincts. Le texte est converti en contours pour un rendu indépendant des polices installées.
 
 ## Validation isolée
 

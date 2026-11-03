@@ -16,7 +16,7 @@ public final class PanelInstrumentation extends Instrumentation {
         CardStore.prefs(getTargetContext()).edit().putBoolean("setup_seen",true).apply();
         try{int id=getTargetContext().getResources().getIdentifier("launcher_profile_schema","raw",getTargetContext().getPackageName());
             try(InputStream in=getTargetContext().getResources().openRawResource(id)){PanelStore.schema=new JSONObject(new String(SharedPhotoAlbum.bounded(in,1024*1024),StandardCharsets.UTF_8));}
-            LocalizationTest.run(this);PanelRuntimeTest.run(null);checkLogo();AppIconRendererTest.main(new String[0]);CardConfigTest.main(new String[0]);HaWebAuthTest.run(this);HaLiveClientTest.run(this);WallpaperColorTest.run(this);AppActionsTest.run(this);HomeExperienceTest.run();SecurityTest.run(this);HeatPumpStateTest.main(new String[0]);EntitySearchTest.main(new String[0]);PhotoAlbumTest.run(this);result.putString("stream","PASS: "+PanelRuntimeTest.checks+" native validation/layout/logo checks, "+LocalizationTest.checks+" language checks, "+AppIconRendererTest.checks+" icon checks, "+CardConfigTest.checks+" card checks and "+HaWebAuthTest.checks+" WebView auth checks and "+HaLiveClientTest.checks+" live-protocol checks and "+WallpaperColorTest.checks+" wallpaper checks and "+AppActionsTest.checks+" app-menu checks and "+HomeExperienceTest.checks+" home/voice checks and "+SecurityTest.checks+" credential/HTTPS security checks and "+PhotoAlbumTest.checks+" album checks\n");finish(-1,result);
+            LocalizationTest.run(this);PanelRuntimeTest.run(null);checkLogo();checkInstallationBrand();AppIconRendererTest.main(new String[0]);CardConfigTest.main(new String[0]);HaWebAuthTest.run(this);HaLiveClientTest.run(this);WallpaperColorTest.run(this);AppActionsTest.run(this);HomeExperienceTest.run();SecurityTest.run(this);HeatPumpStateTest.main(new String[0]);EntitySearchTest.main(new String[0]);PhotoAlbumTest.run(this);result.putString("stream","PASS: "+PanelRuntimeTest.checks+" native validation/layout/logo checks, "+LocalizationTest.checks+" language checks, "+AppIconRendererTest.checks+" icon checks, "+CardConfigTest.checks+" card checks and "+HaWebAuthTest.checks+" WebView auth checks and "+HaLiveClientTest.checks+" live-protocol checks and "+WallpaperColorTest.checks+" wallpaper checks and "+AppActionsTest.checks+" app-menu checks and "+HomeExperienceTest.checks+" home/voice checks and "+SecurityTest.checks+" credential/HTTPS security checks and "+PhotoAlbumTest.checks+" album checks\n");finish(-1,result);
         }catch(Throwable e){result.putString("stream","FAIL: "+android.util.Log.getStackTraceString(e));finish(1,result);}
     }
 
@@ -37,6 +37,39 @@ public final class PanelInstrumentation extends Instrumentation {
                 check(bitmap.getPixel(0, 0) == 0, "No square container");
             }
         } finally { bitmap.recycle(); }
+    }
+    private void checkInstallationBrand() {
+        android.content.Context context = getTargetContext();
+        android.content.pm.ApplicationInfo info = context.getApplicationInfo();
+        int launcherIcon = context.getResources().getIdentifier("app_icon", "drawable", context.getPackageName());
+        int installationIcon = context.getResources().getIdentifier("installation_icon", "drawable", context.getPackageName());
+        check(info.icon == installationIcon && info.icon != launcherIcon, "Installation and launcher marks are separate");
+        Bitmap icon = render(info.loadIcon(context.getPackageManager()), 256, 256);
+        Bitmap banner = render(info.loadBanner(context.getPackageManager()), 1200, 675);
+        try {
+            check(icon.getPixel(0, 0) == 0, "Icon rounded corner is transparent");
+            check(icon.getPixel(128, 20) == 0xff18bcf2, "Icon cyan background");
+            check(icon.getPixel(60, 90) == 0xffffffff, "Icon white TV screen");
+            for (int[] point : new int[][]{{128,83},{99,124},{157,107},{128,160}})
+                check(icon.getPixel(point[0], point[1]) == 0xff18bcf2, "Icon connected branch inside TV");
+            check(icon.getPixel(72, 191) == 0xffffffff, "Icon TV left foot");
+            check(icon.getPixel(184, 191) == 0xffffffff, "Icon TV right foot");
+            check(banner.getPixel(100, 100) == 0xff18bcf2, "Banner cyan background");
+            check(banner.getPixel(260, 300) == 0xffffffff, "Banner white TV screen");
+            for (int[] point : new int[][]{{320,296},{294,333},{346,318}})
+                check(banner.getPixel(point[0], point[1]) == 0xff18bcf2, "Banner connected branch");
+            int whitePixels = 0;
+            for (int y = 285; y < 365; y++) for (int x = 438; x < 1030; x++)
+                if (banner.getPixel(x, y) == 0xffffffff) whitePixels++;
+            check(whitePixels > 5000, "Outlined TV Assistant wordmark renders without external font");
+        } finally { icon.recycle(); banner.recycle(); }
+    }
+    private Bitmap render(android.graphics.drawable.Drawable drawable, int width, int height) {
+        check(drawable != null, "Packaged brand drawable exists");
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        drawable.setBounds(0, 0, width, height);
+        drawable.draw(new Canvas(bitmap));
+        return bitmap;
     }
     private void check(boolean valid, String message) {
         PanelRuntimeTest.checks++;

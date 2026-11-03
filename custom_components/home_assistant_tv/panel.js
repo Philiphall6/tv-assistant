@@ -1,5 +1,5 @@
 /* TV Assistant — local admin editor. No CDN, analytics, eval or HA service calls. */
-import {raw as userText, isRaw, languageOf, translate} from "/home_assistant_tv/localize.js?v=0.7.0";
+import {raw as userText, isRaw, languageOf, translate} from "/home_assistant_tv/localize.js?v=0.7.1";
 const clone = value => JSON.parse(JSON.stringify(value));
 function node(tag, attrs = {}, ...children) {
   const e = document.createElement(tag);
@@ -93,7 +93,7 @@ class HomeAssistantTVPanel extends HTMLElement {
   renderContent(){
     if(!this.shadowRoot)return;
     const s=this.node("main",{class:"shell"});
-    s.append(this.node("header",{class:"top"},this.node("div",{class:"brand"},this.node("button",{class:"btn",title:"Ouvrir le menu Home Assistant",onclick:()=>this.dispatchEvent(new CustomEvent("hass-toggle-menu",{bubbles:true,composed:true}))},"☰"),this.node("div",{class:"mark"},"▣"),this.node("div",{},this.node("h1",{},"TV Assistant"),this.node("div",{class:"muted"},this.t("Éditeur TV")+" · 0.7.0"))),this.node("span",{id:"draft",class:"badge"},this.dirty||this.yamlDirty?"Brouillon non envoyé":`Version ${this.revision}`)));
+    s.append(this.node("header",{class:"top"},this.node("div",{class:"brand"},this.node("button",{class:"btn",title:"Ouvrir le menu Home Assistant",onclick:()=>this.dispatchEvent(new CustomEvent("hass-toggle-menu",{bubbles:true,composed:true}))},"☰"),this.node("div",{class:"mark"},"▣"),this.node("div",{},this.node("h1",{},"TV Assistant"),this.node("div",{class:"muted"},this.t("Éditeur TV")+" · 0.7.1"))),this.node("span",{id:"draft",class:"badge"},this.dirty||this.yamlDirty?"Brouillon non envoyé":`Version ${this.revision}`)));
     const select=this.node("select",{"aria-label":"Profil",onchange:e=>this.run(async()=>{if(this.discard()){await this.load(e.target.value);this.message="";}})});
     const profiles=[...this.meta.profiles];if(!profiles.some(p=>p.id===this.profile))profiles.push({id:this.profile,title:this.profileTitle+" (nouveau)"});
     for(const p of profiles)select.append(this.node("option",{value:p.id},userText(p.title)));select.value=this.profile;

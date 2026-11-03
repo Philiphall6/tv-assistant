@@ -1,0 +1,11 @@
+<!-- Generated packaging asset. The in-launcher app_icon.xml remains separate. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="256" android:viewportHeight="256">
+    <path android:pathData="M46 0H210Q256 0 256 46V210Q256 256 210 256H46Q0 256 0 210V46Q0 0 46 0Z" android:fillColor="#18BCF2"/>
+    <path android:pathData="M62 58.7H194Q216 58.7 216 80.7V152.2Q216 174.2 194 174.2H62Q40 174.2 40 152.2V80.7Q40 58.7 62 58.7Z" android:fillColor="#FFFFFF"/>
+    <path android:pathData="M68.6 183H90.6L84 197.3H59.8Q54.3 197.3 57.6 190.7L68.6 183Z" android:fillColor="#FFFFFF"/>
+    <path android:pathData="M165.4 183H187.4L198.4 190.7Q201.7 197.3 196.2 197.3H172L165.4 183Z" android:fillColor="#FFFFFF"/>
+    <path android:pathData="M128 82.9V161M128 152.2 99.4 123.6M128 135.7 156.6 107.1" android:fillColor="#00000000" android:strokeColor="#18BCF2" android:strokeWidth="7.7" android:strokeLineCap="round" android:strokeLineJoin="round"/>
+    <path android:pathData="M136.8 82.9C136.8 87.7601 132.8601 91.7 128 91.7C123.1399 91.7 119.2 87.7601 119.2 82.9C119.2 78.0399 123.1399 74.1 128 74.1C132.8601 74.1 136.8 78.0399 136.8 82.9Z" android:fillColor="#18BCF2"/>
+    <path android:pathData="M108.2 123.6C108.2 128.4601 104.2601 132.4 99.4 132.4C94.5399 132.4 90.6 128.4601 90.6 123.6C90.6 118.7399 94.5399 114.8 99.4 114.8C104.2601 114.8 108.2 118.7399 108.2 123.6Z" android:fillColor="#18BCF2"/>
+    <path android:pathData="M165.4 107.1C165.4 111.9601 161.4601 115.9 156.6 115.9C151.7399 115.9 147.8 111.9601 147.8 107.1C147.8 102.2399 151.7399 98.3 156.6 98.3C161.4601 98.3 165.4 102.2399 165.4 107.1Z" android:fillColor="#18BCF2"/>
+</vector>

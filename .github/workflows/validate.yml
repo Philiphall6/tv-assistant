@@ -43,6 +43,7 @@ jobs:
       - run: python scripts/generate-localization.py --check
       - run: python tests/test_localization_catalog.py
       - run: python tests/test_docs.py
+      - run: python tests/test_brand_assets.py
       - run: sha256sum -c libs/SHA256SUMS
       - run: pip install PyYAML playwright
       - run: python tests/test_ha_panel.py
