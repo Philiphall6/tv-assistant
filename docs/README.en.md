@@ -2,6 +2,9 @@
 
 [Français](../README.md) · [Releases and signed APK](https://github.com/Philiphall6/tv-assistant/releases) · [Security](../SECURITY.md)
 
+[![HACS Default](https://img.shields.io/badge/HACS-Default-blue)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration)
+[![Latest release](https://img.shields.io/github/v/release/Philiphall6/tv-assistant?color=blue)](https://github.com/Philiphall6/tv-assistant/releases/latest)
+
 TV Assistant combines a customizable Android TV launcher with a multi-TV editor inside Home Assistant. It is an independent community project, not an official Home Assistant or Google product.
 
 [![Install TV Assistant with HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration)

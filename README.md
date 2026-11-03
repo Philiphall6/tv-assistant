@@ -2,6 +2,9 @@
 
 [English](docs/README.en.md) · [Installation](docs/INSTALLATION.md) · [Télécharger l’APK](https://github.com/Philiphall6/tv-assistant/releases) · [Sécurité](SECURITY.md)
 
+[![HACS Default](https://img.shields.io/badge/HACS-Default-blue)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration)
+[![Dernière version](https://img.shields.io/github/v/release/Philiphall6/tv-assistant?color=blue)](https://github.com/Philiphall6/tv-assistant/releases/latest)
+
 [![Validation](https://github.com/Philiphall6/tv-assistant/actions/workflows/validate.yml/badge.svg)](https://github.com/Philiphall6/tv-assistant/actions/workflows/validate.yml)
 [![Android](https://github.com/Philiphall6/tv-assistant/actions/workflows/android.yml/badge.svg)](https://github.com/Philiphall6/tv-assistant/actions/workflows/android.yml)
 
