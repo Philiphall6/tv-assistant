@@ -46,7 +46,7 @@ public class SettingsActivity extends Activity {
             e.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             e.setSaveEnabled(false);e.setLongClickable(false);
             if(android.os.Build.VERSION.SDK_INT>=26)e.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
-            e.setHint(TokenStore.get(this).isEmpty()?"Jeton du compte TV non administrateur":"Jeton protégé enregistré · vide = conserver");
+            e.setHint(TokenStore.get(this).isEmpty()?I18n.t("Jeton du compte TV non administrateur"):I18n.t("Jeton protégé enregistré · vide = conserver"));
         }
         box.addView(e); return e;
     }
@@ -60,29 +60,29 @@ public class SettingsActivity extends Activity {
     private void buildUi() {
         ScrollView scroll = new ScrollView(this); scroll.setBackgroundColor(Color.rgb(7,9,13));
         LinearLayout box = new LinearLayout(this); box.setOrientation(LinearLayout.VERTICAL); box.setPadding(dp(76),dp(42),dp(76),dp(50)); scroll.addView(box);
-        TextView kicker=text("PARAMÈTRES DU LAUNCHER",13,Color.rgb(243,183,95)); kicker.setLetterSpacing(.12f); box.addView(kicker);
+        TextView kicker=text(I18n.t("PARAMÈTRES DU LAUNCHER"),13,Color.rgb(243,183,95)); kicker.setLetterSpacing(.12f); box.addView(kicker);
         TextView title=text("TV Assistant",36,Color.WHITE); title.setPadding(0,dp(7),0,dp(5)); box.addView(title);
         box.addView(text("Configuration locale de Home Assistant et du comportement de l’écran d’accueil.",16,Color.rgb(160,164,172)));
-        Button homeRow=button("Configurer la rangée Votre maison");homeRow.setBackgroundColor(Color.rgb(3,169,244));homeRow.setTextColor(Color.BLACK);homeRow.setOnClickListener(v->{if(!save())return;startActivity(new Intent(this,HomeRowSettingsActivity.class));});box.addView(homeRow);
-        Button entities=button("Choisir les appareils et fonctions affichés");entities.setOnClickListener(v -> { if(!save())return; startActivity(new Intent(this,EntityManagerActivity.class)); });box.addView(entities);
-        Button panel=button("Édition depuis Home Assistant · plusieurs TV");panel.setOnClickListener(v->{if(!save())return;startActivity(new Intent(this,PanelSettingsActivity.class));});box.addView(panel);
-        Button cards=button("Cartes personnalisées et dashboard natif");cards.setOnClickListener(v->{if(!save())return;startActivity(new Intent(this,CardManagerActivity.class));});box.addView(cards);
+        Button homeRow=button(I18n.t("Configurer la rangée Votre maison"));homeRow.setBackgroundColor(Color.rgb(3,169,244));homeRow.setTextColor(Color.BLACK);homeRow.setOnClickListener(v->{if(!save())return;startActivity(new Intent(this,HomeRowSettingsActivity.class));});box.addView(homeRow);
+        Button entities=button(I18n.t("Choisir les appareils et fonctions affichés"));entities.setOnClickListener(v -> { if(!save())return; startActivity(new Intent(this,EntityManagerActivity.class)); });box.addView(entities);
+        Button panel=button(I18n.t("Édition depuis Home Assistant · plusieurs TV"));panel.setOnClickListener(v->{if(!save())return;startActivity(new Intent(this,PanelSettingsActivity.class));});box.addView(panel);
+        Button cards=button(I18n.t("Cartes personnalisées et dashboard natif"));cards.setOnClickListener(v->{if(!save())return;startActivity(new Intent(this,CardManagerActivity.class));});box.addView(cards);
         Button webCards=button("Connexion web HA · vraies cartes et tableaux de bord");webCards.setOnClickListener(v->{if(!save())return;startActivity(new Intent(this,HaDashboardActivity.class).putExtra("dashboard_path","/home-assistant-tv-cards/"+PanelStore.identity(this)));});box.addView(webCards);
-        url=field(box,"Adresse HTTPS Home Assistant","ha_url","https://homeassistant.example",false);
-        token=field(box,"Jeton d’accès longue durée","ha_token","",true);
-        sceneMovie=field(box,"Scène soirée cinéma","scene_movie","scene.soiree_cinema",false);
-        sceneOff=field(box,"Scène tout éteindre","scene_off","scene.tout_eteindre",false);
-        light=field(box,"Lumières du salon","light_entity","light.salon",false);
-        box.addView(text("HTTPS et certificat valide obligatoires. Le jeton est chiffré avec Android Keystore et exclu des sauvegardes. Utilisez un compte TV non administrateur.",14,Color.LTGRAY));
-        Button forget=button("Effacer le jeton et la session web de cette TV");forget.setOnClickListener(v->new android.app.AlertDialog.Builder(this).setTitle("Effacer la connexion locale ?").setMessage("Les réglages restent conservés. Le jeton n’est pas révoqué dans HA ; il faudra le ressaisir pour reconnecter cette TV.").setNegativeButton("Annuler",null).setPositiveButton("Effacer",(d,w)->{
-            if(TokenStore.clear(this)){token.setText("");token.setHint("Jeton du compte TV non administrateur");android.webkit.CookieManager.getInstance().removeAllCookies(null);android.webkit.WebStorage.getInstance().deleteAllData();Toast.makeText(this,"Connexion locale effacée",Toast.LENGTH_SHORT).show();}
+        url=field(box,I18n.t("Adresse HTTPS Home Assistant"),"ha_url","https://homeassistant.example",false);
+        token=field(box,I18n.t("Jeton d’accès longue durée"),"ha_token","",true);
+        sceneMovie=field(box,I18n.t("Scène soirée cinéma"),"scene_movie","scene.soiree_cinema",false);
+        sceneOff=field(box,I18n.t("Scène tout éteindre"),"scene_off","scene.tout_eteindre",false);
+        light=field(box,I18n.t("Lumières du salon"),"light_entity","light.salon",false);
+        box.addView(text(I18n.t("HTTPS et certificat valide obligatoires. Le jeton est chiffré avec Android Keystore et exclu des sauvegardes. Utilisez un compte TV non administrateur."),14,Color.LTGRAY));
+        Button forget=button(I18n.t("Effacer le jeton et la session web de cette TV"));forget.setOnClickListener(v->new android.app.AlertDialog.Builder(this).setTitle(I18n.t("Effacer la connexion locale ?")).setMessage(I18n.t("Les réglages restent conservés. Le jeton n’est pas révoqué dans HA ; il faudra le ressaisir pour reconnecter cette TV.")).setNegativeButton(I18n.t("Annuler"),null).setPositiveButton(I18n.t("Effacer"),(d,w)->{
+            if(TokenStore.clear(this)){token.setText("");token.setHint(I18n.t("Jeton du compte TV non administrateur"));android.webkit.CookieManager.getInstance().removeAllCookies(null);android.webkit.WebStorage.getInstance().deleteAllData();Toast.makeText(this,I18n.t("Connexion locale effacée"),Toast.LENGTH_SHORT).show();}
         }).show());box.addView(forget);
 
-        Button save=button("Enregistrer les paramètres"); save.setBackgroundColor(Color.rgb(225,168,78)); save.setTextColor(Color.BLACK); save.setOnClickListener(v -> save()); box.addView(save);
-        Button test=button("Tester la connexion Home Assistant"); test.setOnClickListener(v -> { if(!save())return; test.setText("Connexion en cours…"); HaClient.test(this,(ok,msg)->runOnUiThread(()->{test.setText("Tester la connexion Home Assistant"); Toast.makeText(this,ok?"Home Assistant connecté":"Échec : "+msg,Toast.LENGTH_LONG).show();})); }); box.addView(test);
-        Button choose=button("Définir TV Assistant comme launcher par défaut"); choose.setOnClickListener(v -> requestHomeRole()); box.addView(choose);
-        Button system=button("Ouvrir les paramètres Android TV"); system.setOnClickListener(v -> { try{startActivity(new Intent(Settings.ACTION_SETTINGS));}catch(Exception e){Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();} }); box.addView(system);
-        Button back=button("Retour à l’accueil"); back.setOnClickListener(v -> finish()); box.addView(back);
+        Button save=button(I18n.t("Enregistrer les paramètres")); save.setBackgroundColor(Color.rgb(225,168,78)); save.setTextColor(Color.BLACK); save.setOnClickListener(v -> save()); box.addView(save);
+        Button test=button(I18n.t("Tester la connexion Home Assistant")); test.setOnClickListener(v -> { if(!save())return; test.setText(I18n.t("Connexion en cours…")); HaClient.test(this,(ok,msg)->runOnUiThread(()->{test.setText(I18n.t("Tester la connexion Home Assistant")); Toast.makeText(this,ok?I18n.t("Home Assistant connecté"):I18n.t("Échec : ")+msg,Toast.LENGTH_LONG).show();})); }); box.addView(test);
+        Button choose=button(I18n.t("Définir TV Assistant comme launcher par défaut")); choose.setOnClickListener(v -> requestHomeRole()); box.addView(choose);
+        Button system=button(I18n.t("Ouvrir les paramètres Android TV")); system.setOnClickListener(v -> { try{startActivity(new Intent(Settings.ACTION_SETTINGS));}catch(Exception e){Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();} }); box.addView(system);
+        Button back=button(I18n.t("Retour à l’accueil")); back.setOnClickListener(v -> finish()); box.addView(back);
         TvFocus.prepare(scroll);setContentView(scroll); homeRow.requestFocus();
     }
 
@@ -93,9 +93,9 @@ public class SettingsActivity extends Activity {
                 if(TokenStore.get(this).isEmpty()||!base.equals(ServerAddress.normalize(prefs.getString("ha_url",""))))throw new IllegalArgumentException("Renseignez le jeton pour cette adresse HTTPS.");
             }else TokenStore.save(prefs,base,value);
             prefs.edit().putString("ha_url",base).putString("scene_movie",sceneMovie.getText().toString().trim()).putString("scene_off",sceneOff.getText().toString().trim()).putString("light_entity",light.getText().toString().trim()).apply();
-            token.setText("");token.setHint("Jeton protégé enregistré · vide = conserver");
-            Toast.makeText(this,"Paramètres enregistrés",Toast.LENGTH_SHORT).show();return true;
-        }catch(Exception e){Toast.makeText(this,e instanceof IllegalArgumentException?e.getMessage():"Enregistrement sécurisé impossible. Aucun nouveau jeton n’a été accepté.",Toast.LENGTH_LONG).show();return false;}
+            token.setText("");token.setHint(I18n.t("Jeton protégé enregistré · vide = conserver"));
+            Toast.makeText(this,I18n.t("Paramètres enregistrés"),Toast.LENGTH_SHORT).show();return true;
+        }catch(Exception e){Toast.makeText(this,e instanceof IllegalArgumentException?e.getMessage():I18n.t("Enregistrement sécurisé impossible. Aucun nouveau jeton n’a été accepté."),Toast.LENGTH_LONG).show();return false;}
     }
 
     private void requestHomeRole() {

@@ -52,7 +52,7 @@ final class TokenStore {
         String origin=ServerAddress.normalize(address),sealed=seal(key(true),token.trim(),origin);
         if(!prefs.edit().putString("ha_url",origin).putString(ENCRYPTED,sealed).putString(ORIGIN,origin).remove("ha_token")
                 .remove("ha_authenticated_token_fingerprint").remove("ha_authenticated_user").remove("ha_authenticated_user_id").remove("ha_authenticated_admin").commit())
-            throw new IllegalStateException("Enregistrement sécurisé impossible. Réessayez.");
+            throw new IllegalStateException(I18n.t("Enregistrement sécurisé impossible. Réessayez."));
     }
     static synchronized boolean clear(Context context){
         return CardStore.prefs(context).edit().remove(ENCRYPTED).remove(ORIGIN).remove("ha_token").remove("ha_authenticated_token_fingerprint")

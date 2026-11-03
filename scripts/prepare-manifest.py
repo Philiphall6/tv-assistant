@@ -13,6 +13,9 @@ if mode == "audit":
     root.set("package", package + ".audit")
     app = root.find("application")
     app.set(ns + "label", "TV Assistant — isolated tests")
+    application_name = app.get(ns + "name", "")
+    if application_name.startswith("."):
+        app.set(ns + "name", package + application_name)
     for activity in app.findall("activity"):
         name = activity.get(ns + "name")
         if name.startswith("."):

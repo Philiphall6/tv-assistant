@@ -42,7 +42,7 @@ final class HaClient {
         SharedPreferences p = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String base = p.getString("ha_url", "").trim().replaceAll("/+$", "");
         String token = TokenStore.get(context).trim();
-        if (base.isEmpty() || token.isEmpty()) { cb.done(false, null, "Home Assistant n’est pas configuré"); return; }
+        if (base.isEmpty() || token.isEmpty()) { cb.done(false, null, I18n.t("Home Assistant n’est pas configuré")); return; }
         new Thread(() -> {
             HttpURLConnection c = null;
             try {
@@ -53,7 +53,7 @@ final class HaClient {
                 int code = c.getResponseCode(); InputStream stream = code >= 200 && code < 300 ? c.getInputStream() : c.getErrorStream();
                 String response="";
                 if (stream != null) try (InputStream in=stream) { response=new String(SharedPhotoAlbum.bounded(in,16*1024*1024),StandardCharsets.UTF_8); }
-                if (code >= 200 && code < 300) cb.done(true, new JSONArray(response), "Connecté"); else cb.done(false, null, "Erreur HTTP " + code);
+                if (code >= 200 && code < 300) cb.done(true, new JSONArray(response), I18n.t("Connecté")); else cb.done(false, null, I18n.t("Erreur HTTP ") + code);
             } catch (Exception e) { cb.done(false, null, e.getClass().getSimpleName() + " : " + e.getMessage()); }
             finally { if (c != null) c.disconnect(); }
         }).start();
@@ -63,7 +63,7 @@ final class HaClient {
         SharedPreferences p = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String base = p.getString("ha_url", "").trim().replaceAll("/+$", "");
         String token = TokenStore.get(context).trim();
-        if (base.isEmpty() || token.isEmpty()) { cb.done(false, "Home Assistant n’est pas configuré"); return; }
+        if (base.isEmpty() || token.isEmpty()) { cb.done(false, I18n.t("Home Assistant n’est pas configuré")); return; }
         new Thread(() -> {
             HttpURLConnection c = null;
             try {
@@ -79,7 +79,7 @@ final class HaClient {
                 int code = c.getResponseCode();
                 InputStream stream = code >= 200 && code < 300 ? c.getInputStream() : c.getErrorStream();
                 if (stream != null) try (InputStream in=stream) { SharedPhotoAlbum.bounded(in,1024*1024); }
-                cb.done(code >= 200 && code < 300, code >= 200 && code < 300 ? "Connecté" : "Erreur HTTP " + code);
+                cb.done(code >= 200 && code < 300, code >= 200 && code < 300 ? I18n.t("Connecté") : I18n.t("Erreur HTTP ") + code);
             } catch (Exception e) { cb.done(false, e.getClass().getSimpleName() + " : " + e.getMessage()); }
             finally { if (c != null) c.disconnect(); }
         }).start();

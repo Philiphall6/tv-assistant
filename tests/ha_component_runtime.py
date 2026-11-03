@@ -73,7 +73,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             self.assertTrue(panel.call_args_list[0].kwargs["require_admin"])
             self.assertFalse(panel.call_args_list[1].kwargs["require_admin"])
             self.assertNotIn("sidebar_title",panel.call_args_list[1].kwargs)
-            self.assertEqual(len(self.hass.http.async_register_static_paths.call_args.args[0]),2)
+            self.assertEqual(len(self.hass.http.async_register_static_paths.call_args.args[0]),4)
             self.assertTrue(await component.async_unload_entry(self.hass,None))
             self.assertTrue(await component.async_setup_entry(self.hass,None))
             self.assertEqual(len(commands),12)

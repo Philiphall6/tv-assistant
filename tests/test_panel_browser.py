@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import os
 from playwright.sync_api import sync_playwright
+from browser_assets import serve_localization
 
 root=Path(__file__).resolve().parents[1]
 schema=json.loads((root/"custom_components/home_assistant_tv/schema.json").read_text())
@@ -11,7 +12,7 @@ with sync_playwright() as p:
     browser=p.chromium.launch(executable_path=os.environ.get("CHROME_BIN"),headless=True,args=["--no-sandbox"])
     page=browser.new_page(viewport={"width":1440,"height":1050})
     errors=[];page.on("pageerror",lambda e:errors.append(str(e)))
-    page.route("https://ha-test.invalid/**",lambda route:route.fulfill(body="<!doctype html><html lang='fr'><body></body></html>",content_type="text/html"))
+    page.route("https://ha-test.invalid/**",lambda route:serve_localization(route) or route.fulfill(body="<!doctype html><html lang='fr'><body></body></html>",content_type="text/html"))
     page.goto("https://ha-test.invalid/")
     page.add_script_tag(content=script,type="module")
     page.wait_for_function("() => !!customElements.get('home-assistant-tv-panel')")

@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "TV Assistant",
+        "description": "Add a panel to edit native launcher profiles. Existing dashboards are not modified. Each TV must be linked voluntarily."
+      }
+    },
+    "abort": {
+      "already_configured": "The panel is already installed."
+    }
+  }
+}

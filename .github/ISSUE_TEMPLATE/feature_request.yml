@@ -1,0 +1,10 @@
+name: Feature request / Proposer une fonction
+description: Explain the use case and the desired behavior.
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Use case and proposal / Besoin et proposition
+      description: Do not include personal configuration or credentials.
+    validations:
+      required: true

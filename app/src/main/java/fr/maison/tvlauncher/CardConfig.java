@@ -54,17 +54,17 @@ final class CardConfig {
         } else items=Collections.singletonList(root);
         // Practical storage guard, not a fixed number of slots in the dashboard.
         List<Map<String,Object>> result=new ArrayList<>(); Set<String> ids=new HashSet<>();
-        for(Object item:items){Map<String,Object> card=validate(map(item,"Carte"));String id=str(card,"id","");if(!id.isEmpty()&&!ids.add(id))throw new IllegalArgumentException("Identifiant de carte en double : "+id);result.add(card);}
+        for(Object item:items){Map<String,Object> card=validate(map(item,I18n.t("Carte")));String id=str(card,"id","");if(!id.isEmpty()&&!ids.add(id))throw new IllegalArgumentException("Identifiant de carte en double : "+id);result.add(card);}
         return result;
     }
     static Map<String,Object> validate(Map<String,Object> c) {
-        keys(c,"Carte","id","type","name","entity","icon","content","color","enabled","show_state","tap_action","hold_action","actions","frequency_entity","defrost_entity","pump_entity","heating_allowed_entity","animate","placement","interactive","package","show_icon","background","background_opacity","title_size","body_size","lovelace","source_yaml","ha_sizing");
+        keys(c,I18n.t("Carte"),"id","type","name","entity","icon","content","color","enabled","show_state","tap_action","hold_action","actions","frequency_entity","defrost_entity","pump_entity","heating_allowed_entity","animate","placement","interactive","package","show_icon","background","background_opacity","title_size","body_size","lovelace","source_yaml","ha_sizing");
         String type=str(c,"type","button");
         if(!Arrays.asList("button","entity","text",HeatPumpState.TYPE,"app","ha_card").contains(type))throw new IllegalArgumentException("Type non natif : "+type+". Utilisez ha_card pour les vraies cartes Home Assistant.");
         if(type.equals("ha_card")){
             if(c.containsKey("ha_sizing")&&(!(c.get("ha_sizing") instanceof String)||!Arrays.asList("yaml","zone").contains(c.get("ha_sizing"))))throw new IllegalArgumentException("Dimensionnement HA : yaml ou zone attendu");
             if(!str(c,"id","").matches("[A-Za-z0-9_-]{1,80}"))throw new IllegalArgumentException("Carte HA : identifiant requis");
-            Map<String,Object> config=map(c.get("lovelace"),"Carte HA");
+            Map<String,Object> config=map(c.get("lovelace"),I18n.t("Carte HA"));
             String kind=str(config,"type","");if(kind.isEmpty()||kind.length()>200)throw new IllegalArgumentException("Carte HA : type Lovelace requis");
             if(c.containsKey("tap_action")||c.containsKey("hold_action")||c.containsKey("actions"))throw new IllegalArgumentException("Les actions HA se règlent dans lovelace");
             if(c.containsKey("source_yaml")&&!config.equals(load(str(c,"source_yaml",""))))throw new IllegalArgumentException("Le YAML source et la carte HA ne correspondent pas");
@@ -81,11 +81,11 @@ final class CardConfig {
         String color=str(c,"color","");if(!color.isEmpty()&&!color.matches("#[0-9a-fA-F]{6}"))throw new IllegalArgumentException("Couleur attendue : '#RRGGBB'");
         if(!type.equals("ha_card")&&str(c,"name","").isEmpty()&&entity.isEmpty()&&str(c,"content","").isEmpty())throw new IllegalArgumentException("Ajoutez un titre, une entité ou un texte");
         for(String k:Arrays.asList("tap_action","hold_action"))if(c.containsKey(k))validateAction(map(c.get(k),k),entity);
-        if(c.containsKey("actions")) {if(!(c.get("actions") instanceof List))throw new IllegalArgumentException("actions doit être une liste");for(Object a:(List<?>)c.get("actions"))validateAction(map(a,"Action"),entity);}
+        if(c.containsKey("actions")) {if(!(c.get("actions") instanceof List))throw new IllegalArgumentException("actions doit être une liste");for(Object a:(List<?>)c.get("actions"))validateAction(map(a,I18n.t("Action")),entity);}
         return c;
     }
     static void validateAction(Map<String,Object> a,String entity) {
-        keys(a,"Action","action","name","perform_action","service","data","target","confirmation","navigation_path","url_path","package");
+        keys(a,I18n.t("Action"),"action","name","perform_action","service","data","target","confirmation","navigation_path","url_path","package");
         String action=str(a,"action","none");
         if(!Arrays.asList("none","more-info","toggle","perform-action","call-service","navigate","url","launch-app").contains(action))throw new IllegalArgumentException("Action non prise en charge : "+action);
         if(a.containsKey("confirmation")&&!(a.get("confirmation") instanceof Boolean))throw new IllegalArgumentException("confirmation doit valoir true ou false");

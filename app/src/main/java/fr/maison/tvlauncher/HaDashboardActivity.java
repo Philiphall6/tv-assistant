@@ -15,12 +15,12 @@ public class HaDashboardActivity extends Activity {
     WebView web;Pointer pointer;FrameLayout surface;String origin;TextView status;int speed;boolean destroyed,loadFailed;
     @Override public void onCreate(Bundle b){super.onCreate(b);
         SharedPreferences prefs=CardStore.prefs(this);String address;
-        String requested=getIntent().getStringExtra("dashboard_path");try{address=DashboardUrl.resolve(prefs.getString("ha_url",""),requested==null?prefs.getString("dashboard_web_path","/lovelace/0"):requested);}catch(Exception e){Toast.makeText(this,"Configurez l’adresse HA et le chemin du tableau de bord.",Toast.LENGTH_LONG).show();finish();return;}
+        String requested=getIntent().getStringExtra("dashboard_path");try{address=DashboardUrl.resolve(prefs.getString("ha_url",""),requested==null?prefs.getString("dashboard_web_path","/lovelace/0"):requested);}catch(Exception e){Toast.makeText(this,I18n.t("Configurez l’adresse HA et le chemin du tableau de bord."),Toast.LENGTH_LONG).show();finish();return;}
         origin=address;speed=prefs.getInt("dashboard_pointer_speed",24);getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         LinearLayout root=new LinearLayout(this);root.setOrientation(LinearLayout.VERTICAL);root.setBackgroundColor(0xff101820);
-        status=new TextView(this);status.setTextColor(Color.WHITE);status.setTextSize(13);status.setPadding(16,10,16,10);status.setText("Chargement HA… · Flèches : pointeur · OK : clic · CH ± : défiler · Menu : options · Retour : Maison");root.addView(status);
+        status=new TextView(this);status.setTextColor(Color.WHITE);status.setTextSize(13);status.setPadding(16,10,16,10);status.setText(I18n.t("Chargement HA… · Flèches : pointeur · OK : clic · CH ± : défiler · Menu : options · Retour : Maison"));root.addView(status);
         surface=new FrameLayout(this);root.addView(surface,new LinearLayout.LayoutParams(-1,0,1));setContentView(root);
-        try{web=new WebView(this);}catch(Exception e){status.setText("Android System WebView est indisponible. Mettez-le à jour depuis le Play Store. Retour : Maison");return;}
+        try{web=new WebView(this);}catch(Exception e){status.setText(I18n.t("Android System WebView est indisponible. Mettez-le à jour depuis le Play Store. Retour : Maison"));return;}
         WebSettings settings=web.getSettings();settings.setJavaScriptEnabled(true);settings.setDomStorageEnabled(true);settings.setAllowFileAccess(false);settings.setAllowContentAccess(false);settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);settings.setSupportMultipleWindows(false);settings.setMediaPlaybackRequiresUserGesture(true);settings.setTextZoom(prefs.getInt("dashboard_web_text_zoom",100));settings.setUseWideViewPort(true);settings.setLoadWithOverviewMode(true);
         CookieManager.getInstance().setAcceptThirdPartyCookies(web,false);
         web.setWebViewClient(new WebViewClient(){
@@ -28,9 +28,9 @@ public class HaDashboardActivity extends Activity {
             @Override public boolean shouldOverrideUrlLoading(WebView view,String url){return blocked(url);}
             boolean blocked(String url){if(DashboardUrl.sameOrigin(origin,url))return false;Toast.makeText(HaDashboardActivity.this,"Seuls les liens de votre serveur HA sont ouverts dans cette vue.",Toast.LENGTH_SHORT).show();return true;}
             @Override public void onPageStarted(WebView view,String url,Bitmap icon){loadFailed=false;}
-            @Override public void onPageFinished(WebView view,String url){if(loadFailed)return;status.setText("HA · Connexion web habituelle si demandée · Flèches : pointeur · OK : clic · CH ± : défiler · Menu : options · Retour : Maison");CookieManager.getInstance().flush();}
-            @Override public void onReceivedError(WebView view,WebResourceRequest request,WebResourceError error){if(request.isForMainFrame()){loadFailed=true;status.setText("HA inaccessible. Vérifiez le réseau et l’adresse. Menu : réessayer · Retour : Maison");}}
-            @Override public void onReceivedSslError(WebView view,SslErrorHandler handler,android.net.http.SslError error){handler.cancel();loadFailed=true;status.setText("Certificat HA non valide pour cette adresse. Utilisez son nom HTTPS valide. Retour : Maison");}
+            @Override public void onPageFinished(WebView view,String url){if(loadFailed)return;status.setText(I18n.t("HA · Connexion web habituelle si demandée · Flèches : pointeur · OK : clic · CH ± : défiler · Menu : options · Retour : Maison"));CookieManager.getInstance().flush();}
+            @Override public void onReceivedError(WebView view,WebResourceRequest request,WebResourceError error){if(request.isForMainFrame()){loadFailed=true;status.setText(I18n.t("HA inaccessible. Vérifiez le réseau et l’adresse. Menu : réessayer · Retour : Maison"));}}
+            @Override public void onReceivedSslError(WebView view,SslErrorHandler handler,android.net.http.SslError error){handler.cancel();loadFailed=true;status.setText(I18n.t("Certificat HA non valide pour cette adresse. Utilisez son nom HTTPS valide. Retour : Maison"));}
         });
         surface.addView(web,new FrameLayout.LayoutParams(-1,-1));pointer=new Pointer();surface.addView(pointer,new FrameLayout.LayoutParams(-1,-1));pointer.setClickable(false);pointer.setFocusable(false);
         web.loadUrl(address);web.requestFocus();
@@ -49,7 +49,7 @@ public class HaDashboardActivity extends Activity {
     void event(long down,long when,int action,float x,float y){if(destroyed||web==null)return;MotionEvent event=MotionEvent.obtain(down,when,action,x,y,0);event.setSource(InputDevice.SOURCE_TOUCHSCREEN);web.dispatchTouchEvent(event);event.recycle();}
     void tap(){long now=SystemClock.uptimeMillis();event(now,now,MotionEvent.ACTION_DOWN,pointer.x,pointer.y);event(now,now+60,MotionEvent.ACTION_UP,pointer.x,pointer.y);}
     void swipe(int direction){float x=pointer.x,y=web.getHeight()*(direction>0?.75f:.25f),distance=web.getHeight()*.5f*direction;long down=SystemClock.uptimeMillis();event(down,down,MotionEvent.ACTION_DOWN,x,y);for(int i=1;i<=10;i++){final int step=i;web.postDelayed(()->event(down,SystemClock.uptimeMillis(),step==10?MotionEvent.ACTION_UP:MotionEvent.ACTION_MOVE,x,y-distance*step/10),i*25);}}
-    void menu(){String[] options={"Retour aux cartes Maison","Page précédente","Recharger le tableau de bord"};AlertDialog dialog=new AlertDialog.Builder(this).setTitle("Tableau de bord HA").setItems(options,(v,i)->{if(i==0)finish();else if(web!=null){if(i==1&&web.canGoBack())web.goBack();else if(i==2)web.reload();}}).setNegativeButton("Fermer",null).create();dialog.setOnShowListener(v->TvFocus.dialog(dialog));dialog.show();}
+    void menu(){String[] options={I18n.t("Retour aux cartes Maison"),I18n.t("Page précédente"),I18n.t("Recharger le tableau de bord")};AlertDialog dialog=new AlertDialog.Builder(this).setTitle(I18n.t("Tableau de bord HA")).setItems(options,(v,i)->{if(i==0)finish();else if(web!=null){if(i==1&&web.canGoBack())web.goBack();else if(i==2)web.reload();}}).setNegativeButton("Fermer",null).create();dialog.setOnShowListener(v->TvFocus.dialog(dialog));dialog.show();}
     @Override protected void onResume(){super.onResume();if(web!=null)web.onResume();}
     @Override protected void onPause(){if(web!=null)web.onPause();super.onPause();}
     @Override protected void onDestroy(){destroyed=true;if(web!=null){web.stopLoading();surface.removeView(web);web.destroy();web=null;}super.onDestroy();}

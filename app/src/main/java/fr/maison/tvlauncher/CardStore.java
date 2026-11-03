@@ -29,7 +29,7 @@ final class CardStore {
             int status=conn.getResponseCode();if(status!=200)throw new IllegalArgumentException("Lecture impossible (HTTP "+status+"). La dernière configuration reste disponible.");
             ByteArrayOutputStream bytes=new ByteArrayOutputStream();try(InputStream in=conn.getInputStream()){byte[] buf=new byte[4096];int n;while((n=in.read(buf))!=-1){if(bytes.size()+n>CardConfig.MAX_LENGTH)throw new IllegalArgumentException("Fichier trop volumineux (256 Ko maximum)");bytes.write(buf,0,n);}}
             String raw=bytes.toString(StandardCharsets.UTF_8.name());List<Map<String,Object>> cards=CardConfig.parse(raw);
-            callback.done(true,cards.size()+" carte(s) validée(s)",raw);
+            callback.done(true,cards.size()+I18n.t(" carte(s) validée(s)"),raw);
         }catch(Exception e){callback.done(false,e instanceof IllegalArgumentException?e.getMessage():"Serveur inaccessible. La dernière configuration est conservée.",null);}finally{if(conn!=null)conn.disconnect();}},"HA-card-config").start();
     }
 }

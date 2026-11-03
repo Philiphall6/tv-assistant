@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "TV Assistant",
+        "description": "Ajoute un panneau pour éditer les profils du launcher natif. Aucun dashboard existant n’est modifié. L’activation sur chaque TV reste volontaire."
+      }
+    },
+    "abort": {
+      "already_configured": "Le panneau est déjà installé."
+    }
+  }
+}

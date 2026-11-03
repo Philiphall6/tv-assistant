@@ -1,5 +1,6 @@
 /* Persistent, authenticated HA card surface. No polling or periodic page reload. */
-const VERSION = "0.6.0";
+import {languageOf, translate} from "/home_assistant_tv/localize.js?v=0.7.0";
+const VERSION = "0.7.0";
 const loadedResources = new Map();
 let helpersPromise;
 
@@ -200,7 +201,7 @@ class HomeAssistantTvCards extends HTMLElement {
     for (const record of this.nodes.values()) record.sizing.clear();
     this.stage.replaceChildren(); this.nodes.clear();
     const notice = document.createElement("div"); notice.className = "notice error";
-    notice.textContent = this.status.error; this.stage.append(notice);
+    notice.textContent = translate(this.status.error, languageOf(this._hass)); this.stage.append(notice);
   }
   async renderCards() {
     if (!this._hass || !this.cards || !this.isConnected || !this.received) return;

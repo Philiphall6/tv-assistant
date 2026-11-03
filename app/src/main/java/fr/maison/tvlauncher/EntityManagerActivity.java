@@ -99,10 +99,10 @@ public class EntityManagerActivity extends Activity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);root.setPadding(dp(64), dp(30), dp(64), dp(28));
         root.setBackgroundColor(0xff1f242d);
-        root.addView(text("APPAREILS ET FONCTIONS", 12, TvFocus.ACCENT));
-        TextView title = text("Choisir les cartes de l’accueil", 28, Color.WHITE);
+        root.addView(text(I18n.t("APPAREILS ET FONCTIONS"), 12, TvFocus.ACCENT));
+        TextView title = text(I18n.t("Choisir les cartes de l’accueil"), 28, Color.WHITE);
         title.setPadding(0, dp(4), 0, dp(4));root.addView(title);
-        root.addView(text("← Recherche   ·   → Retour / Enregistrer   ·   OK Cocher / décocher", 13, 0xffa6abb4));
+        root.addView(text(I18n.t("← Recherche   ·   → Retour / Enregistrer   ·   OK Cocher / décocher"), 13, 0xffa6abb4));
 
         LinearLayout searchRow = new LinearLayout(this);
         searchRow.setGravity(Gravity.CENTER_VERTICAL);
@@ -112,15 +112,15 @@ public class EntityManagerActivity extends Activity {
         search.setId(View.generateViewId());search.setSingleLine(true);search.setTextSize(16);
         search.setPadding(dp(18), 0, dp(18), 0);
         search.setTextColor(Color.WHITE);search.setHintTextColor(0xffa6abb4);
-        search.setHint("Rechercher un nom ou un identifiant…");
-        search.setContentDescription("Rechercher les cartes par nom ou identifiant d’entité");
+        search.setHint(I18n.t("Rechercher un nom ou un identifiant…"));
+        search.setContentDescription(I18n.t("Rechercher les cartes par nom ou identifiant d’entité"));
         search.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         searchRow.addView(search, new LinearLayout.LayoutParams(0, -1, 1));
-        clear = button("Effacer");
+        clear = button(I18n.t("Effacer"));
         LinearLayout.LayoutParams clearParams = new LinearLayout.LayoutParams(dp(120), -1);
         clearParams.leftMargin = dp(10);searchRow.addView(clear, clearParams);
         clear.setOnClickListener(view -> { search.setText("");search.requestFocus(); });
-        selections = button("Les sélections");
+        selections = button(I18n.t("Les sélections"));
         LinearLayout.LayoutParams selectionParams = new LinearLayout.LayoutParams(dp(200), -1);
         selectionParams.leftMargin = dp(10);searchRow.addView(selections, selectionParams);
         selections.setOnClickListener(view -> {
@@ -134,7 +134,7 @@ public class EntityManagerActivity extends Activity {
         LinearLayout.LayoutParams progressParams = new LinearLayout.LayoutParams(dp(28), dp(28));
         progressParams.gravity = Gravity.CENTER;progressParams.topMargin = dp(10);
         root.addView(progress, progressParams);
-        status = text("Chargement depuis Home Assistant…", 13, 0xffbec1c7);
+        status = text(I18n.t("Chargement depuis Home Assistant…"), 13, 0xffbec1c7);
         status.setPadding(0, dp(8), 0, dp(8));root.addView(status);
 
         list = new ListView(this);
@@ -163,7 +163,7 @@ public class EntityManagerActivity extends Activity {
 
         LinearLayout actions = new LinearLayout(this);
         actions.setGravity(Gravity.END);actions.setPadding(0, dp(10), 0, 0);
-        cancel = button("Retour");save = button("Enregistrer la sélection");
+        cancel = button(I18n.t("Retour"));save = button(I18n.t("Enregistrer la sélection"));
         save.setEnabled(false);
         actions.addView(cancel, new LinearLayout.LayoutParams(dp(180), dp(48)));
         LinearLayout.LayoutParams saveParams = new LinearLayout.LayoutParams(dp(280), dp(48));
@@ -228,20 +228,20 @@ public class EntityManagerActivity extends Activity {
     }
 
     private void updateSelectionButton() {
-        selections.setText(selectedOnly ? "Toutes les cartes" : "Les sélections (" + selected.size() + ")");
-        selections.setContentDescription(selectedOnly ? "Afficher toutes les cartes"
-                : "Afficher uniquement les " + selected.size() + " cartes sélectionnées");
+        selections.setText(selectedOnly ? I18n.t("Toutes les cartes") : I18n.t("Les sélections (") + selected.size() + ")");
+        selections.setContentDescription(selectedOnly ? I18n.t("Afficher toutes les cartes")
+                : I18n.t("Afficher uniquement les ") + selected.size() + I18n.t(" cartes sélectionnées"));
     }
 
     private void updateStatus() {
         updateSelectionButton();
         String results;
         if (selectedOnly) {
-            results = selected.isEmpty() ? "Aucune carte sélectionnée"
-                    : visibleRows.isEmpty() ? "Aucune sélection ne correspond à la recherche"
-                    : "Les sélections : " + visibleRows.size() + " carte(s) affichée(s)";
-        } else results = visibleRows.isEmpty() ? "Aucun résultat" : visibleRows.size() + " résultat(s) sur " + rows.size();
-        status.setText(results + "  ·  " + selected.size() + " carte(s) sélectionnée(s)");
+            results = selected.isEmpty() ? I18n.t("Aucune carte sélectionnée")
+                    : visibleRows.isEmpty() ? I18n.t("Aucune sélection ne correspond à la recherche")
+                    : I18n.t("Les sélections : ") + visibleRows.size() + I18n.t(" carte(s) affichée(s)");
+        } else results = visibleRows.isEmpty() ? I18n.t("Aucun résultat") : visibleRows.size() + I18n.t(" résultat(s) sur ") + rows.size();
+        status.setText(results + "  ·  " + selected.size() + I18n.t(" carte(s) sélectionnée(s)"));
     }
 
     private void saveSelection() {
@@ -253,14 +253,14 @@ public class EntityManagerActivity extends Activity {
         order.addAll(selected);
         prefs.edit().putStringSet("dashboard_entities", new HashSet<>(selected))
                 .putString("dashboard_entities_order", String.join("\n", order)).apply();
-        Toast.makeText(this, selected.size() + " carte(s) enregistrée(s)", Toast.LENGTH_SHORT).show();finish();
+        Toast.makeText(this, selected.size() + I18n.t(" carte(s) enregistrée(s)"), Toast.LENGTH_SHORT).show();finish();
     }
 
     private void load() {
         HaClient.getStates(this, (ok, data, message) -> runOnUiThread(() -> {
             if (isFinishing() || isDestroyed()) return;
             progress.setVisibility(View.GONE);
-            if (!ok) { status.setText("Impossible de charger : " + message);return; }
+            if (!ok) { status.setText(I18n.t("Impossible de charger : ") + message);return; }
             try {
                 rows.clear();
                 Set<String> available = new HashSet<>();
@@ -288,7 +288,7 @@ public class EntityManagerActivity extends Activity {
                     return domain != 0 ? domain : a.name.compareToIgnoreCase(b.name);
                 });
                 loaded = true;save.setEnabled(true);filter();
-            } catch (Exception exception) { status.setText("Erreur de lecture : " + exception.getMessage()); }
+            } catch (Exception exception) { status.setText(I18n.t("Erreur de lecture : ") + exception.getMessage()); }
         }));
     }
 }

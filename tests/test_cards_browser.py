@@ -2,6 +2,7 @@
 from pathlib import Path
 import os
 from playwright.sync_api import sync_playwright
+from browser_assets import serve_localization
 
 root=Path(__file__).resolve().parents[1]
 script=(root/"custom_components/home_assistant_tv/cards.js").read_text()
@@ -11,6 +12,8 @@ with sync_playwright() as p:
     errors=[];page.on("pageerror",lambda e:errors.append(str(e)))
     requests=[]
     def serve(route):
+        if serve_localization(route):
+            return
         if route.request.url.endswith("/installed.js"):
             requests.append(route.request.url)
             route.fulfill(content_type="application/javascript",body="""

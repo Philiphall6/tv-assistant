@@ -31,15 +31,17 @@ async def async_setup_entry(hass, entry):
     if not hass.data.get(DOMAIN + "_registered"):
         await hass.http.async_register_static_paths([
             StaticPathConfig("/home_assistant_tv/panel.js", str(Path(__file__).with_name("panel.js")), False),
-            StaticPathConfig("/home_assistant_tv/cards.js", str(Path(__file__).with_name("cards.js")), False)])
+            StaticPathConfig("/home_assistant_tv/cards.js", str(Path(__file__).with_name("cards.js")), False),
+            StaticPathConfig("/home_assistant_tv/localize.js", str(Path(__file__).with_name("localize.js")), False),
+            StaticPathConfig("/home_assistant_tv/ui-catalog.js", str(Path(__file__).with_name("ui-catalog.js")), False)])
         for command in (ws_list, ws_get, ws_validate, ws_save, ws_restore, ws_assign, ws_subscribe, ws_ack, ws_preview, ws_preview_result, ws_parse_card, ws_render_subscribe):
             websocket_api.async_register_command(hass, command)
         hass.data[DOMAIN + "_registered"] = True
     await panel_custom.async_register_panel(hass, PANEL, "home-assistant-tv-panel",
         sidebar_title="TV Assistant", sidebar_icon="mdi:television-dashboard",
-        module_url="/home_assistant_tv/panel.js?v=0.6.0", require_admin=True)
+        module_url="/home_assistant_tv/panel.js?v=0.7.0", require_admin=True)
     await panel_custom.async_register_panel(hass, CARDS_PANEL, "home-assistant-tv-cards",
-        module_url="/home_assistant_tv/cards.js?v=0.6.0", require_admin=False)
+        module_url="/home_assistant_tv/cards.js?v=0.7.0", require_admin=False)
     return True
 
 

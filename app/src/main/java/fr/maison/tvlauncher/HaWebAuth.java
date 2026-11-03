@@ -62,7 +62,7 @@ final class HaWebAuth {
         String token=TokenStore.get(prefs);
         if(!token.isEmpty()&&fingerprint(token).equals(prefs.getString("ha_authenticated_token_fingerprint",""))){
             if(prefs.getBoolean("ha_authenticated_admin",true)){
-                view.evaluateJavascript("window.externalAuthSetToken(false)",null);failure.fail("Utilisez le jeton du compte TV non administrateur");return;
+                view.evaluateJavascript("window.externalAuthSetToken(false)",null);failure.fail(I18n.t("Utilisez le jeton du compte TV non administrateur"));return;
             }
             try{JSONObject auth=new JSONObject().put("access_token",token).put("expires_in",1800);view.evaluateJavascript("window.externalAuthSetToken(true,"+auth+")",null);}catch(Exception ignored){}
         }else if(android.os.SystemClock.uptimeMillis()<deadline){view.postDelayed(()->answer(view,address,prefs,failure,deadline),250);}

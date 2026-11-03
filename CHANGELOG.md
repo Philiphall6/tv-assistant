@@ -1,5 +1,16 @@
 # Versions
 
+## Intégration 0.7.0 / Android 2.13.0
+
+- Langue automatique dans le launcher et l’éditeur HA : français, anglais et repli anglais pour les langues non traduites.
+- Ressources Android natives, suivi de la langue du compte HA, conservation des brouillons et des noms personnalisés lors du changement de langue.
+- Dates et nombres régionaux, format d’heure 12/24 heures et reconnaissance vocale `auto` suivant Android, sans modifier les choix explicites existants.
+- Documentation française et anglaise, captures autorisées avec métadonnées supprimées, guides de contribution et de traduction.
+- Workflows HACS et Hassfest sans contrôles ignorés, tests navigateur, documentation, traductions et matrice Android API 30/36.
+- Préparation de candidature au catalogue HACS par défaut, sans annoncer une admission.
+
+L’APK conserve le même identifiant et la même clé de signature de publication. Aucun redémarrage ou changement de votre installation HA n’est effectué par la publication du dépôt.
+
 ## Intégration 0.6.0 / Android 2.12.0
 
 Première publication du projet TV Assistant sous GPL-3.0-only, avec un historique neuf et des exemples génériques.

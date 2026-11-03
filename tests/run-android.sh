@@ -23,8 +23,8 @@ scripts/sign-apk.sh "$TVA_TEST_DIR/instrumentation-unsigned.apk" "$TVA_KEYS/test
 adb -s "$ANDROID_SERIAL" install -r "$TVA_KEYS/audit.apk"
 adb -s "$ANDROID_SERIAL" install -r "$TVA_KEYS/tests.apk"
 adb -s "$ANDROID_SERIAL" shell am instrument -w fr.maison.tvlauncher.tests/fr.maison.tvlauncher.PanelInstrumentation | tee build/instrumentation.log
-rg -q '^PASS: ' build/instrumentation.log
-! rg -q 'FAIL:|INSTRUMENTATION_FAILED|Process crashed' build/instrumentation.log
+grep -q '^PASS: ' build/instrumentation.log
+! grep -Eq 'FAIL:|INSTRUMENTATION_FAILED|Process crashed' build/instrumentation.log
 adb -s "$ANDROID_SERIAL" uninstall fr.maison.tvlauncher.tests
 adb -s "$ANDROID_SERIAL" uninstall fr.maison.tvlauncher.audit
 printf 'PASS: isolated instrumentation completed; temporary signing material: %s\n' "$TVA_KEYS"

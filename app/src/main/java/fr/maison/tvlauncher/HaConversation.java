@@ -19,14 +19,14 @@ final class HaConversation {
         if(!conversationId.isEmpty())body.put("conversation_id",conversationId);
         return body;
     }
-    static String answer(JSONObject response){JSONObject speech=response.optJSONObject("speech"),plain=speech==null?null:speech.optJSONObject("plain");return plain==null?"Réponse reçue de Home Assistant.":plain.optString("speech","Réponse reçue de Home Assistant.");}
+    static String answer(JSONObject response){JSONObject speech=response.optJSONObject("speech"),plain=speech==null?null:speech.optJSONObject("plain");return plain==null?I18n.t("Réponse reçue de Home Assistant."):plain.optString("speech",I18n.t("Réponse reçue de Home Assistant."));}
     static void process(Context context,String text,String conversationId,Callback callback){
         SharedPreferences prefs=CardStore.prefs(context);
         String base=prefs.getString("ha_url","").trim().replaceAll("/+$",""),token=TokenStore.get(context).trim();
         final String body;
-        try{body=payload(text,prefs.getString("voice_agent_id",""),prefs.getString("voice_language","fr"),conversationId).toString();}
+        try{body=payload(text,prefs.getString("voice_agent_id",""),I18n.voiceLanguage(prefs),conversationId).toString();}
         catch(Exception invalid){callback.done(false,invalid.getMessage(),"");return;}
-        if(base.isEmpty()||token.isEmpty()){callback.done(false,"Home Assistant n’est pas configuré","");return;}
+        if(base.isEmpty()||token.isEmpty()){callback.done(false,I18n.t("Home Assistant n’est pas configuré"),"");return;}
         new Thread(()->{
             HttpURLConnection connection=null;
             try{
@@ -38,7 +38,7 @@ final class HaConversation {
                 if(code<200||code>=300){callback.done(false,"Assist indisponible (HTTP "+code+"). Vérifiez l’agent et les droits du compte TV.","");return;}
                 JSONObject result;try(InputStream in=connection.getInputStream()){result=new JSONObject(new String(SharedPhotoAlbum.bounded(in,256*1024),StandardCharsets.UTF_8));}
                 JSONObject response=result.getJSONObject("response");callback.done(!"error".equals(response.optString("response_type")),answer(response),result.optString("conversation_id",""));
-            }catch(Exception failure){callback.done(false,"Réponse Assist non reçue. La demande a pu être exécutée : vérifiez avant de la renvoyer.","");}
+            }catch(Exception failure){callback.done(false,I18n.t("Réponse Assist non reçue. La demande a pu être exécutée : vérifiez avant de la renvoyer."),"");}
             finally{if(connection!=null)connection.disconnect();}
         },"HA-TV-Assist").start();
     }

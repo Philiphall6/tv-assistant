@@ -516,9 +516,9 @@
   },
   "voice_language": {
     "type": "string",
-    "default": "fr",
-    "max": 16,
-    "label": "Langue de reconnaissance (fr, en…)",
+    "default": "auto",
+    "max": 35,
+    "label": "Langue de reconnaissance (auto = langue Android)",
     "group": "Barre",
     "section": "Recherche vocale"
   },

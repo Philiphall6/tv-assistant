@@ -31,10 +31,10 @@ final class PanelStore {
     }
     static JSONObject validate(Context c,JSONObject config)throws Exception {
         if(config.toString().getBytes(StandardCharsets.UTF_8).length>CardConfig.MAX_LENGTH)throw new IllegalArgumentException("Profil trop volumineux (256 Ko)");
-        Map<String,Object> root=CardConfig.map(data(config,0),"Profil");CardConfig.checkData(root,0);
-        CardConfig.keys(root,"Profil","schema","settings","cards","navigation");
+        Map<String,Object> root=CardConfig.map(data(config,0),I18n.t("Profil"));CardConfig.checkData(root,0);
+        CardConfig.keys(root,I18n.t("Profil"),"schema","settings","cards","navigation");
         Object version=root.get("schema");if(!(version instanceof Integer)||((Integer)version)!=1)throw new IllegalArgumentException("Version de profil non prise en charge");
-        Map<String,Object> settings=CardConfig.map(root.getOrDefault("settings",new LinkedHashMap<>()),"Réglages");JSONObject rules=schema(c);
+        Map<String,Object> settings=CardConfig.map(root.getOrDefault("settings",new LinkedHashMap<>()),I18n.t("Réglages"));JSONObject rules=schema(c);
         for(Map.Entry<String,Object> entry:settings.entrySet()){
             String key=entry.getKey();Object v=entry.getValue();if(!rules.has(key))throw new IllegalArgumentException("Réglage non autorisé : "+key);
             JSONObject r=rules.getJSONObject(key);String type=r.getString("type");
@@ -74,7 +74,7 @@ final class PanelStore {
     }
     static void enable(Context c,String name,String profile)throws Exception {
         id(profile);if(name.trim().isEmpty()||name.length()>80)throw new IllegalArgumentException("Nom de TV attendu (80 caractères maximum)");
-        SharedPreferences p=CardStore.prefs(c);if(p.getString("ha_url","").isEmpty()||TokenStore.get(c).isEmpty())throw new IllegalArgumentException("Configurez d’abord la connexion Home Assistant");
+        SharedPreferences p=CardStore.prefs(c);if(p.getString("ha_url","").isEmpty()||TokenStore.get(c).isEmpty())throw new IllegalArgumentException(I18n.t("Configurez d’abord la connexion Home Assistant"));
         if(!p.getBoolean("ha_panel_enabled",false)){
             JSONObject backup=new JSONObject();for(Iterator<String> it=schema(c).keys();it.hasNext();){String k=it.next();backup.put(k,p.contains(k)?p.getAll().get(k):JSONObject.NULL);}
             p.edit().putString("ha_panel_backup",backup.toString()).apply();
@@ -85,7 +85,7 @@ final class PanelStore {
     static boolean apply(Context c,JSONObject snapshot)throws Exception {
         if(!enabled(c))return false;SharedPreferences p=CardStore.prefs(c);String profile=snapshot.getString("profile");id(profile);
         long revision=snapshot.getLong("revision");
-        if(revision<1||snapshot.isNull("config")){status(c,snapshot.optBoolean("approval_required")?"Autorisation requise · un administrateur doit affecter un profil à cette TV dans HA":"TV reliée · créez ou affectez un profil dans Home Assistant");return false;}
+        if(revision<1||snapshot.isNull("config")){status(c,snapshot.optBoolean("approval_required")?I18n.t("Autorisation requise · un administrateur doit affecter un profil à cette TV dans HA"):I18n.t("TV reliée · créez ou affectez un profil dans Home Assistant"));return false;}
         JSONObject config=validate(c,snapshot.getJSONObject("config"));
         if(config.toString().equals(p.getString("ha_panel_config",""))&&profile.equals(p.getString("ha_panel_applied_profile",""))&&revision==p.getLong("ha_panel_revision",0)){status(c,"Profil "+profile+" · version "+revision);return false;}
         JSONObject settings=config.getJSONObject("settings"),backup=new JSONObject(p.getString("ha_panel_backup","{}"));

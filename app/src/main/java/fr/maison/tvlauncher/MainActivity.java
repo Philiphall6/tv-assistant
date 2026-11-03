@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
         WallpaperSlideshow slideshow;
 
         LauncherView(MainActivity a){super(a);activity=a;setFocusable(true);setFocusableInTouchMode(true);hero=BitmapFactory.decodeResource(getResources(),R.drawable.living_room_hero);haMark=getResources().getDrawable(R.drawable.app_icon,a.getTheme());brandLogo=new BrandLogo(a);stroke.setStyle(Paint.Style.STROKE);prefs=a.getSharedPreferences(HaClient.PREFS,MODE_PRIVATE);if(!prefs.getBoolean("home_redesign_v2",false))prefs.edit().putBoolean("home_redesign_v2",true).putInt("wallpaper_mode",0).putInt("background_dim",8).apply();NativeCards.init(a);slideshow=new WallpaperSlideshow(this);}
-        void tick(){if(!active)return;time=new SimpleDateFormat("HH:mm",Locale.FRANCE).format(new Date());invalidate();postDelayed(clockTick,30000);}
+        void tick(){if(!active)return;time=android.text.format.DateFormat.getTimeFormat(activity).format(new Date());invalidate();postDelayed(clockTick,30000);}
         void pause(){active=false;if(slideshow!=null)slideshow.stop();removeCallbacks(clockTick);if(live!=null){live.stop();live=null;}pendingCardId=null;clearAppPress();dismissAppMenu();}
         void reload(){pause();active=true;prefs=activity.getSharedPreferences(HaClient.PREFS,MODE_PRIVATE);if(prefs.getInt("wallpaper_mode",0)==4)slideshow.start();loadCustomWallpaper();loadApps();customCards=CardStore.active(activity);loadEntities();haOnline=false;
             live=new HaLiveClient(activity,new HaLiveClient.Listener(){public void states(Map<String,JSONObject> next){states=next;loadEntities();}public void connection(boolean online){haOnline=online;invalidate();}public void configuration(JSONObject snapshot)throws Exception{applyPanel(snapshot);}public Bitmap preview(){return capturePreview();}});live.start();refreshRemote();tick();
@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
         }
         void loadFavoriteApps(){favoriteApps.clear();String saved=prefs.getString("favorite_apps_order","");if(!saved.isEmpty())for(String pkg:saved.split("\\n"))for(AppEntry a:apps)if(a.pkg.equals(pkg)){favoriteApps.add(a);break;}favoriteOffset=Math.min(favoriteOffset,Math.max(0,favoriteApps.size()));}
         boolean isFavorite(AppEntry a){for(AppEntry f:favoriteApps)if(f.pkg.equals(a.pkg))return true;return false;}
-        void toggleFavorite(AppEntry a){boolean added=AppFavorites.toggle(prefs,a.pkg);loadFavoriteApps();normalizeSelection();Toast.makeText(activity,a.label+(added?" ajoutée aux favoris":" retirée des favoris"),Toast.LENGTH_SHORT).show();invalidate();}
+        void toggleFavorite(AppEntry a){boolean added=AppFavorites.toggle(prefs,a.pkg);loadFavoriteApps();normalizeSelection();Toast.makeText(activity,a.label+(added?I18n.t(" ajoutée aux favoris"):I18n.t(" retirée des favoris")),Toast.LENGTH_SHORT).show();invalidate();}
         AppEntry selectedApp(){
             if(col<0)return null;
             if(appsPage&&row==0)return col<apps.size()?apps.get(col):null;
@@ -141,7 +141,7 @@ public class MainActivity extends Activity {
             if(prefs.contains("dashboard_entities_order")){for(String id:ordered.split("\\n"))if(!id.trim().isEmpty())configured.add(id.trim());}
             else{Set<String> saved=prefs.getStringSet("dashboard_entities",null);if(saved!=null)configured.addAll(saved);else{configured.add(prefs.getString("light_entity","light.salon"));configured.add(prefs.getString("scene_movie","scene.soiree_cinema"));configured.add(prefs.getString("scene_off","scene.tout_eteindre"));}}
             if(prefs.getBoolean("home_source_ha",false)){JSONObject group=states.get(prefs.getString("home_group_entity","group.tv_launcher").trim());JSONObject attrs=group==null?null:group.optJSONObject("attributes");JSONArray members=attrs==null?null:attrs.optJSONArray("entity_id");if(members!=null){configured.clear();for(int i=0;i<members.length();i++){String id=members.optString(i);if(!id.isEmpty())configured.add(id);}}}
-            if(prefs.getBoolean("dashboard_include_entities",true))for(String id:configured){EntityItem e=new EntityItem();e.id=id;e.name=prettyEntityName(id);e.haState=states.get(id);e.state=e.haState==null?"Indisponible":e.haState.optString("state");JSONObject attrs=e.haState==null?null:e.haState.optJSONObject("attributes");if(attrs!=null)e.name=attrs.optString("friendly_name",e.name);e.domain=id.contains(".")?id.substring(0,id.indexOf('.')):"homeassistant";homeEntities.add(e);}
+            if(prefs.getBoolean("dashboard_include_entities",true))for(String id:configured){EntityItem e=new EntityItem();e.id=id;e.name=prettyEntityName(id);e.haState=states.get(id);e.state=e.haState==null?I18n.t("Indisponible"):e.haState.optString("state");JSONObject attrs=e.haState==null?null:e.haState.optJSONObject("attributes");if(attrs!=null)e.name=attrs.optString("friendly_name",e.name);e.domain=id.contains(".")?id.substring(0,id.indexOf('.')):"homeassistant";homeEntities.add(e);}
             int index=0;for(Map<String,Object> card:customCards){int slot=index++;if(!CardConfig.bool(card,"enabled",true)||card.containsKey("placement"))continue;EntityItem e=new EntityItem();e.custom=card;e.id="card:"+CardConfig.str(card,"id",String.valueOf(slot));String entity=CardConfig.str(card,"entity","");e.haState=HeatPumpState.isCard(card)?HeatPumpCard.displayState(card,states):states.get(entity);e.domain="custom";e.name=NativeCards.title(card,e.haState);e.state=NativeCards.stateText(e.haState);homeEntities.add(e);}
             if(selected!=null)for(int i=0;i<homeEntities.size();i++)if(selected.equals(homeEntities.get(i).id)){col=i;break;}
             homeOffset=Math.min(homeOffset,Math.max(0,homeEntities.size()-1));normalizeSelection();invalidate();
@@ -160,11 +160,11 @@ public class MainActivity extends Activity {
         void sectionTitle(Canvas c,String title,float width){NativeCards.text(c,p,title,0,prefs.getInt("section_title_size",25),width,prefs.getInt("section_title_size",25),tint("section_color",Color.WHITE),true);}
         void drawBody(Canvas c,LauncherLayout l){
             if(appsPage||dashboardPage){c.save();c.translate(l.content.left,l.content.top-118);float w=l.content.width(),h=l.content.height()+118;if(appsPage)drawApplicationsPage(c,w*.045f,w,h);else drawDashboard(c,w*.045f,w,h);c.restore();return;}
-            LauncherLayout.Block b=block("greeting");beginBlock(c,b);if(prefs.getBoolean("show_greeting",true))NativeCards.text(c,p,greeting(),0,prefs.getInt("greeting_size",64),b.logicalWidth(),prefs.getInt("greeting_size",64),tint("greeting_color",Color.WHITE),true);if(prefs.getBoolean("show_subtitle",true))NativeCards.text(c,p,prefs.getString("hero_subtitle","Votre salon, simplement."),0,prefs.getInt("greeting_size",64)+20+prefs.getInt("subtitle_size",22),b.logicalWidth(),prefs.getInt("subtitle_size",22),tint("subtitle_color",0xffd7d9dc),false);c.restore();
+            LauncherLayout.Block b=block("greeting");beginBlock(c,b);if(prefs.getBoolean("show_greeting",true))NativeCards.text(c,p,greeting(),0,prefs.getInt("greeting_size",64),b.logicalWidth(),prefs.getInt("greeting_size",64),tint("greeting_color",Color.WHITE),true);if(prefs.getBoolean("show_subtitle",true))NativeCards.text(c,p,prefs.getString("hero_subtitle",I18n.t("Votre salon, simplement.")),0,prefs.getInt("greeting_size",64)+20+prefs.getInt("subtitle_size",22),b.logicalWidth(),prefs.getInt("subtitle_size",22),tint("subtitle_color",0xffd7d9dc),false);c.restore();
             if(prefs.getBoolean("show_quick",true)){b=block("quick");beginBlock(c,b);drawQuick(c,0,0,b.logicalWidth());c.restore();}
-            if(!resumeApps.isEmpty()&&prefs.getBoolean("show_continue",true)){b=block("continue");beginBlock(c,b);sectionTitle(c,"Reprendre la lecture",b.logicalWidth());drawContinue(c,0,rowStart(),b.logicalWidth());c.restore();}
-            if(prefs.getBoolean("show_favorites",true)){b=block("favorites");beginBlock(c,b);sectionTitle(c,"Vos applications",b.logicalWidth());drawFavorites(c,0,rowStart(),b.logicalWidth());c.restore();}
-            if(prefs.getBoolean("show_home",true)){b=block("home");beginBlock(c,b);sectionTitle(c,prefs.getString("home_row_title","Votre maison"),b.logicalWidth());drawHome(c,0,rowStart(),b.logicalWidth());c.restore();}
+            if(!resumeApps.isEmpty()&&prefs.getBoolean("show_continue",true)){b=block("continue");beginBlock(c,b);sectionTitle(c,I18n.t("Reprendre la lecture"),b.logicalWidth());drawContinue(c,0,rowStart(),b.logicalWidth());c.restore();}
+            if(prefs.getBoolean("show_favorites",true)){b=block("favorites");beginBlock(c,b);sectionTitle(c,I18n.t("Vos applications"),b.logicalWidth());drawFavorites(c,0,rowStart(),b.logicalWidth());c.restore();}
+            if(prefs.getBoolean("show_home",true)){b=block("home");beginBlock(c,b);sectionTitle(c,prefs.getString("home_row_title",I18n.t("Votre maison")),b.logicalWidth());drawHome(c,0,rowStart(),b.logicalWidth());c.restore();}
             drawPlaced(c,l);
         }
         final Runnable syncHaSurface=this::syncHaSurface;
@@ -198,8 +198,8 @@ public class MainActivity extends Activity {
         void drawHaPlaceholder(Canvas c,Map<String,Object> card,float x,float y,float w,float h,boolean selected){
             if(activity.haCards!=null&&activity.haCards.hasReadyCard())return;
             drawCard(c,x,y,w,h,selected,0xdd19232c);
-            NativeCards.text(c,p,CardConfig.str(card,"name","Carte Home Assistant"),x+16,y+30,w-32,20,Color.WHITE,true);
-            NativeCards.text(c,p,activity.haCards==null?"Chargement HA…":activity.haCards.message,x+16,y+57,w-32,15,0xffbccbd6,false);
+            NativeCards.text(c,p,CardConfig.str(card,"name",I18n.t("Carte Home Assistant")),x+16,y+30,w-32,20,Color.WHITE,true);
+            NativeCards.text(c,p,activity.haCards==null?I18n.t("Chargement HA…"):activity.haCards.message,x+16,y+57,w-32,15,0xffbccbd6,false);
         }
         int pendingPlacedIndex=-1;
         boolean placedVisible(Map<String,Object> card){return card.containsKey("placement")&&CardConfig.bool(card,"enabled",true);}
@@ -209,7 +209,7 @@ public class MainActivity extends Activity {
         boolean hasPlaced(){for(Map<String,Object> card:customCards)if(placedVisible(card))return true;return false;}
         void drawPlaced(Canvas c,LauncherLayout l){
             for(int i=0;i<customCards.size();i++){Map<String,Object> card=customCards.get(i);if(!placedVisible(card))continue;RectF b=l.placed(card);boolean selected=row==6&&col==i&&placedFocusable(card);c.save();c.clipRect(b);
-                if("app".equals(CardConfig.str(card,"type",""))){AppEntry a=placedApp(card);if(selected)drawCard(c,b.left+5,b.top+5,b.width()-10,b.height()-10,true,0);float radius=Math.min(b.width()*.38f,b.height()*.34f);if(a!=null)drawAppIcon(c,a,b.centerX(),b.top+radius+8,radius);NativeCards.text(c,p,a==null?"Application absente":CardConfig.str(card,"name",a.label),b.left+8,b.bottom-12,b.width()-16,prefs.getInt("app_label_size",15),tint("text_color",Color.WHITE),true);
+                if("app".equals(CardConfig.str(card,"type",""))){AppEntry a=placedApp(card);if(selected)drawCard(c,b.left+5,b.top+5,b.width()-10,b.height()-10,true,0);float radius=Math.min(b.width()*.38f,b.height()*.34f);if(a!=null)drawAppIcon(c,a,b.centerX(),b.top+radius+8,radius);NativeCards.text(c,p,a==null?I18n.t("Application absente"):CardConfig.str(card,"name",a.label),b.left+8,b.bottom-12,b.width()-16,prefs.getInt("app_label_size",15),tint("text_color",Color.WHITE),true);
                 }else if(HaCardSurface.isCard(card)){drawHaPlaceholder(c,card,b.left,b.top,b.width(),b.height(),selected);}else{float fit=Math.min(1,Math.min(b.width()/200f,b.height()/100f));c.translate(b.left,b.top);c.scale(fit,fit);JSONObject state=placedState(card);NativeCards.draw(c,p,card,state,0,0,b.width()/fit,b.height()/fit,selected,haOnline);animateCard(card,state,0,0,b.width(),b.height());}
                 c.restore();
             }
@@ -260,48 +260,48 @@ public class MainActivity extends Activity {
                 if(mode!=1)NativeCards.text(c,p,CardConfig.str(item,"label",""),x,t.centerY()+fs*.35f,t.right-x-strip.padding,fs,selected?TvFocus.INK:textColor,selected);c.restore();
             }
             if(nav.items.size()>strip.tabs.size()&&!strip.tabs.isEmpty())NativeCards.text(c,p,(navOffset>0?"‹ ":"")+(navOffset+1)+"–"+(navOffset+strip.tabs.size())+" / "+nav.items.size()+(navOffset+strip.tabs.size()<nav.items.size()?" ›":""),strip.area.left,strip.counterY,strip.area.width(),11*scale,color,false);
-            if(strip.showStatus){int statusColor=haOnline?0xff69d39e:0xffd09b4c;if(strip.fullStatus)NativeCards.text(c,p,haOnline?"● Maison connectée":"● Mode local",strip.status.left,textBaseline(strip.status,strip.statusSize),strip.status.width(),strip.statusSize,statusColor,false);else{p.setColor(statusColor);c.drawCircle(strip.status.centerX(),strip.status.centerY(),4*scale,p);}}
+            if(strip.showStatus){int statusColor=haOnline?0xff69d39e:0xffd09b4c;if(strip.fullStatus)NativeCards.text(c,p,haOnline?I18n.t("● Maison connectée"):I18n.t("● Mode local"),strip.status.left,textBaseline(strip.status,strip.statusSize),strip.status.width(),strip.statusSize,statusColor,false);else{p.setColor(statusColor);c.drawCircle(strip.status.centerX(),strip.status.centerY(),4*scale,p);}}
             if(strip.showClock)NativeCards.text(c,p,time,strip.clock.left,textBaseline(strip.clock,strip.clockSize),strip.clock.width(),strip.clockSize,color,true);
         }
         void drawWallpaper(Canvas c,float w,float h,int mode){if(WallpaperBackdrop.drawSolid(c,w,h,mode,prefs,p))return;if(mode==4&&slideshow.draw(c,w,h))return;Bitmap image=mode==3?customWallpaper:(mode==0||mode==4)?hero:null;if(image!=null){int fit=prefs.getInt("wallpaper_fit",0);if(fit==2){c.drawBitmap(image,null,new RectF(0,0,w,h),p);return;}float iw=image.getWidth(),ih=image.getHeight(),scale=fit==1?Math.min(w/iw,h/ih):Math.max(w/iw,h/ih);float dw=iw*scale,dh=ih*scale;if(fit==1){p.setColor(0xff080b0f);c.drawRect(0,0,w,h,p);float l=(w-dw)/2,t=(h-dh)/2;c.drawBitmap(image,null,new RectF(l,t,l+dw,t+dh),p);return;}float srcW=w/scale,srcH=h/scale,fx=prefs.getInt("wallpaper_focus_x",50)/100f,fy=prefs.getInt("wallpaper_focus_y",50)/100f,left=(iw-srcW)*fx,top=(ih-srcH)*fy;left=Math.max(0,Math.min(iw-srcW,left));top=Math.max(0,Math.min(ih-srcH,top));c.drawBitmap(image,new Rect((int)left,(int)top,(int)(left+srcW),(int)(top+srcH)),new RectF(0,0,w,h),p);return;}p.setShader(new LinearGradient(0,0,w,h,mode==1?new int[]{0xff203541,0xff101a21,0xff080d11}:new int[]{0xff090b0e,0xff090b0e},null,Shader.TileMode.CLAMP));c.drawRect(0,0,w,h,p);p.setShader(null);}
         float textBaseline(RectF bounds,float size){p.setTextSize(size);p.setTypeface(Typeface.DEFAULT);return bounds.centerY()-(p.ascent()+p.descent())/2;}
         String greeting(){return NativeCards.greeting(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));}
-        String formattedDate(){String s=new SimpleDateFormat("EEEE d MMMM",Locale.FRANCE).format(new Date());return s.substring(0,1).toUpperCase(Locale.FRANCE)+s.substring(1);}
+        String formattedDate(){String s=new SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(I18n.locale(),"EEEEdMMMM"),I18n.locale()).format(new Date());return s.substring(0,1).toUpperCase(I18n.locale())+s.substring(1);}
         void drawHeader(Canvas c,float pad,float w){
             if(haMark!=null){haMark.setBounds((int)pad,31,(int)pad+64,95);haMark.draw(c);}
             txt(c,"TV Assistant",pad+78,75,24,Color.WHITE,true);
-            String[] tabs={"Pour vous","Applications","Maison","⚙  Paramètres TV","⌂  Home Assistant"};float[] xs={pad+330,pad+465,pad+625,pad+760,pad+970};float[] widths={102,128,90,176,182};
+            String[] tabs={I18n.t("Pour vous"),I18n.t("Applications"),I18n.t("Maison"),I18n.t("⚙  Paramètres TV"),"⌂  Home Assistant"};float[] xs={pad+330,pad+465,pad+625,pad+760,pad+970};float[] widths={102,128,90,176,182};
             for(int i=0;i<tabs.length;i++){if(row==4&&col==i)rounded(c,xs[i]-15,35,xs[i]+widths[i]+6,94,29,0xfff1f2f4);txt(c,tabs[i],xs[i],73,19,row==4&&col==i?0xff17191d:(i==0?Color.WHITE:0xffc0c3c7),row==4&&col==i||i==0);}
-            if(prefs.getBoolean("show_status",true)){int dot=haOnline?0xff69d39e:0xffd09b4c;rounded(c,w-315,35,w-126,94,29,0xaa171c22);rounded(c,w-290,58,w-278,70,6,dot);txt(c,haOnline?"Maison connectée":"Mode local",w-265,74,14,0xffe0e2e4,false);}if(prefs.getBoolean("show_clock",true))txt(c,time,w-101,76,20,Color.WHITE,true);
+            if(prefs.getBoolean("show_status",true)){int dot=haOnline?0xff69d39e:0xffd09b4c;rounded(c,w-315,35,w-126,94,29,0xaa171c22);rounded(c,w-290,58,w-278,70,6,dot);txt(c,haOnline?I18n.t("Maison connectée"):I18n.t("Mode local"),w-265,74,14,0xffe0e2e4,false);}if(prefs.getBoolean("show_clock",true))txt(c,time,w-101,76,20,Color.WHITE,true);
         }
         void drawQuick(Canvas c,float x,float y,float w){
             c.save();float fit=Math.min(1,w/409f);c.scale(fit,fit);
             boolean first=row==2&&col==0,second=row==2&&col==1;
             drawCard(c,x,y,205,66,first,first?TvFocus.PAPER:0xee202832);
-            txt(c,"▶  Soirée cinéma",x+24,y+42,16,first?TvFocus.INK:Color.WHITE,true);
+            txt(c,I18n.t("▶  Soirée cinéma"),x+24,y+42,16,first?TvFocus.INK:Color.WHITE,true);
             drawCard(c,x+219,y,190,66,second,second?TvFocus.PAPER:0xee202832);
-            txt(c,"○  Tout éteindre",x+242,y+42,15,second?TvFocus.INK:Color.WHITE,true);
+            txt(c,I18n.t("○  Tout éteindre"),x+242,y+42,15,second?TvFocus.INK:Color.WHITE,true);
             c.restore();
         }
-        void drawHouseSummary(Canvas c,float l,float t,float r,float b){glass(c,l,t,r,b,9);txt(c,"MAISON",l+28,t+43,14,0xffffc75d,true);txt(c,haOnline?"Connectée":"Hors connexion",l+28,t+78,21,Color.WHITE,true);int count=Math.min(3,homeEntities.size());for(int i=0;i<count;i++){EntityItem e=homeEntities.get(i);float y=t+116+i*76;rounded(c,l+24,y-25,l+63,y+14,10,domainColor(e.domain)&0x77ffffff|0x22000000);txt(c,domainIcon(e.domain),l+37,y+2,17,domainColor(e.domain),true);txt(c,shorten(e.name,29),l+78,y-4,16,Color.WHITE,true);txt(c,friendlyState(e),l+78,y+19,13,0xffaeb5bc,false);if(i<count-1){p.setColor(0x334f5b64);c.drawRect(l+24,y+38,r-24,y+39,p);}}if(count==0)txt(c,"Ajoutez des appareils depuis Home Assistant",l+28,t+135,15,0xffaeb5bc,false);}
+        void drawHouseSummary(Canvas c,float l,float t,float r,float b){glass(c,l,t,r,b,9);txt(c,"MAISON",l+28,t+43,14,0xffffc75d,true);txt(c,haOnline?I18n.t("Connectée"):I18n.t("Hors connexion"),l+28,t+78,21,Color.WHITE,true);int count=Math.min(3,homeEntities.size());for(int i=0;i<count;i++){EntityItem e=homeEntities.get(i);float y=t+116+i*76;rounded(c,l+24,y-25,l+63,y+14,10,domainColor(e.domain)&0x77ffffff|0x22000000);txt(c,domainIcon(e.domain),l+37,y+2,17,domainColor(e.domain),true);txt(c,shorten(e.name,29),l+78,y-4,16,Color.WHITE,true);txt(c,friendlyState(e),l+78,y+19,13,0xffaeb5bc,false);if(i<count-1){p.setColor(0x334f5b64);c.drawRect(l+24,y+38,r-24,y+39,p);}}if(count==0)txt(c,I18n.t("Ajoutez des appareils depuis Home Assistant"),l+28,t+135,15,0xffaeb5bc,false);}
         void drawContinue(Canvas c,float pad,float y,float w){
             float gap=14,cw=(w-pad*2-gap*3)/4f,ch=106;
             for(int i=0;i<resumeApps.size();i++){
                 AppEntry a=resumeApps.get(i);float x=pad+i*(cw+gap);drawCard(c,x,y,cw,ch,row==3&&col==i,0xee171a20);
                 drawAppIcon(c,a,x+52,y+51,36);
-                txt(c,shorten(a.label,22),x+105,y+41,16,Color.WHITE,true);txt(c,"Reprendre",x+105,y+63,12,0xffa8abb2,false);
+                txt(c,shorten(a.label,22),x+105,y+41,16,Color.WHITE,true);txt(c,I18n.t("Reprendre"),x+105,y+63,12,0xffa8abb2,false);
                 rounded(c,x+105,y+76,x+cw-18,y+81,3,0xff3a3d44);float progress=(.28f+i*.16f);rounded(c,x+105,y+76,x+105+(cw-123)*progress,y+81,3,0xfff3b75f);
             }
         }
         int appGridColumns(){return Math.max(3,Math.min(12,prefs.getInt("app_grid_columns",10)));}
         int appGridRows(){return Math.max(2,Math.min(6,prefs.getInt("app_grid_rows",5)));}
         void drawApplicationsPage(Canvas c,float pad,float w,float h){
-            p.setShader(null);p.setColor(0xf20b1015);c.drawRect(0,118,w,h,p);txt(c,"Vos applications",pad,184,38,Color.WHITE,true);txt(c,apps.size()+" applications installées  ·  Maintenez OK pour les options",pad,222,18,0xffb4b9bf,false);
+            p.setShader(null);p.setColor(0xf20b1015);c.drawRect(0,118,w,h,p);txt(c,I18n.t("Vos applications"),pad,184,38,Color.WHITE,true);txt(c,apps.size()+I18n.t(" applications installées  ·  Maintenez OK pour les options"),pad,222,18,0xffb4b9bf,false);
             int cols=appGridColumns();float gap=12,cellW=(w-pad*2-gap*(cols-1))/cols,cellH=Math.min(180,(h-270)/appGridRows()),top=248,r=Math.min(Math.min(53,prefs.getInt("icon_radius",62)),Math.min(cellW*.4f,cellH*.32f));int max=Math.min(apps.size(),appGridOffset+cols*appGridRows());
             for(int i=appGridOffset;i<max;i++){int slot=i-appGridOffset,gridRow=slot/cols,gridCol=slot%cols;float x=pad+gridCol*(cellW+gap),y=top+gridRow*cellH,cx=x+cellW/2,cy=y+58;boolean sel=row==0&&col==i;
                 if(sel)rounded(c,x,y,x+cellW,y+cellH-8,prefs.getInt("card_roundness",18),0xfff1f2f4);AppEntry a=apps.get(i);cy=y+cellH*.4f;drawAppIcon(c,a,cx,cy,r);if(isFavorite(a)){rounded(c,cx+r-20,cy-r,cx+r+6,cy-r+26,13,0xffffc75d);txt(c,"★",cx+r-16,cy-r+20,17,0xff15171b,true);}if(prefs.getBoolean("show_app_labels",true))NativeCards.text(c,p,a.label,x+5,y+cellH-20,cellW-10,prefs.getInt("app_label_size",15),sel?TvFocus.INK:tint("text_color",Color.WHITE),true);
             }
-            if(appGridOffset>0)txt(c,"▲  Applications précédentes",w-310,178,14,0xffa7abb3,false);if(max<apps.size())txt(c,"Applications suivantes  ▼",w-290,h-24,14,0xffa7abb3,false);
+            if(appGridOffset>0)txt(c,I18n.t("▲  Applications précédentes"),w-310,178,14,0xffa7abb3,false);if(max<apps.size())txt(c,I18n.t("Applications suivantes  ▼"),w-290,h-24,14,0xffa7abb3,false);
         }
         int favoriteVisibleCount(){return Math.max(1,(int)(block("favorites").logicalWidth()/favoriteCellWidth()));}
         float favoriteCellWidth(){return Math.max(prefs.getInt("favorite_icon_size",59)*2+24,prefs.getInt("favorite_cell_width",184));}
@@ -347,10 +347,10 @@ public class MainActivity extends Activity {
         boolean webDashboard(){return prefs.getBoolean("dashboard_web_enabled",false);}
         void openWebDashboard(){activity.startActivity(new Intent(activity,HaDashboardActivity.class));}
         void drawDashboard(Canvas c,float pad,float w,float h){
-            p.setColor(0xd90b1219);c.drawRect(0,118,w,h,p);NativeCards.text(c,p,prefs.getString("home_row_title","Votre maison"),pad,190,webDashboard()?w-pad*2-480:w-pad*2,38,tint("text_color",Color.WHITE),true);if(webDashboard()){float bw=Math.min(440,w*.48f),bx=w-pad-bw;drawCard(c,bx,145,bw,62,row==7,0xee19232c);NativeCards.text(c,p,"↗ "+prefs.getString("dashboard_web_title","Tableau de bord TV"),bx+18,185,bw-36,20,tint("text_color",Color.WHITE),true);}
-            txt(c,haOnline?"En direct · OK pour ouvrir · Appui long pour les actions":"Hors ligne · dernières valeurs conservées",pad,228,18,0xffb4c0ca,false);
+            p.setColor(0xd90b1219);c.drawRect(0,118,w,h,p);NativeCards.text(c,p,prefs.getString("home_row_title",I18n.t("Votre maison")),pad,190,webDashboard()?w-pad*2-480:w-pad*2,38,tint("text_color",Color.WHITE),true);if(webDashboard()){float bw=Math.min(440,w*.48f),bx=w-pad-bw;drawCard(c,bx,145,bw,62,row==7,0xee19232c);NativeCards.text(c,p,"↗ "+prefs.getString("dashboard_web_title",I18n.t("Tableau de bord TV")),bx+18,185,bw-36,20,tint("text_color",Color.WHITE),true);}
+            txt(c,haOnline?I18n.t("En direct · OK pour ouvrir · Appui long pour les actions"):I18n.t("Hors ligne · dernières valeurs conservées"),pad,228,18,0xffb4c0ca,false);
             int columns=dashboardColumns(),visible=columns*dashboardRows();float gap=20,cw=(w-pad*2-gap*(columns-1))/columns,ch=Math.min(320,(h-300)/dashboardRows()-16);
-            if(homeEntities.isEmpty())txt(c,"Créez vos cartes dans Home Assistant → Cartes personnalisées et dashboard natif",pad,330,22,0xffc2cbd4,false);
+            if(homeEntities.isEmpty())txt(c,I18n.t("Créez vos cartes dans Home Assistant → Cartes personnalisées et dashboard natif"),pad,330,22,0xffc2cbd4,false);
             for(int i=dashboardOffset;i<Math.min(homeEntities.size(),dashboardOffset+visible);i++){int slot=i-dashboardOffset;EntityItem e=homeEntities.get(i);Map<String,Object> card=e.custom;if(card==null){card=new LinkedHashMap<>();card.put("name",e.name);card.put("entity",e.id);String icon=e.domain.equals("light")?"mdi:lightbulb":e.domain.equals("climate")?"mdi:thermostat":e.domain.equals("cover")?"mdi:window-shutter":e.domain.equals("sensor")?"mdi:gauge":e.domain.equals("scene")||e.domain.equals("script")?"mdi:play-circle":"mdi:home";card.put("icon",icon);}
                 if(HaCardSurface.isCard(card))drawHaPlaceholder(c,card,pad+(slot%columns)*(cw+gap),264+(slot/columns)*(ch+gap),cw,ch,row==1&&col==i);else NativeCards.draw(c,p,card,e.haState,pad+(slot%columns)*(cw+gap),264+(slot/columns)*(ch+gap),cw,ch,row==1&&col==i,haOnline);
                 animateCard(card,e.haState,pad+(slot%columns)*(cw+gap),264+(slot/columns)*(ch+gap),cw,ch);
@@ -370,7 +370,7 @@ public class MainActivity extends Activity {
         void animateCard(Map<String,Object> card,JSONObject state,float x,float y,float w,float h){if(active&&isShown()&&HeatPumpCard.animate(card,state,haOnline))postInvalidateDelayed(50);}
         int domainColor(String d){if(d.equals("light"))return 0xffffc35f;if(d.equals("switch")||d.equals("input_boolean"))return 0xff73d6a4;if(d.equals("cover"))return 0xffa48cff;if(d.equals("climate"))return 0xff6db9ff;if(d.equals("sensor")||d.equals("binary_sensor"))return 0xff6dcfe5;if(d.equals("scene")||d.equals("script"))return 0xfff3b75f;if(d.equals("media_player"))return 0xffff8175;if(d.equals("settings"))return 0xffaa96ff;return 0xffaeb2ba;}
         String domainIcon(String d){if(d.equals("light"))return "●";if(d.equals("switch")||d.equals("input_boolean"))return "◉";if(d.equals("cover"))return "▤";if(d.equals("climate"))return "⌁";if(d.equals("scene")||d.equals("script"))return "▶";if(d.equals("media_player"))return "♪";if(d.equals("settings"))return "⚙";return "•";}
-        String friendlyState(EntityItem e){String s=e.state;if(s==null)return "Indisponible";if(s.equals("on"))return "Allumé";if(s.equals("off"))return "Éteint";if(s.equals("open"))return "Ouvert";if(s.equals("closed"))return "Fermé";if(s.equals("unavailable"))return "Indisponible";return s;}
+        String friendlyState(EntityItem e){String s=e.state;if(s==null)return I18n.t("Indisponible");if(s.equals("on"))return I18n.t("Allumé");if(s.equals("off"))return I18n.t("Éteint");if(s.equals("open"))return I18n.t("Ouvert");if(s.equals("closed"))return I18n.t("Fermé");if(s.equals("unavailable"))return I18n.t("Indisponible");return s;}
         void drawCard(Canvas c,float x,float y,float w,float h,boolean selected,int color){
             int rad=prefs.getInt("card_roundness",20);float grow=selected?3:0;
             if(selected&&row!=2)color=TvFocus.ACTIVE_SURFACE;
@@ -382,7 +382,7 @@ public class MainActivity extends Activity {
             }
         }
         String shorten(String s,int n){return s.length()>n?s.substring(0,n-1)+"…":s;}
-        String prettyEntityName(String id){String raw=id.contains(".")?id.substring(id.indexOf('.')+1):id;raw=raw.replace('_',' ');if(raw.isEmpty())return "Maison";return raw.substring(0,1).toUpperCase(Locale.FRANCE)+raw.substring(1);}
+        String prettyEntityName(String id){String raw=id.contains(".")?id.substring(id.indexOf('.')+1):id;raw=raw.replace('_',' ');if(raw.isEmpty())return I18n.t("Maison");return raw.substring(0,1).toUpperCase(Locale.FRANCE)+raw.substring(1);}
         @Override public boolean onKeyDown(int key,KeyEvent e){
             if(!AppActionsDialog.isConfirm(key))clearAppPress();
             if(key==KeyEvent.KEYCODE_MENU){openSettings();return true;}
@@ -450,10 +450,10 @@ public class MainActivity extends Activity {
         }
         void showSelectionInfo(){
             String message="TV Assistant";
-            if(appsPage&&row==0&&col<apps.size()){AppEntry a=apps.get(col);message=a.label+(isFavorite(a)?" · Favori":" · Maintenez OK pour les options");}
-            else if(row==5&&col<favoriteApps.size())message=favoriteApps.get(col).label+" · Favori";
+            if(appsPage&&row==0&&col<apps.size()){AppEntry a=apps.get(col);message=a.label+(isFavorite(a)?I18n.t(" · Favori"):I18n.t(" · Maintenez OK pour les options"));}
+            else if(row==5&&col<favoriteApps.size())message=favoriteApps.get(col).label+I18n.t(" · Favori");
             else if(row==1&&col<homeEntities.size()){EntityItem e=homeEntities.get(col);message=e.name+" : "+friendlyState(e);}
-            else if(row==4)message=col==0?"Accueil":col==1?apps.size()+" applications installées":col==2?"Dashboard Maison":col==3?"Paramètres de la télévision":"Paramètres TV Assistant";
+            else if(row==4)message=col==0?I18n.t("Accueil"):col==1?apps.size()+I18n.t(" applications installées"):col==2?I18n.t("Dashboard Maison"):col==3?I18n.t("Paramètres de la télévision"):"Paramètres TV Assistant";
             Toast.makeText(activity,message,Toast.LENGTH_LONG).show();
         }
         void launchNamedApp(String... names){
@@ -461,9 +461,9 @@ public class MainActivity extends Activity {
             for(String name:names)for(AppEntry a:apps)if(a.label.toLowerCase(Locale.FRANCE).contains(name.toLowerCase(Locale.FRANCE))){launchApp(a);return;}
             Toast.makeText(activity,"Application TV introuvable",Toast.LENGTH_SHORT).show();
         }
-        void activate(){if(row==7){openWebDashboard();return;}if(row==6){activatePlaced(false);return;}if(row==4){col=navigation().normalize(col);if(col==NavigationConfig.BRAND){openSettings();return;}if(col==NavigationConfig.VOICE){activity.startActivity(new Intent(activity,VoiceSearchActivity.class));return;}if(col>=5){Map<String,Object> item=navigation().selected(col);if(item!=null){if("app".equals(item.get("type"))){String pkg=CardConfig.str(item,"package","");Intent launch=activity.getPackageManager().getLeanbackLaunchIntentForPackage(pkg);if(launch==null)launch=activity.getPackageManager().getLaunchIntentForPackage(pkg);if(launch!=null){try{activity.startActivity(launch);}catch(Exception e){Toast.makeText(activity,"Application indisponible",Toast.LENGTH_SHORT).show();}}else Toast.makeText(activity,"Application absente de cette TV",Toast.LENGTH_SHORT).show();}else if("ha_dashboard".equals(item.get("type")))activity.startActivity(new Intent(activity,HaDashboardActivity.class).putExtra("dashboard_path",CardConfig.str(item,"path","")));}return;}if(col==0){appsPage=false;dashboardPage=false;row=4;col=0;enterHome();invalidate();}else if(col==1){appsPage=true;dashboardPage=false;row=0;col=0;appGridOffset=0;invalidate();}else if(col==2){dashboardPage=true;appsPage=false;if(webDashboard()){row=7;col=0;}else if(!homeEntities.isEmpty()){row=1;col=Math.min(dashboardOffset,homeEntities.size()-1);}refreshRemote();invalidate();}else if(col==3)openTvSettings();else if(col==4)openSettings();return;}if(row==5){if(col<favoriteApps.size())launchApp(favoriteApps.get(col));return;}if(row==0&&appsPage){if(col<apps.size())launchApp(apps.get(col));return;}if(row==3){if(col<resumeApps.size())launchApp(resumeApps.get(col));return;}if(row==2){if(col==0)scene("scene_movie","Scène cinéma lancée");else scene("scene_off","Maison éteinte");return;}if(row==1){if(col<homeEntities.size()){EntityItem e=homeEntities.get(col);if(e.custom!=null)customAction(e,false);else activateEntity(e);}return;}}
+        void activate(){if(row==7){openWebDashboard();return;}if(row==6){activatePlaced(false);return;}if(row==4){col=navigation().normalize(col);if(col==NavigationConfig.BRAND){openSettings();return;}if(col==NavigationConfig.VOICE){activity.startActivity(new Intent(activity,VoiceSearchActivity.class));return;}if(col>=5){Map<String,Object> item=navigation().selected(col);if(item!=null){if("app".equals(item.get("type"))){String pkg=CardConfig.str(item,"package","");Intent launch=activity.getPackageManager().getLeanbackLaunchIntentForPackage(pkg);if(launch==null)launch=activity.getPackageManager().getLaunchIntentForPackage(pkg);if(launch!=null){try{activity.startActivity(launch);}catch(Exception e){Toast.makeText(activity,I18n.t("Application indisponible"),Toast.LENGTH_SHORT).show();}}else Toast.makeText(activity,I18n.t("Application absente de cette TV"),Toast.LENGTH_SHORT).show();}else if("ha_dashboard".equals(item.get("type")))activity.startActivity(new Intent(activity,HaDashboardActivity.class).putExtra("dashboard_path",CardConfig.str(item,"path","")));}return;}if(col==0){appsPage=false;dashboardPage=false;row=4;col=0;enterHome();invalidate();}else if(col==1){appsPage=true;dashboardPage=false;row=0;col=0;appGridOffset=0;invalidate();}else if(col==2){dashboardPage=true;appsPage=false;if(webDashboard()){row=7;col=0;}else if(!homeEntities.isEmpty()){row=1;col=Math.min(dashboardOffset,homeEntities.size()-1);}refreshRemote();invalidate();}else if(col==3)openTvSettings();else if(col==4)openSettings();return;}if(row==5){if(col<favoriteApps.size())launchApp(favoriteApps.get(col));return;}if(row==0&&appsPage){if(col<apps.size())launchApp(apps.get(col));return;}if(row==3){if(col<resumeApps.size())launchApp(resumeApps.get(col));return;}if(row==2){if(col==0)scene("scene_movie",I18n.t("Scène cinéma lancée"));else scene("scene_off",I18n.t("Maison éteinte"));return;}if(row==1){if(col<homeEntities.size()){EntityItem e=homeEntities.get(col);if(e.custom!=null)customAction(e,false);else activateEntity(e);}return;}}
         void activateEntity(EntityItem e){String action;if(e.domain.equals("scene")||e.domain.equals("script"))action="turn_on";else if(e.domain.equals("button")||e.domain.equals("input_button"))action="press";else if(e.domain.equals("media_player"))action="media_play_pause";else if(e.domain.equals("sensor")||e.domain.equals("binary_sensor")){Toast.makeText(activity,e.name+" : "+friendlyState(e),Toast.LENGTH_SHORT).show();return;}else action="toggle";HaClient.callService(activity,e.domain,action,e.id,(ok,msg)->activity.runOnUiThread(()->{Toast.makeText(activity,ok?e.name+" commandé":msg,Toast.LENGTH_LONG).show();if(ok)loadEntities();}));}
-        void launchApp(AppEntry a){Intent i=new Intent();i.setClassName(a.pkg,a.activity);i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);try{activity.startActivity(i);}catch(Exception ex){Toast.makeText(activity,"Impossible d’ouvrir "+a.label,Toast.LENGTH_SHORT).show();}}
+        void launchApp(AppEntry a){Intent i=new Intent();i.setClassName(a.pkg,a.activity);i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);try{activity.startActivity(i);}catch(Exception ex){Toast.makeText(activity,I18n.t("Impossible d’ouvrir ")+a.label,Toast.LENGTH_SHORT).show();}}
         void scene(String key,String ok){service("scene","turn_on",prefs.getString(key,key.equals("scene_movie")?"scene.soiree_cinema":"scene.tout_eteindre"),ok);}
         void service(String domain,String action,String entity,String ok){HaClient.callService(activity,domain,action,entity,(success,msg)->activity.runOnUiThread(()->Toast.makeText(activity,success?ok:msg,Toast.LENGTH_LONG).show()));}
         void openSettings(){activity.startActivity(new Intent(activity,LauncherSettingsActivity.class));}

@@ -1,0 +1,32 @@
+name: Bug report / Signaler un problème
+description: Report a reproducible problem without private data.
+body:
+  - type: markdown
+    attributes:
+      value: "Never include tokens, passwords, HA addresses, personal album links or unredacted logs. Security vulnerabilities: use private reporting, not this public form."
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions
+      description: APK, integration, Android, Home Assistant and WebView versions. No device serial numbers.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce / Étapes
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual result / Résultat attendu et obtenu
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy / Confidentialité
+      options:
+        - label: I removed private data from text, screenshots and attachments.
+          required: true

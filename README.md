@@ -1,5 +1,10 @@
 # TV Assistant
 
+[English](docs/README.en.md) · [Installation](docs/INSTALLATION.md) · [Télécharger l’APK](https://github.com/Philiphall6/tv-assistant/releases) · [Sécurité](SECURITY.md)
+
+[![Validation](https://github.com/Philiphall6/tv-assistant/actions/workflows/validate.yml/badge.svg)](https://github.com/Philiphall6/tv-assistant/actions/workflows/validate.yml)
+[![Android](https://github.com/Philiphall6/tv-assistant/actions/workflows/android.yml/badge.svg)](https://github.com/Philiphall6/tv-assistant/actions/workflows/android.yml)
+
 Un launcher Android TV personnalisable et un éditeur multi-TV dans Home Assistant. Projet communautaire indépendant, sans affiliation officielle avec Home Assistant ou Google.
 
 ## Aperçu
@@ -43,9 +48,15 @@ L’administrateur peut modifier toutes les TV ; leur utilisateur dédié reste 
 
 Voir [installation et retour arrière](docs/INSTALLATION.md), [compilation et signature](docs/BUILD.md), [sécurité](SECURITY.md) et [validation](docs/TESTING.md).
 
+## Langues
+
+La TV utilise la langue d’Android ; le panneau utilise la langue du compte Home Assistant, même si le navigateur est dans une autre langue. Français et anglais sont fournis, avec l’anglais comme langue de repli. Les noms personnalisés, les profils, les entités et le YAML ne sont pas traduits ni réécrits.
+
+Les dates et nombres suivent les paramètres régionaux. L’horloge suit le format 12/24 heures d’Android. La langue de reconnaissance vocale vaut `auto` par défaut ; un choix explicite comme `fr` ou `en` reste prioritaire. Les anciennes configurations avec une langue explicite sont conservées. Les cartes Lovelace utilisent les traductions fournies par HA et leurs propres extensions ; certains diagnostics techniques peuvent conserver leur langue d’origine.
+
 ## Mise à jour et données
 
-La version Android 2.12.0 utilise le même identifiant technique `fr.maison.tvlauncher`, pour préserver les mises à jour des installations précédentes lorsque la signature correspond. Le domaine HA reste `home_assistant_tv` pour la même raison. Ces noms techniques ne sont pas des données personnelles.
+L’APK utilise le même identifiant technique `fr.maison.tvlauncher`, pour préserver les mises à jour des installations précédentes lorsque la signature correspond. Le domaine HA reste `home_assistant_tv` pour la même raison. Ces noms techniques ne sont pas des données personnelles.
 
 Les anciens jetons sont migrés vers Android Keystore lors de leur lecture avec une adresse HTTPS valide. Les réglages locaux et jetons ne sont pas exportés dans les profils HA. Une nouvelle TV ou une réinstallation après désinstallation nécessite de ressaisir son jeton ; aucune sauvegarde Android des données de l’application n’est autorisée.
 
@@ -54,3 +65,5 @@ Le dépôt ne contient ni jeton, clé de signature, fichier de configuration dom
 ## Licence
 
 Code original sous **GPL-3.0-only** : [LICENSE](LICENSE). Les bibliothèques et marques conservent leurs licences et droits respectifs : [THIRD_PARTY.md](THIRD_PARTY.md). Les noms et logos Home Assistant et Google ne sont pas couverts par la licence GPL de ce projet.
+
+Pour contribuer : [guide de contribution](CONTRIBUTING.md), [traductions](docs/LOCALIZATION.md) et [préparation au catalogue HACS](docs/HACS_DEFAULT.md).

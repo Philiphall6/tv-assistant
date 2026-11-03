@@ -7,7 +7,7 @@ Les tests n’utilisent aucun compte HA réel ni commande domotique. Les donnée
 - Tests Chromium : éditeur, navigation, placement, vraies surfaces de cartes simulées et dimensionnement.
 - Instrumentation Android : disposition, icônes, cartes, protocole temps réel, pont WebView, AES-GCM, migration, mauvais serveur et données chiffrées altérées.
 
-Le manifeste accepte Android 11–16. Un modèle CI prévoit les bornes **API 30 et API 36** dans `docs/ci/validate.yml`. Il n’est pas activé dans cette première publication : la connexion GitHub de publication ne possède pas le droit d’écriture des workflows. Un mainteneur autorisé peut le copier dans `.github/workflows/validate.yml`. Les tests ci-dessous ont été exécutés localement. Une version non exécutée avec succès ne doit pas être présentée comme testée. Les variantes de firmware, les touches constructeur et toutes les cartes HACS ne sont pas couvertes.
+Le manifeste accepte Android 11–16. Le workflow [Android](https://github.com/Philiphall6/tv-assistant/actions/workflows/android.yml) exécute les bornes **API 30 et API 36** sur des paquets isolés. Le workflow [Validate](https://github.com/Philiphall6/tv-assistant/actions/workflows/validate.yml) vérifie HACS, Hassfest, le runtime HA, les navigateurs, les traductions et la documentation. Aucun contrôle HACS ou Hassfest n’est ignoré. Consultez le résultat du commit concerné : la présence d’un workflow n’atteste pas sa réussite. Les variantes de firmware, les touches constructeur et toutes les cartes HACS ne sont pas couvertes.
 
 ## Vérification de la première publication — 3 novembre 2026
 
@@ -31,7 +31,13 @@ pip install playwright
 playwright install chromium
 python3 tests/test_panel_browser.py
 python3 tests/test_cards_browser.py
+python3 tests/test_localization_browser.py
+python3 tests/test_localization_catalog.py
+python3 tests/test_docs.py
+python3 scripts/generate-localization.py --check
 docker run --rm --network none -v "$PWD:/work" -w /work ghcr.io/home-assistant/home-assistant:2026.10.4 python tests/ha_component_runtime.py
 ```
 
 `CHROME_BIN` permet d’utiliser un Chromium déjà installé. Le mode audit interdit le remplacement du launcher personnel et la suite refuse un package cible qui ne se termine pas par `.audit`.
+
+Les tests de langue vérifient la priorité du choix HA sur le navigateur, les variantes régionales, le repli anglais, la conservation du brouillon et l’absence de traduction des noms personnalisés. L’instrumentation Android vérifie les ressources, les salutations, les états, les nombres et la langue vocale automatique.

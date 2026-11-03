@@ -52,7 +52,7 @@ final class PhotoAlbumStore {
         String source=config(c).getString("photo_album_url","").trim();
         try{SharedPhotoAlbum.albumUri(source);}catch(IOException e){reply(cb,false,e.getMessage());return;}
         SharedPreferences status=state(c);long now=System.currentTimeMillis(),interval=clamp(config(c).getInt("photo_album_sync_minutes",15),1,1440)*60000L;
-        if(!force&&hash(source).equals(status.getString("attempt_source",""))&&now>=status.getLong("attempt",0)&&now-status.getLong("attempt",0)<interval){reply(cb,true,"À jour");return;}
+        if(!force&&hash(source).equals(status.getString("attempt_source",""))&&now>=status.getLong("attempt",0)&&now-status.getLong("attempt",0)<interval){reply(cb,true,I18n.t("À jour"));return;}
         if(!BUSY.compareAndSet(false,true)){reply(cb,false,"Une synchronisation est déjà en cours");return;}
         status.edit().putLong("attempt",now).putString("attempt_source",hash(source)).putString("status","Lecture de l’album et de ses pages…").apply();
         IO.execute(()->{try{
@@ -115,7 +115,7 @@ final class PhotoAlbumStore {
         return BitmapFactory.decodeByteArray(bytes,0,bytes.length,opts);
     }
     static void clear(Context c,Callback cb){
-        if(!BUSY.compareAndSet(false,true)){reply(cb,false,"Attendez la fin de la synchronisation");return;}
+        if(!BUSY.compareAndSet(false,true)){reply(cb,false,I18n.t("Attendez la fin de la synchronisation"));return;}
         IO.execute(()->{try{synchronized(DISK){cacheEpoch++;File[] all=directory(c).listFiles();if(all!=null)for(File f:all)if(f.getName().matches("([a-f0-9]{64}\\.jpg(\\.part)?|album\\.json(\\.bak|\\.new)?)")&&!f.delete())throw new IOException("Une copie locale ne peut pas être supprimée");state(c).edit().clear().apply();}reply(cb,true,"Copies locales supprimées ; les photos Google sont intactes");}catch(Exception e){reply(cb,false,error(e));}finally{BUSY.set(false);}});
     }
 }

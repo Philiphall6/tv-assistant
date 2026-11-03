@@ -48,13 +48,13 @@ final class AppActionsDialog extends Dialog {
         title.setEllipsize(android.text.TextUtils.TruncateAt.END);
         title.setPadding(dp(8), 0, dp(8), dp(14));
         content.addView(title);
-        favorite = button(content, isFavorite ? "Retirer des favoris" : "Ajouter aux favoris", actions::favorite);
-        information = button(content, "Informations sur l’application", actions::information);
-        uninstall = button(content, "Désinstaller", actions::uninstall);
+        favorite = button(content, isFavorite ? I18n.t("Retirer des favoris") : I18n.t("Ajouter aux favoris"), actions::favorite);
+        information = button(content, I18n.t("Informations sur l’application"), actions::information);
+        uninstall = button(content, I18n.t("Désinstaller"), actions::uninstall);
         uninstall.setEnabled(!systemApp);
         if (systemApp) {
             TextView note = new TextView(activity);
-            note.setText("Application système · désinstallation indisponible");
+            note.setText(I18n.t("Application système · désinstallation indisponible"));
             note.setTextSize(12);
             note.setTextColor(0xffb1bdc8);
             note.setPadding(dp(8), dp(10), dp(8), 0);
@@ -122,6 +122,6 @@ final class AppActionsDialog extends Dialog {
 
     static void open(Activity activity, Intent intent) {
         try { activity.startActivity(intent); }
-        catch (Exception unavailable) { Toast.makeText(activity, "Action indisponible sur cet appareil", Toast.LENGTH_LONG).show(); }
+        catch (Exception unavailable) { Toast.makeText(activity, I18n.t("Action indisponible sur cet appareil"), Toast.LENGTH_LONG).show(); }
     }
 }

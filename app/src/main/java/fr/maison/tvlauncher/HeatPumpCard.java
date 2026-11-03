@@ -16,7 +16,7 @@ final class HeatPumpCard {
     }
     static JSONObject displayState(Map<String,Object> card,Map<String,JSONObject> states){
         Map<String,String> values=new HashMap<>();String priority=CardConfig.str(card,"entity",HeatPumpState.PRIORITY);
-        StringBuilder details=new StringBuilder();String[] labels={"Priorité","Fréquence compresseur","Dégivrage","Pompe de circulation","Chauffage autorisé"};
+        StringBuilder details=new StringBuilder();String[] labels={I18n.t("Priorité"),I18n.t("Fréquence compresseur"),I18n.t("Dégivrage"),I18n.t("Pompe de circulation"),I18n.t("Chauffage autorisé")};
         for(int i=0;i<5;i++){String id=i==0?priority:CardConfig.str(card,HeatPumpState.KEYS[i-1],HeatPumpState.DEFAULTS[i-1]);JSONObject state=states.get(id);String value=state==null?"unavailable":state.optString("state","unavailable");values.put(id,value);details.append(labels[i]).append(" : ").append(value).append("\n").append(id).append(i==4?"":"\n\n");}
         HeatPumpState value=HeatPumpState.evaluate(card,values);
         JSONObject out=new JSONObject();try{out.put("entity_id",priority).put("state",value.label).put("pac_color",value.color).put("pac_running",value.running).put("pac_details",details.toString());}catch(Exception ignored){}return out;
@@ -32,7 +32,7 @@ final class HeatPumpCard {
         boolean showIcon=CardConfig.bool(card,"show_icon",true);if(showIcon)icon(c,p,left,top,size,color,animate(card,state,online)?angle(SystemClock.uptimeMillis()):0);
         float tx=left+(showIcon?size+8*scale:0),tw=w-(tx-x)-10*scale;boolean show=CardConfig.bool(card,"show_state",true);
         NativeCards.text(c,p,NativeCards.title(card,state),tx,y+h/2-(show?5*scale:-5*scale),tw,card.containsKey("title_size")?((Number)card.get("title_size")).intValue():NativeCards.font("card_title_size",19),NativeCards.tint("card_text_color",Color.WHITE),true);
-        if(show){String label=state==null?"Indisponible":state.optString("state","Indisponible");if(!online)label+=" · hors ligne";
+        if(show){String label=state==null?I18n.t("Indisponible"):state.optString("state",I18n.t("Indisponible"));if(!online)label+=I18n.t(" · hors ligne");
             int body=card.containsKey("body_size")?((Number)card.get("body_size")).intValue():NativeCards.font("card_state_size",14);List<String> lines=NativeCards.wrap(label,p,tw,body,2);float baseline=y+h/2+body;for(String line:lines){NativeCards.text(c,p,line,tx,baseline,tw,body,NativeCards.tint("card_secondary_color",0xffeef7ff),false);baseline+=body+4;}}
     }
     static void icon(Canvas c,Paint p,float x,float y,float size,int color,float rotation){

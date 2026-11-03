@@ -10,7 +10,7 @@ final class NavigationConfig {
     static final String[] TYPES={"home","applications","house","tv_settings","launcher_settings"};
     static final String[] LABELS={"Pour vous","Applications","Maison","Paramètres TV","Home Assistant"};
     static final String[] ICONS={"mdi:home","mdi:apps","mdi:home-automation","mdi:television","mdi:cog"};
-    static List<Map<String,Object>> defaults(){List<Map<String,Object>> list=new ArrayList<>();Map<String,Object> voice=new LinkedHashMap<>();voice.put("id","voice");voice.put("type","voice");voice.put("label","Recherche");voice.put("icon","mdi:microphone");voice.put("display",1);list.add(voice);for(int i=0;i<5;i++){Map<String,Object> item=new LinkedHashMap<>();item.put("id",TYPES[i]);item.put("type",TYPES[i]);item.put("label",LABELS[i]);item.put("icon",ICONS[i]);list.add(item);}return list;}
+    static List<Map<String,Object>> defaults(){List<Map<String,Object>> list=new ArrayList<>();Map<String,Object> voice=new LinkedHashMap<>();voice.put("id","voice");voice.put("type","voice");voice.put("label",I18n.t("Recherche"));voice.put("icon","mdi:microphone");voice.put("display",1);list.add(voice);for(int i=0;i<5;i++){Map<String,Object> item=new LinkedHashMap<>();item.put("id",TYPES[i]);item.put("type",TYPES[i]);item.put("label",I18n.t(LABELS[i]));item.put("icon",ICONS[i]);list.add(item);}return list;}
     static List<Map<String,Object>> validate(Object value){
         if(!(value instanceof List)||((List<?>)value).size()>40)throw new IllegalArgumentException("navigation : liste de 0 à 40 onglets");
         List<Map<String,Object>> list=new ArrayList<>();Set<String> ids=new HashSet<>(),types=new HashSet<>();

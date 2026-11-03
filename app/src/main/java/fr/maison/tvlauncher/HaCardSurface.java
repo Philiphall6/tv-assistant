@@ -17,7 +17,7 @@ final class HaCardSurface extends FrameLayout {
     final Decoration decoration;
     WebView web;
     JSONArray positions=new JSONArray();
-    String geometry="[]", selected="", address="", credentialKey="", failureMessage="", message="Chargement de la carte HA…";
+    String geometry="[]", selected="", address="", credentialKey="", failureMessage="", message=I18n.t("Chargement de la carte HA…");
     boolean ready, pointerMode, destroyed, paused, refreshAfterLogin, probing;
     int probes;
     float pointerX,pointerY;
@@ -32,7 +32,7 @@ final class HaCardSurface extends FrameLayout {
         if(destroyed)return;
         String json=next.toString();boolean changed=!json.equals(geometry);positions=next;geometry=json;selected=focus;
         if(next.length()>0&&PanelStore.enabled(activity))ensureWeb();
-        else if(!PanelStore.enabled(activity)){if(web!=null)destroyWeb();if(next.length()>0)message="Reliez ce launcher à l’extension HA pour afficher cette carte";}
+        else if(!PanelStore.enabled(activity)){if(web!=null)destroyWeb();if(next.length()>0)message=I18n.t("Reliez ce launcher à l’extension HA pour afficher cette carte");}
         if(changed&&web!=null)sendGeometry();
         if(next.length()==0&&pointerMode)exitPointer();
         if(web!=null)web.setAlpha(ready&&next.length()>0?1:0);
@@ -41,11 +41,11 @@ final class HaCardSurface extends FrameLayout {
     void ensureWeb(){
         String next;
         try{next=DashboardUrl.resolve(CardStore.prefs(activity).getString("ha_url",""),"/home-assistant-tv-cards/"+PanelStore.identity(activity));}
-        catch(Exception e){message="Configurez la connexion Home Assistant";return;}
+        catch(Exception e){message=I18n.t("Configurez la connexion Home Assistant");return;}
         String credentials=HaWebAuth.fingerprint(TokenStore.get(activity))+CardStore.prefs(activity).getBoolean("ha_cards_native_auth",true);
         if(web!=null&&address.equals(next)&&credentialKey.equals(credentials))return;
-        destroyWeb();address=next;credentialKey=credentials;ready=false;failureMessage="";message="Chargement de la carte HA…";
-        try{web=new WebView(activity);}catch(Exception e){message="Android System WebView indisponible";return;}
+        destroyWeb();address=next;credentialKey=credentials;ready=false;failureMessage="";message=I18n.t("Chargement de la carte HA…");
+        try{web=new WebView(activity);}catch(Exception e){message=I18n.t("Android System WebView indisponible");return;}
         web.setBackgroundColor(Color.TRANSPARENT);web.setAlpha(0);web.setFocusable(false);
         WebSettings s=web.getSettings();s.setJavaScriptEnabled(true);s.setDomStorageEnabled(true);
         s.setAllowFileAccess(false);s.setAllowContentAccess(false);s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
@@ -68,8 +68,8 @@ final class HaCardSurface extends FrameLayout {
                     catch(Exception ignored){message="Chemin HA non pris en charge dans le launcher";}
                 }
             }
-            @Override public void onReceivedError(WebView v,WebResourceRequest r,WebResourceError e){if(r.isForMainFrame())fail("HA inaccessible · OK pour réessayer");}
-            @Override public void onReceivedSslError(WebView v,SslErrorHandler h,android.net.http.SslError e){h.cancel();fail("Certificat HA non valide · vérifiez l’adresse HTTPS");}
+            @Override public void onReceivedError(WebView v,WebResourceRequest r,WebResourceError e){if(r.isForMainFrame())fail(I18n.t("HA inaccessible · OK pour réessayer"));}
+            @Override public void onReceivedSslError(WebView v,SslErrorHandler h,android.net.http.SslError e){h.cancel();fail(I18n.t("Certificat HA non valide · vérifiez l’adresse HTTPS"));}
         });
         boolean externalAuth=HaWebAuth.attach(activity,web,address,this::fail);
         addView(web,0,new LayoutParams(-1,-1));web.loadUrl(address+(externalAuth?"?external_auth=1":""));startProbe();
@@ -87,12 +87,12 @@ final class HaCardSurface extends FrameLayout {
                     ready=true;probing=false;failureMessage="";message="";sendGeometry();web.setAlpha(positions.length()>0?1:0);launcher.invalidate();decoration.invalidate();return;
                 }
                 if(state.has("error"))message="Carte HA : "+state.optString("error");
-                else if(state.optBoolean("login"))message="Connexion web HA nécessaire · OK pour se connecter";
-                else message=failureMessage.isEmpty()?"Chargement de la carte HA…":failureMessage;
+                else if(state.optBoolean("login"))message=I18n.t("Connexion web HA nécessaire · OK pour se connecter");
+                else message=failureMessage.isEmpty()?I18n.t("Chargement de la carte HA…"):failureMessage;
                 sendGeometry();
             }catch(Exception ignored){}
             launcher.invalidate();
-            if(++probes<40)postDelayed(probe,750);else {probing=false;if(message.startsWith("Chargement"))message="Carte HA non chargée · OK : connexion ou réessayer";launcher.invalidate();}
+            if(++probes<40)postDelayed(probe,750);else {probing=false;if(message.startsWith("Chargement"))message=I18n.t("Carte HA non chargée · OK : connexion ou réessayer");launcher.invalidate();}
         });
     }
     void activate(Map<String,Object> card){
@@ -104,13 +104,13 @@ final class HaCardSurface extends FrameLayout {
         pointerX=(float)(g.optDouble("x")+g.optDouble("width")/2)*getWidth()/100f;
         pointerY=(float)(g.optDouble("y")+Math.min(g.optDouble("height")/2,5))*getHeight()/100f;
         pointerMode=true;web.setFocusableInTouchMode(true);web.requestFocus();decoration.invalidate();
-        Toast.makeText(activity,"Flèches : pointeur · OK : clic / maintenir · CH ± : défiler · Retour : launcher",Toast.LENGTH_LONG).show();
+        Toast.makeText(activity,I18n.t("Flèches : pointeur · OK : clic / maintenir · CH ± : défiler · Retour : launcher"),Toast.LENGTH_LONG).show();
     }
     void connectionMenu(){
-        AlertDialog dialog=new AlertDialog.Builder(activity).setTitle("Carte Home Assistant")
+        AlertDialog dialog=new AlertDialog.Builder(activity).setTitle(I18n.t("Carte Home Assistant"))
             .setMessage(message+"\nLes cartes réutilisent le jeton du launcher si le WebView le permet. La connexion web séparée reste disponible en secours.")
             .setPositiveButton("Connexion HA",(d,w)->{refreshAfterLogin=true;activity.startActivity(new Intent(activity,HaDashboardActivity.class).putExtra("dashboard_path","/home-assistant-tv-cards/"+PanelStore.identity(activity)));})
-            .setNeutralButton("Réessayer",(d,w)->retry()).setNegativeButton("Retour",null).create();
+            .setNeutralButton(I18n.t("Réessayer"),(d,w)->retry()).setNegativeButton(I18n.t("Retour"),null).create();
         dialog.setOnShowListener(d->TvFocus.dialog(dialog));dialog.show();
     }
     void retry(){failureMessage="";if(web!=null){ready=false;web.reload();startProbe();}else ensureWeb();}
