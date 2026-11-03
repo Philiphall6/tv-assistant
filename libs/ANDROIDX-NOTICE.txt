@@ -1,0 +1,19 @@
+AndroidX Webkit 1.18.0, Core 1.1.0 and Annotation 1.1.0
+Copyright The Android Open Source Project
+Licensed under the Apache License, Version 2.0 (LICENSE-AndroidX.txt).
+
+Official artifacts from Google's Maven repository:
+https://dl.google.com/dl/android/maven2/androidx/webkit/webkit/1.18.0/webkit-1.18.0.aar
+https://dl.google.com/dl/android/maven2/androidx/core/core/1.1.0/core-1.1.0.aar
+https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.1.0/annotation-1.1.0.jar
+
+Webkit classes.jar SHA256 (unmodified):
+2b8112e33c3d5a801628a59948a700875d52e368ac9ca0781a1c2bf295a836a2
+
+Core is a binary subset, not the full Android UI support library: only Pair,
+ObjectsCompat and PackageInfoCompat are retained. These are the complete Core
+references used by Webkit, verified with jdeps; no code in those classes is changed.
+Original full Core classes.jar SHA256:
+6dad2c3643d2e11e8ccf63c9af57d3e36ed4cfa5caa1930f44f4f90f2990fd50
+
+Source: https://android.googlesource.com/platform/frameworks/support/

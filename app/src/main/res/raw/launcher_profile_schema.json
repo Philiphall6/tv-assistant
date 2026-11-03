@@ -1,0 +1,1144 @@
+{
+  "dashboard_web_enabled": {
+    "type": "boolean",
+    "default": false,
+    "label": "Afficher le bouton du tableau de bord HA dans Maison",
+    "group": "Dashboard HA",
+    "section": "Tableau de bord HA"
+  },
+  "dashboard_web_path": {
+    "type": "string",
+    "max": 300,
+    "format": "dashboard_path",
+    "default": "/lovelace/0",
+    "label": "Chemin du tableau de bord (ex. /dashboard-tv/tv)",
+    "group": "Dashboard HA",
+    "section": "Tableau de bord HA"
+  },
+  "dashboard_web_title": {
+    "type": "string",
+    "max": 100,
+    "default": "Tableau de bord TV",
+    "label": "Nom du bouton dans Maison",
+    "group": "Dashboard HA",
+    "section": "Tableau de bord HA"
+  },
+  "dashboard_web_text_zoom": {
+    "type": "integer",
+    "min": 50,
+    "max": 150,
+    "default": 100,
+    "label": "Taille du texte web (%)",
+    "group": "Dashboard HA",
+    "section": "Tableau de bord HA"
+  },
+  "dashboard_pointer_speed": {
+    "type": "integer",
+    "min": 8,
+    "max": 60,
+    "default": 24,
+    "label": "Vitesse du pointeur",
+    "group": "Dashboard HA",
+    "section": "Tableau de bord HA"
+  },
+  "nav_background": {
+    "type": "boolean",
+    "default": true,
+    "label": "Fond coloré de la barre (désactivé = transparent)",
+    "group": "Barre",
+    "section": "Fond"
+  },
+  "nav_background_color": {
+    "type": "string",
+    "format": "color",
+    "max": 7,
+    "default": "#10171E",
+    "label": "Couleur du fond de la barre",
+    "group": "Barre",
+    "section": "Fond"
+  },
+  "nav_background_opacity": {
+    "type": "integer",
+    "min": 0,
+    "max": 100,
+    "default": 53,
+    "label": "Opacité du fond (%)",
+    "group": "Barre",
+    "section": "Fond"
+  },
+  "nav_width": {
+    "type": "integer",
+    "min": 40,
+    "max": 100,
+    "default": 100,
+    "label": "Largeur en haut / en bas (%)",
+    "group": "Barre",
+    "section": "Position"
+  },
+  "nav_alignment": {
+    "type": "integer",
+    "min": 0,
+    "max": 2,
+    "default": 1,
+    "label": "Alignement en haut / en bas",
+    "group": "Barre",
+    "section": "Position",
+    "options": [
+      [
+        0,
+        "À gauche"
+      ],
+      [
+        1,
+        "Au centre"
+      ],
+      [
+        2,
+        "À droite"
+      ]
+    ]
+  },
+  "nav_tab_gap": {
+    "type": "integer",
+    "min": 0,
+    "max": 48,
+    "default": 8,
+    "label": "Espacement entre les onglets",
+    "group": "Barre",
+    "section": "Position"
+  },
+  "nav_corner_radius": {
+    "type": "integer",
+    "min": 0,
+    "max": 60,
+    "default": 0,
+    "label": "Arrondi du fond de la barre",
+    "group": "Barre",
+    "section": "Fond"
+  },
+  "nav_position": {
+    "type": "integer",
+    "default": 0,
+    "label": "Position de la barre fixe",
+    "group": "Barre",
+    "min": 0,
+    "max": 3,
+    "section": "Position",
+    "options": [
+      [
+        0,
+        "En haut"
+      ],
+      [
+        1,
+        "En bas"
+      ],
+      [
+        2,
+        "À gauche"
+      ],
+      [
+        3,
+        "À droite"
+      ]
+    ]
+  },
+  "nav_scale": {
+    "type": "integer",
+    "default": 100,
+    "label": "Taille de la barre (%)",
+    "group": "Barre",
+    "min": 70,
+    "max": 160,
+    "section": "Position"
+  },
+  "layout_greeting_x": {
+    "type": "integer",
+    "default": 5,
+    "label": "Position horizontale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 90,
+    "section": "Salutation et sous-titre"
+  },
+  "layout_greeting_y": {
+    "type": "integer",
+    "default": 9,
+    "label": "Position verticale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 95,
+    "section": "Salutation et sous-titre"
+  },
+  "layout_greeting_width": {
+    "type": "integer",
+    "default": 90,
+    "label": "Largeur (%)",
+    "group": "Disposition",
+    "min": 10,
+    "max": 100,
+    "section": "Salutation et sous-titre"
+  },
+  "layout_greeting_scale": {
+    "type": "integer",
+    "default": 100,
+    "label": "Échelle du bloc (%)",
+    "group": "Disposition",
+    "min": 50,
+    "max": 160,
+    "section": "Salutation et sous-titre"
+  },
+  "layout_quick_x": {
+    "type": "integer",
+    "default": 5,
+    "label": "Position horizontale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 90,
+    "section": "Actions rapides"
+  },
+  "layout_quick_y": {
+    "type": "integer",
+    "default": 26,
+    "label": "Position verticale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 95,
+    "section": "Actions rapides"
+  },
+  "layout_quick_width": {
+    "type": "integer",
+    "default": 50,
+    "label": "Largeur (%)",
+    "group": "Disposition",
+    "min": 10,
+    "max": 100,
+    "section": "Actions rapides"
+  },
+  "layout_quick_scale": {
+    "type": "integer",
+    "default": 100,
+    "label": "Échelle du bloc (%)",
+    "group": "Disposition",
+    "min": 50,
+    "max": 160,
+    "section": "Actions rapides"
+  },
+  "layout_continue_x": {
+    "type": "integer",
+    "default": 5,
+    "label": "Position horizontale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 90,
+    "section": "Reprise de lecture"
+  },
+  "layout_continue_y": {
+    "type": "integer",
+    "default": 35,
+    "label": "Position verticale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 95,
+    "section": "Reprise de lecture"
+  },
+  "layout_continue_width": {
+    "type": "integer",
+    "default": 90,
+    "label": "Largeur (%)",
+    "group": "Disposition",
+    "min": 10,
+    "max": 100,
+    "section": "Reprise de lecture"
+  },
+  "layout_continue_scale": {
+    "type": "integer",
+    "default": 100,
+    "label": "Échelle du bloc (%)",
+    "group": "Disposition",
+    "min": 50,
+    "max": 160,
+    "section": "Reprise de lecture"
+  },
+  "layout_favorites_x": {
+    "type": "integer",
+    "default": 5,
+    "label": "Position horizontale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 90,
+    "section": "Applications favorites"
+  },
+  "layout_favorites_y": {
+    "type": "integer",
+    "default": 42,
+    "label": "Position verticale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 95,
+    "section": "Applications favorites"
+  },
+  "layout_favorites_width": {
+    "type": "integer",
+    "default": 90,
+    "label": "Largeur (%)",
+    "group": "Disposition",
+    "min": 10,
+    "max": 100,
+    "section": "Applications favorites"
+  },
+  "layout_favorites_scale": {
+    "type": "integer",
+    "default": 100,
+    "label": "Échelle du bloc (%)",
+    "group": "Disposition",
+    "min": 50,
+    "max": 160,
+    "section": "Applications favorites"
+  },
+  "layout_home_x": {
+    "type": "integer",
+    "default": 5,
+    "label": "Position horizontale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 90,
+    "section": "Cartes de la maison"
+  },
+  "layout_home_y": {
+    "type": "integer",
+    "default": 67,
+    "label": "Position verticale (%)",
+    "group": "Disposition",
+    "min": 0,
+    "max": 95,
+    "section": "Cartes de la maison"
+  },
+  "layout_home_width": {
+    "type": "integer",
+    "default": 90,
+    "label": "Largeur (%)",
+    "group": "Disposition",
+    "min": 10,
+    "max": 100,
+    "section": "Cartes de la maison"
+  },
+  "layout_home_scale": {
+    "type": "integer",
+    "default": 100,
+    "label": "Échelle du bloc (%)",
+    "group": "Disposition",
+    "min": 50,
+    "max": 160,
+    "section": "Cartes de la maison"
+  },
+  "show_quick": {
+    "type": "boolean",
+    "default": true,
+    "label": "Afficher les actions rapides",
+    "group": "Rangées"
+  },
+  "text_color": {
+    "type": "string",
+    "default": "#FFFFFF",
+    "label": "Couleur du texte",
+    "group": "Apparence",
+    "format": "color",
+    "max": 7,
+    "section": "Couleurs"
+  },
+  "secondary_text_color": {
+    "type": "string",
+    "default": "#BDC5CF",
+    "label": "Couleur du texte secondaire",
+    "group": "Apparence",
+    "format": "color",
+    "max": 7,
+    "section": "Couleurs"
+  },
+  "greeting_color": {
+    "type": "string",
+    "default": "#FFFFFF",
+    "label": "Couleur de la salutation",
+    "group": "Apparence",
+    "format": "color",
+    "max": 7,
+    "section": "Couleurs"
+  },
+  "subtitle_color": {
+    "type": "string",
+    "default": "#D7D9DC",
+    "label": "Couleur du sous-titre",
+    "group": "Apparence",
+    "format": "color",
+    "max": 7,
+    "section": "Couleurs"
+  },
+  "section_color": {
+    "type": "string",
+    "default": "#FFFFFF",
+    "label": "Couleur des titres de rangées",
+    "group": "Apparence",
+    "format": "color",
+    "max": 7,
+    "section": "Couleurs"
+  },
+  "nav_text_color": {
+    "type": "string",
+    "default": "#E0E2E4",
+    "label": "Couleur du texte de navigation",
+    "group": "Barre",
+    "format": "color",
+    "max": 7,
+    "section": "Textes et icônes"
+  },
+  "card_text_color": {
+    "type": "string",
+    "default": "#FFFFFF",
+    "label": "Couleur du titre des cartes",
+    "group": "Apparence",
+    "format": "color",
+    "max": 7,
+    "section": "Couleurs"
+  },
+  "card_secondary_color": {
+    "type": "string",
+    "default": "#CBD3DC",
+    "label": "Couleur du texte des cartes",
+    "group": "Apparence",
+    "format": "color",
+    "max": 7,
+    "section": "Couleurs"
+  },
+  "section_title_size": {
+    "type": "integer",
+    "default": 25,
+    "label": "Taille des titres de rangées",
+    "group": "Apparence",
+    "min": 14,
+    "max": 50,
+    "section": "Typographie"
+  },
+  "app_label_size": {
+    "type": "integer",
+    "default": 15,
+    "label": "Taille des noms d’applications",
+    "group": "Apparence",
+    "min": 10,
+    "max": 32,
+    "section": "Typographie"
+  },
+  "card_title_size": {
+    "type": "integer",
+    "default": 19,
+    "label": "Taille du titre des cartes",
+    "group": "Apparence",
+    "min": 12,
+    "max": 36,
+    "section": "Typographie"
+  },
+  "card_state_size": {
+    "type": "integer",
+    "default": 14,
+    "label": "Taille du texte des cartes",
+    "group": "Apparence",
+    "min": 10,
+    "max": 30,
+    "section": "Typographie"
+  },
+  "nav_text_size": {
+    "type": "integer",
+    "default": 19,
+    "label": "Taille du texte de navigation",
+    "group": "Barre",
+    "min": 12,
+    "max": 30,
+    "section": "Textes et icônes"
+  },
+  "app_grid_columns": {
+    "type": "integer",
+    "default": 10,
+    "label": "Colonnes de la page Applications",
+    "group": "Rangées",
+    "min": 3,
+    "max": 12
+  },
+  "app_grid_rows": {
+    "type": "integer",
+    "default": 5,
+    "label": "Rangées de la page Applications",
+    "group": "Rangées",
+    "min": 2,
+    "max": 6
+  },
+  "dashboard_rows": {
+    "type": "integer",
+    "default": 3,
+    "label": "Rangées de la page Maison",
+    "group": "Rangées",
+    "min": 1,
+    "max": 5
+  },
+  "voice_provider": {
+    "type": "integer",
+    "default": 0,
+    "min": 0,
+    "max": 3,
+    "label": "Service de recherche vocale",
+    "group": "Barre",
+    "section": "Recherche vocale",
+    "options": [
+      [
+        0,
+        "Android / Google TV"
+      ],
+      [
+        1,
+        "Home Assistant Assist"
+      ],
+      [
+        2,
+        "Choisir : Google TV, Assist, personnalisé"
+      ],
+      [
+        3,
+        "Service personnalisé"
+      ]
+    ]
+  },
+  "voice_agent_id": {
+    "type": "string",
+    "default": "",
+    "max": 120,
+    "label": "Agent Assist (vide = agent HA par défaut)",
+    "group": "Barre",
+    "section": "Recherche vocale"
+  },
+  "voice_language": {
+    "type": "string",
+    "default": "fr",
+    "max": 16,
+    "label": "Langue de reconnaissance (fr, en…)",
+    "group": "Barre",
+    "section": "Recherche vocale"
+  },
+  "voice_confirm": {
+    "type": "boolean",
+    "default": true,
+    "label": "Confirmer avant d’envoyer à Assist",
+    "group": "Barre",
+    "section": "Recherche vocale"
+  },
+  "voice_speak_response": {
+    "type": "boolean",
+    "default": true,
+    "label": "Lire la réponse Assist à voix haute",
+    "group": "Barre",
+    "section": "Recherche vocale"
+  },
+  "nav_clock_size": {
+    "type": "integer",
+    "default": 20,
+    "min": 14,
+    "max": 40,
+    "label": "Taille de l’heure",
+    "group": "Barre",
+    "section": "Informations"
+  },
+  "nav_status_size": {
+    "type": "integer",
+    "default": 14,
+    "min": 10,
+    "max": 28,
+    "label": "Taille de l’état de connexion",
+    "group": "Barre",
+    "section": "Informations"
+  },
+  "scene_movie": {
+    "type": "string",
+    "default": "scene.soiree_cinema",
+    "max": 255,
+    "format": "entity",
+    "label": "Scène cinéma à convertir en carte",
+    "group": "Rangées",
+    "section": "Actions rapides"
+  },
+  "scene_off": {
+    "type": "string",
+    "default": "scene.tout_eteindre",
+    "max": 255,
+    "format": "entity",
+    "label": "Scène extinction à convertir en carte",
+    "group": "Rangées",
+    "section": "Actions rapides"
+  },
+  "show_clock": {
+    "type": "boolean",
+    "default": true,
+    "label": "Afficher l’heure",
+    "group": "Barre",
+    "section": "Informations"
+  },
+  "show_status": {
+    "type": "boolean",
+    "default": true,
+    "label": "État de la connexion HA",
+    "group": "Barre",
+    "section": "Informations"
+  },
+  "show_greeting": {
+    "type": "boolean",
+    "default": true,
+    "label": "Afficher la salutation",
+    "group": "Apparence"
+  },
+  "greeting_size": {
+    "type": "integer",
+    "min": 44,
+    "max": 78,
+    "default": 64,
+    "label": "Taille de la salutation",
+    "group": "Apparence"
+  },
+  "show_subtitle": {
+    "type": "boolean",
+    "default": true,
+    "label": "Afficher le texte d’accueil",
+    "group": "Apparence"
+  },
+  "hero_subtitle": {
+    "type": "string",
+    "max": 240,
+    "default": "Votre salon, simplement.",
+    "label": "Texte d’accueil",
+    "group": "Apparence"
+  },
+  "subtitle_size": {
+    "type": "integer",
+    "min": 14,
+    "max": 30,
+    "default": 22,
+    "label": "Taille du texte d’accueil",
+    "group": "Apparence"
+  },
+  "app_icon_shape": {
+    "type": "integer",
+    "min": 0,
+    "max": 5,
+    "default": 0,
+    "label": "Forme des icônes",
+    "group": "Apparence",
+    "section": "Icônes des applications",
+    "options": [
+      [
+        0,
+        "Ronde"
+      ],
+      [
+        1,
+        "Carrée arrondie"
+      ],
+      [
+        2,
+        "Carrée"
+      ],
+      [
+        3,
+        "Cookie à 4 côtés"
+      ],
+      [
+        4,
+        "Cookie à 7 côtés"
+      ],
+      [
+        5,
+        "Arche"
+      ]
+    ]
+  },
+  "favorite_icon_size": {
+    "type": "integer",
+    "min": 44,
+    "max": 72,
+    "default": 59,
+    "label": "Taille des favoris",
+    "group": "Apparence"
+  },
+  "favorite_cell_width": {
+    "type": "integer",
+    "min": 130,
+    "max": 220,
+    "default": 184,
+    "label": "Espacement des favoris",
+    "group": "Apparence"
+  },
+  "show_app_labels": {
+    "type": "boolean",
+    "default": true,
+    "label": "Nom sous les applications",
+    "group": "Apparence"
+  },
+  "home_card_height": {
+    "type": "integer",
+    "min": 90,
+    "max": 120,
+    "default": 108,
+    "label": "Hauteur des cartes",
+    "group": "Apparence"
+  },
+  "home_card_opacity": {
+    "type": "integer",
+    "min": 35,
+    "max": 100,
+    "default": 90,
+    "label": "Opacité des cartes (%)",
+    "group": "Apparence"
+  },
+  "card_roundness": {
+    "type": "integer",
+    "min": 4,
+    "max": 30,
+    "default": 18,
+    "label": "Arrondi des cartes",
+    "group": "Apparence"
+  },
+  "focus_width": {
+    "type": "integer",
+    "min": 2,
+    "max": 6,
+    "default": 4,
+    "label": "Épaisseur du focus",
+    "group": "Apparence"
+  },
+  "show_favorites": {
+    "type": "boolean",
+    "default": true,
+    "label": "Rangée des favoris",
+    "group": "Rangées"
+  },
+  "show_continue": {
+    "type": "boolean",
+    "default": true,
+    "label": "Reprise de lecture (si disponible)",
+    "group": "Rangées"
+  },
+  "show_home": {
+    "type": "boolean",
+    "default": true,
+    "label": "Rangée Votre maison",
+    "group": "Rangées"
+  },
+  "home_row_title": {
+    "type": "string",
+    "max": 100,
+    "default": "Votre maison",
+    "label": "Titre de la maison",
+    "group": "Rangées"
+  },
+  "home_columns": {
+    "type": "integer",
+    "min": 3,
+    "max": 5,
+    "default": 4,
+    "label": "Cartes visibles à l’accueil",
+    "group": "Rangées"
+  },
+  "dashboard_columns": {
+    "type": "integer",
+    "min": 2,
+    "max": 5,
+    "default": 3,
+    "label": "Colonnes du dashboard Maison",
+    "group": "Rangées"
+  },
+  "home_show_states": {
+    "type": "boolean",
+    "default": true,
+    "label": "Afficher les états",
+    "group": "Rangées"
+  },
+  "dashboard_include_entities": {
+    "type": "boolean",
+    "default": true,
+    "label": "Inclure la sélection d’entités avec les cartes",
+    "group": "Rangées"
+  },
+  "dashboard_entities_order": {
+    "type": "string",
+    "max": 16000,
+    "format": "entities",
+    "default": "",
+    "label": "Entités dans l’ordre (une par ligne)",
+    "group": "Rangées"
+  },
+  "home_source_ha": {
+    "type": "boolean",
+    "default": false,
+    "label": "Utiliser les membres d’un groupe HA",
+    "group": "Rangées"
+  },
+  "home_group_entity": {
+    "type": "string",
+    "max": 160,
+    "format": "entity",
+    "default": "group.tv_launcher",
+    "label": "Entité du groupe",
+    "group": "Rangées"
+  },
+  "start_dashboard": {
+    "type": "boolean",
+    "default": false,
+    "label": "Ouvrir Maison au démarrage",
+    "group": "Rangées"
+  },
+  "start_apps": {
+    "type": "boolean",
+    "default": false,
+    "label": "Ouvrir Applications au démarrage (si Maison désactivé)",
+    "group": "Rangées"
+  },
+  "show_mobile_apps": {
+    "type": "boolean",
+    "default": true,
+    "label": "Inclure les applications non-TV",
+    "group": "Favoris"
+  },
+  "favorite_apps_order": {
+    "type": "string",
+    "max": 16000,
+    "format": "packages",
+    "default": "",
+    "label": "Favoris dans l’ordre : packages Android, un par ligne",
+    "group": "Favoris"
+  },
+  "wallpaper_mode": {
+    "type": "integer",
+    "min": 0,
+    "max": 5,
+    "default": 0,
+    "label": "Fond d’écran",
+    "group": "Fond d’écran",
+    "options": [
+      [
+        0,
+        "Salon zen"
+      ],
+      [
+        1,
+        "Dégradé bleu-noir"
+      ],
+      [
+        2,
+        "Noir minimal"
+      ],
+      [
+        3,
+        "Image personnelle déjà importée sur la TV"
+      ],
+      [
+        4,
+        "Album Google Photos partagé"
+      ],
+      [
+        5,
+        "Couleur unie"
+      ]
+    ]
+  },
+  "wallpaper_color": {
+    "type": "string",
+    "max": 7,
+    "format": "color",
+    "default": "#202124",
+    "label": "Couleur du fond uni",
+    "group": "Fond d’écran",
+    "presets": [
+      [
+        "#000000",
+        "Noir"
+      ],
+      [
+        "#202124",
+        "Anthracite"
+      ],
+      [
+        "#102A43",
+        "Bleu nuit"
+      ],
+      [
+        "#03A9F4",
+        "Bleu HA"
+      ],
+      [
+        "#3D5A50",
+        "Vert sauge"
+      ],
+      [
+        "#493548",
+        "Prune"
+      ],
+      [
+        "#8C4F3B",
+        "Terracotta"
+      ],
+      [
+        "#E8DFD0",
+        "Crème"
+      ]
+    ]
+  },
+  "background_dim": {
+    "type": "integer",
+    "min": 0,
+    "max": 75,
+    "default": 8,
+    "label": "Assombrissement (%)",
+    "group": "Fond d’écran"
+  },
+  "wallpaper_fit": {
+    "type": "integer",
+    "min": 0,
+    "max": 2,
+    "default": 0,
+    "label": "Cadrage",
+    "group": "Fond d’écran",
+    "options": [
+      [
+        0,
+        "Recadrer et remplir"
+      ],
+      [
+        1,
+        "Ajuster sans couper"
+      ],
+      [
+        2,
+        "Étirer"
+      ]
+    ]
+  },
+  "wallpaper_focus_x": {
+    "type": "integer",
+    "min": 0,
+    "max": 100,
+    "default": 50,
+    "label": "Position horizontale (%)",
+    "group": "Fond d’écran"
+  },
+  "wallpaper_focus_y": {
+    "type": "integer",
+    "min": 0,
+    "max": 100,
+    "default": 50,
+    "label": "Position verticale (%)",
+    "group": "Fond d’écran"
+  },
+  "wallpaper_left_overlay": {
+    "type": "integer",
+    "min": 0,
+    "max": 100,
+    "default": 100,
+    "label": "Dégradé gauche (%)",
+    "group": "Fond d’écran"
+  },
+  "wallpaper_overlay_width": {
+    "type": "integer",
+    "min": 35,
+    "max": 100,
+    "default": 82,
+    "label": "Largeur du dégradé (%)",
+    "group": "Fond d’écran"
+  },
+  "wallpaper_bottom_overlay": {
+    "type": "integer",
+    "min": 0,
+    "max": 100,
+    "default": 100,
+    "label": "Dégradé bas (%)",
+    "group": "Fond d’écran"
+  },
+  "photo_album_url": {
+    "type": "string",
+    "max": 2048,
+    "format": "album",
+    "default": "",
+    "label": "Lien de l’album Google Photos (toute personne ayant le lien peut le consulter)",
+    "group": "Fond d’écran"
+  },
+  "photo_album_seconds": {
+    "type": "integer",
+    "min": 5,
+    "max": 3600,
+    "default": 30,
+    "label": "Secondes par photo",
+    "group": "Fond d’écran"
+  },
+  "photo_album_fade_ms": {
+    "type": "integer",
+    "min": 0,
+    "max": 3000,
+    "default": 1000,
+    "label": "Fondu en millisecondes (0 = désactivé)",
+    "group": "Fond d’écran"
+  },
+  "photo_album_shuffle": {
+    "type": "boolean",
+    "default": false,
+    "label": "Ordre aléatoire",
+    "group": "Fond d’écran"
+  },
+  "photo_album_sync_minutes": {
+    "type": "integer",
+    "min": 1,
+    "max": 1440,
+    "default": 15,
+    "label": "Vérification de l’album en minutes",
+    "group": "Fond d’écran"
+  },
+  "photo_album_cache_mb": {
+    "type": "integer",
+    "min": 32,
+    "max": 1024,
+    "default": 128,
+    "label": "Cache des photos en Mo",
+    "group": "Fond d’écran"
+  },
+  "nav_display": {
+    "type": "integer",
+    "min": 0,
+    "max": 2,
+    "default": 0,
+    "label": "Affichage des onglets",
+    "section": "Textes et icônes",
+    "options": [
+      [
+        0,
+        "Texte"
+      ],
+      [
+        1,
+        "Icônes"
+      ],
+      [
+        2,
+        "Texte et icône"
+      ]
+    ],
+    "group": "Barre"
+  },
+  "nav_icon_size": {
+    "type": "integer",
+    "min": 16,
+    "max": 56,
+    "default": 28,
+    "label": "Taille des icônes",
+    "section": "Textes et icônes",
+    "group": "Barre"
+  },
+  "nav_icon_color": {
+    "type": "string",
+    "format": "color",
+    "max": 7,
+    "default": "#E0E2E4",
+    "label": "Couleur des icônes",
+    "section": "Textes et icônes",
+    "group": "Barre"
+  },
+  "nav_logo_color": {
+    "type": "string",
+    "format": "color",
+    "max": 7,
+    "default": "#03A9F4",
+    "label": "Couleur du logo HA",
+    "section": "Logo",
+    "group": "Barre"
+  },
+  "nav_logo_size": {
+    "type": "integer",
+    "min": 32,
+    "max": 76,
+    "default": 50,
+    "label": "Taille du logo HA",
+    "section": "Logo",
+    "group": "Barre"
+  },
+  "voice_custom_name": {
+    "type": "string",
+    "default": "Service personnalisé",
+    "max": 60,
+    "label": "Nom du troisième service",
+    "group": "Barre",
+    "section": "Recherche vocale"
+  },
+  "voice_custom_mode": {
+    "type": "integer",
+    "default": 0,
+    "min": 0,
+    "max": 1,
+    "label": "Destination du service personnalisé",
+    "options": [
+      [
+        0,
+        "Application vocale Android"
+      ],
+      [
+        1,
+        "Adresse de recherche HTTPS"
+      ]
+    ],
+    "group": "Barre",
+    "section": "Recherche vocale"
+  },
+  "voice_custom_package": {
+    "type": "string",
+    "default": "",
+    "max": 255,
+    "format": "voice_package",
+    "label": "Paquet de l’application vocale",
+    "group": "Barre",
+    "section": "Recherche vocale"
+  },
+  "voice_custom_action": {
+    "type": "integer",
+    "default": 0,
+    "min": 0,
+    "max": 3,
+    "label": "Ouverture de l’application",
+    "options": [
+      [
+        0,
+        "Recherche vocale Android"
+      ],
+      [
+        1,
+        "Commande vocale"
+      ],
+      [
+        2,
+        "Assistant Android"
+      ],
+      [
+        3,
+        "Ouvrir simplement l’application"
+      ]
+    ],
+    "group": "Barre",
+    "section": "Recherche vocale"
+  },
+  "voice_custom_url": {
+    "type": "string",
+    "default": "",
+    "max": 2048,
+    "format": "voice_url",
+    "label": "Adresse HTTPS · {query} = demande",
+    "group": "Barre",
+    "section": "Recherche vocale"
+  },
+  "voice_custom_confirm": {
+    "type": "boolean",
+    "default": true,
+    "label": "Confirmer l’envoi au service personnalisé",
+    "group": "Barre",
+    "section": "Recherche vocale"
+  }
+}

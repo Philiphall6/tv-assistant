@@ -1,0 +1,36 @@
+# Validation
+
+Les tests n’utilisent aucun compte HA réel ni commande domotique. Les données d’authentification sont des chaînes fictives et les pages web sont interceptées sur des domaines `.invalid`.
+
+- Tests Python : validation YAML/JSON, profils, approbation d’une nouvelle TV, isolation et captures éphémères.
+- Tests dans le runtime HA 2026.10.4 : décorateurs d’autorisation, abonnements, refus des écritures non administrateur, stockage et panneau.
+- Tests Chromium : éditeur, navigation, placement, vraies surfaces de cartes simulées et dimensionnement.
+- Instrumentation Android : disposition, icônes, cartes, protocole temps réel, pont WebView, AES-GCM, migration, mauvais serveur et données chiffrées altérées.
+
+Le manifeste accepte Android 11–16. Un modèle CI prévoit les bornes **API 30 et API 36** dans `docs/ci/validate.yml`. Il n’est pas activé dans cette première publication : la connexion GitHub de publication ne possède pas le droit d’écriture des workflows. Un mainteneur autorisé peut le copier dans `.github/workflows/validate.yml`. Les tests ci-dessous ont été exécutés localement. Une version non exécutée avec succès ne doit pas être présentée comme testée. Les variantes de firmware, les touches constructeur et toutes les cartes HACS ne sont pas couvertes.
+
+## Vérification de la première publication — 3 novembre 2026
+
+| Contrôle | Résultat local |
+| --- | --- |
+| Android 11 / API 30, émulateur Google APIs | Suite d’instrumentation complète réussie |
+| Android TV 16 / API 36, émulateur TV | Même suite réussie et ouverture de l’accueil vérifiée |
+| Android 12, 13, 14 et 15 | Plage couverte par le manifeste, pas de test d’exécution distinct effectué pour cette publication |
+| Validation Python | 22 tests réussis |
+| Home Assistant 2026.10.4 | 7 tests runtime réussis |
+| Éditeur et cartes Chromium | Deux suites réussies |
+| Validateur officiel hassfest | 1 intégration valide, aucune erreur |
+| Gitleaks 8.30.1 | Aucun secret détecté dans l’arbre public et son historique neuf |
+
+Le contrôle de confidentialité de l’APK et la conservation de l’empreinte du certificat de signature ont également été vérifiés. Ces résultats ne constituent ni un audit indépendant ni une garantie de sécurité absolue.
+
+```sh
+python3 tests/test_ha_panel.py
+pip install playwright
+playwright install chromium
+python3 tests/test_panel_browser.py
+python3 tests/test_cards_browser.py
+docker run --rm --network none -v "$PWD:/work" -w /work ghcr.io/home-assistant/home-assistant:2026.10.4 python tests/ha_component_runtime.py
+```
+
+`CHROME_BIN` permet d’utiliser un Chromium déjà installé. Le mode audit interdit le remplacement du launcher personnel et la suite refuse un package cible qui ne se termine pas par `.audit`.

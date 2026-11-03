@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="fr.maison.tvlauncher.tests" android:versionCode="1" android:versionName="1">
+    <uses-sdk android:minSdkVersion="30" android:targetSdkVersion="36" />
+    <application android:label="HA TV — Tests en mémoire" android:allowBackup="false" />
+    <instrumentation android:name="fr.maison.tvlauncher.PanelInstrumentation" android:targetPackage="fr.maison.tvlauncher" android:label="Native layout and profile regression" />
+    <instrumentation android:name="fr.maison.tvlauncher.VoiceUiInstrumentation" android:targetPackage="fr.maison.tvlauncher" android:label="Voice chooser without commands" />
+    <instrumentation android:name="fr.maison.tvlauncher.AppIconInstrumentation" android:targetPackage="fr.maison.tvlauncher" android:label="Read-only installed icon gallery" />
+    <instrumentation android:name="fr.maison.tvlauncher.HaCardInstrumentation" android:targetPackage="fr.maison.tvlauncher" android:label="Read-only HA card rendering" />
+    <instrumentation android:name="fr.maison.tvlauncher.HaIdentityInstrumentation" android:targetPackage="fr.maison.tvlauncher" android:label="Read-only HA account verification" />
+</manifest>

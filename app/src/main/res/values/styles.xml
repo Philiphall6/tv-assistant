@@ -1,0 +1,18 @@
+<resources>
+    <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#F3B75F</item>
+        <item name="android:navigationBarColor">#07090D</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowBackground">#07090D</item>
+    </style>
+    <style name="DrawerTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#03A9F4</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+</resources>

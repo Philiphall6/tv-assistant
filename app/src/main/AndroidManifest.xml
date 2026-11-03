@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="fr.maison.tvlauncher" android:versionCode="54" android:versionName="2.12.0">
+    <uses-sdk android:minSdkVersion="30" android:targetSdkVersion="36" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <application
+        android:allowBackup="false"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:usesCleartextTraffic="false"
+        android:debuggable="false"
+        android:enableOnBackInvokedCallback="false"
+        android:banner="@drawable/tv_banner"
+        android:icon="@drawable/app_icon"
+        android:label="TV Assistant"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity android:name=".VoiceSearchActivity" android:exported="false" />
+        <activity android:name=".LauncherSetupActivity" android:exported="false" />
+        <activity android:name=".SettingsActivity" android:exported="false" />
+        <activity android:name=".EntityManagerActivity" android:exported="false" />
+        <activity android:name=".CardManagerActivity" android:exported="false" />
+        <activity android:name=".PanelSettingsActivity" android:exported="false" />
+        <activity android:name=".LayoutSettingsActivity" android:exported="false" />
+        <activity android:name=".HaDashboardActivity" android:exported="false" android:screenOrientation="landscape" />
+        <activity android:name=".CardEditorActivity" android:exported="false" />
+        <activity android:name=".HomeRowSettingsActivity" android:exported="false" />
+        <activity android:name=".LauncherSettingsActivity" android:exported="false" />
+        <activity android:name=".AppearanceSettingsActivity" android:exported="false" />
+        <activity android:name=".WallpaperColorActivity" android:exported="false" />
+        <activity android:name=".AlbumWallpaperActivity" android:exported="false" />
+        <activity android:name=".AppManagerActivity" android:exported="false" android:theme="@style/DrawerTheme" />
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|smallestScreenSize|uiMode"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape">
+            <intent-filter android:priority="2">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
