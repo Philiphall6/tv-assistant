@@ -35,11 +35,13 @@ New TVs cannot read a profile before an administrator assigns one. One profile c
 
 ## Features and limits
 
-- Favorite apps, configurable icon shapes, long-press menus and resume content when apps provide it.
+- Favorite apps, configurable icon shapes, long-press menus and resume content with artwork and progress when apps provide it.
+- Remote shortcuts and local button-to-app assignments, subject to manufacturer restrictions.
 - Adjustable navigation position, size, tabs, colors, clock, status and voice search.
 - Native cards, visual and YAML editing, free placement and shared or individual TV profiles.
 - Real Lovelace cards in a persistent WebView, with remote-pointer interaction and no periodic page reload.
 - Solid colors, a local image or a cached slideshow from a shared Google Photos album.
+- The idle launcher and HA dashboard allow the system screensaver without changing Google albums or the TV's timeout settings.
 
 The real preview requires the launcher to be visible on the TV. Otherwise, a placement plan remains available. Not every custom HA card supports TV remotes. Google Photos synchronization uses the public album page format, which Google can change. Treat shared album URLs as private data.
 

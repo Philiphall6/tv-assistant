@@ -44,6 +44,20 @@ adb -s SERIAL shell input keyevent KEYCODE_HOME
 
 Désactivez le débogage réseau après l’installation. Ne laissez pas ADB accessible à des appareils non fiables.
 
+## Reprise de lecture et télécommande
+
+La rangée de reprise lit uniquement les contenus publiés par les applications dans le fournisseur Android TV. Si la TV demande une autorisation supplémentaire, acceptez la demande Android après avoir lu son explication ; vous pouvez aussi refuser et continuer à utiliser le launcher. L’autorisation peut être demandée à nouveau depuis **Paramètres → Rangées de l’accueil → Autoriser la reprise de lecture** ou l’assistant d’installation. Cet accès ne modifie pas votre historique.
+
+La présence d’une application ne garantit pas qu’elle partage des reprises. Une rangée vide reste vide ; aucune affiche ou progression n’est inventée. Une image indisponible est remplacée par l’icône de l’application. Les images et liens proviennent des applications concernées, pas d’une connexion à leurs comptes depuis TV Assistant.
+
+Dans **Paramètres → Général → Télécommande**, choisissez **Associer une touche à une application**, appuyez sur la touche puis sélectionnez l’application. L’association fonctionne lorsque TV Assistant traite la touche, pas dans les autres applications. Les touches Home, Retour, volume, alimentation et navigation ne sont pas réaffectées. Certaines touches réservées par le système ne parviennent pas au launcher.
+
+## Diaporama Google et veille
+
+L’accueil et le tableau de bord HA ne bloquent pas volontairement l’économiseur d’écran. Son choix, ses albums et son délai restent gérés dans les paramètres de la TV ou Google Home, selon le modèle. Le bouton d’alimentation et la veille de la TV restent gérés par Android.
+
+L’économiseur Google est distinct du fond Google Photos partagé du launcher : il remplace l’accueil pendant l’inactivité, puis laisse Android reprendre l’application ou l’accueil lors d’une interaction. Les cartes HA ne se superposent pas au diaporama Google. Une lecture vidéo déclenchée dans une application peut naturellement différer l’économiseur.
+
 ## Dépannage
 
 - **HTTPS refusé** : utilisez un certificat valide pour le nom de votre serveur et une horloge Android correcte. Aucun bouton « ignorer le certificat » n’est fourni.

@@ -16,7 +16,8 @@ public class HaDashboardActivity extends Activity {
     @Override public void onCreate(Bundle b){super.onCreate(b);
         SharedPreferences prefs=CardStore.prefs(this);String address;
         String requested=getIntent().getStringExtra("dashboard_path");try{address=DashboardUrl.resolve(prefs.getString("ha_url",""),requested==null?prefs.getString("dashboard_web_path","/lovelace/0"):requested);}catch(Exception e){Toast.makeText(this,I18n.t("Configurez l’adresse HA et le chemin du tableau de bord."),Toast.LENGTH_LONG).show();finish();return;}
-        origin=address;speed=prefs.getInt("dashboard_pointer_speed",24);getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        // An idle dashboard must allow the system screensaver, just like the launcher.
+        origin=address;speed=prefs.getInt("dashboard_pointer_speed",24);
         LinearLayout root=new LinearLayout(this);root.setOrientation(LinearLayout.VERTICAL);root.setBackgroundColor(0xff101820);
         status=new TextView(this);status.setTextColor(Color.WHITE);status.setTextSize(13);status.setPadding(16,10,16,10);status.setText(I18n.t("Chargement HA… · Flèches : pointeur · OK : clic · CH ± : défiler · Menu : options · Retour : Maison"));root.addView(status);
         surface=new FrameLayout(this);root.addView(surface,new LinearLayout.LayoutParams(-1,0,1));setContentView(root);
@@ -37,6 +38,7 @@ public class HaDashboardActivity extends Activity {
     }
     boolean keyboardVisible(){if(android.os.Build.VERSION.SDK_INT>=30){WindowInsets insets=getWindow().getDecorView().getRootWindowInsets();return insets!=null&&insets.isVisible(WindowInsets.Type.ime());}Rect r=new Rect();getWindow().getDecorView().getWindowVisibleDisplayFrame(r);return getWindow().getDecorView().getHeight()-r.bottom>getResources().getDisplayMetrics().density*150;}
     @Override public boolean dispatchKeyEvent(KeyEvent e){
+        if(RemoteShortcuts.dispatchApp(this,e))return true;
         int k=e.getKeyCode();if(keyboardVisible())return super.dispatchKeyEvent(e);
         if(k==KeyEvent.KEYCODE_BACK){if(e.getAction()==KeyEvent.ACTION_UP)finish();return true;}
         if(k==KeyEvent.KEYCODE_MENU){if(e.getAction()==KeyEvent.ACTION_UP)menu();return true;}

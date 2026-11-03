@@ -116,6 +116,7 @@
     <string name="ui_750fc830" formatted="false">"On"</string>
     <string name="ui_19be580e" formatted="false">"Android System WebView unavailable. Update it in the Play Store. Back: Home"</string>
     <string name="ui_d7fe995f" formatted="false">"Android System WebView unavailable"</string>
+    <string name="ui_b25e5b43" formatted="false">"Android must allow TV Assistant to read continue-watching content shared by your apps. Access is read-only; no history is changed. You can decline and keep using the launcher."</string>
     <string name="ui_898a318f" formatted="false">"Animations"</string>
     <string name="ui_f6cc3554" formatted="false">"Animate fan: "</string>
     <string name="ui_306f0ac5" formatted="false">"Cancel"</string>
@@ -144,6 +145,7 @@
     <string name="ui_490f79ff" formatted="false">"Apply and view on TV"</string>
     <string name="ui_f3922c5f" formatted="false">"Press OK: "</string>
     <string name="ui_d42c2989" formatted="false">"Hold OK (YAML) · optional"</string>
+    <string name="ui_950f7150" formatted="false">"Press the button to assign. Back to cancel."</string>
     <string name="ui_3c94aaf" formatted="false">"Arch"</string>
     <string name="ui_36b2be5f" formatted="false">"Slate"</string>
     <string name="ui_1bd04a37" formatted="false">"Card corner radius"</string>
@@ -151,6 +153,7 @@
     <string name="ui_3c992cb" formatted="false">"Off"</string>
     <string name="ui_12353081" formatted="false">"Assist is thinking…"</string>
     <string name="ui_4417c326" formatted="false">"Assist uses the TV account and its permissions. Transcription uses the installed Android speech service, not HA\'s STT engine. No continuous listening. Text input remains available without a speech service. The third service opens a voice app or an HTTPS address with {query}. No HA token is sent; do not put secrets in the address."</string>
+    <string name="ui_f0e7ddf5" formatted="false">"Assign a button to an app"</string>
     <string name="ui_a278c015" formatted="false">"Dimming (%)"</string>
     <string name="ui_276b7b37" formatted="false">"Background dimming"</string>
     <string name="ui_909714a9" formatted="false">"Overall dimming"</string>
@@ -170,8 +173,11 @@
     <string name="ui_2c6c5c7b" formatted="false">"No speech recognized."</string>
     <string name="ui_743ba974" formatted="false">"No local backup"</string>
     <string name="ui_4a2bcd33" formatted="false">"No selected cards match the search"</string>
+    <string name="ui_7c9b1a92" formatted="false">"No button received. Some buttons are reserved by the TV."</string>
     <string name="ui_73b7488e" formatted="false">"Heating allowed"</string>
     <string name="ui_fdfb765" formatted="false">"Approval required · an administrator must assign a profile to this TV in HA"</string>
+    <string name="ui_680dce7a" formatted="false">"Android permissions"</string>
+    <string name="ui_e556a39e" formatted="false">"Allow continue watching"</string>
     <string name="ui_648994af" formatted="false">"TOP BAR"</string>
     <string name="ui_3cfe166" formatted="false">"Navigation"</string>
     <string name="ui_cef8d5d9" formatted="false">"Navigation bar"</string>
@@ -222,6 +228,7 @@
     <string name="ui_2dd24176" formatted="false">"Invalid HA certificate for this address. Use its valid HTTPS name. Back: Home"</string>
     <string name="ui_a4c44ce7" formatted="false">"Invalid HA certificate · check the HTTPS address"</string>
     <string name="ui_423be27b" formatted="false">"These settings affect only the navigation bar, never the cards."</string>
+    <string name="ui_15b07313" formatted="false">"This button remains reserved for navigation or the system."</string>
     <string name="ui_735df591" formatted="false">"Change photo"</string>
     <string name="ui_a9ce061" formatted="false">"Every permission is your choice. The app never removes or disables a launcher."</string>
     <string name="ui_ded6f35f" formatted="false">"Loading HA…"</string>
@@ -243,6 +250,7 @@
     <string name="ui_ab61fba0" formatted="false">"Choose TV Assistant as your home screen"</string>
     <string name="ui_3d7bb27b" formatted="false">"Choose displayed devices and features"</string>
     <string name="ui_4eaed51" formatted="false">"Choose home screen cards"</string>
+    <string name="ui_35610159" formatted="false">"Choose an app"</string>
     <string name="ui_76bf49ed" formatted="false">"Choose an app…"</string>
     <string name="ui_d69241d8" formatted="false">"Choose a card…"</string>
     <string name="ui_ece4e2ef" formatted="false">"Choose a destination…"</string>
@@ -489,6 +497,7 @@
     <string name="ui_f8b30618" formatted="false">"The Home Assistant connection will be kept."</string>
     <string name="ui_d73e4c8d" formatted="false">"The full list is read in pages. Only photos to display are downloaded at TV size. The cache replaces older copies. Offline, only cached photos are shown. Synchronization runs while the launcher is visible and resumes when it opens."</string>
     <string name="ui_d87af0da" formatted="false">"Palette unavailable; custom color remains available."</string>
+    <string name="ui_85f3d718" formatted="false">"Android TV continue watching is not available on this device."</string>
     <string name="ui_8dc639ec" formatted="false">"The Android service transcribes speech, then sends the text to your HA agent using this TV\'s account."</string>
     <string name="ui_fff58d43" formatted="false">"Recognition language (auto = Android language)"</string>
     <string name="ui_fd16e867" formatted="false">"Recognition language (fr, en…)"</string>
@@ -606,6 +615,7 @@
     <string name="ui_e33a02f6" formatted="false">"Place on For you"</string>
     <string name="ui_a0e59b51" formatted="false">"Place an existing card"</string>
     <string name="ui_1c2550d6" formatted="false">"Layout plan — no screenshot received"</string>
+    <string name="ui_1bd12805" formatted="false">"Later"</string>
     <string name="ui_f49499c5" formatted="false">"Circulation pump"</string>
     <string name="ui_1ab799f5" formatted="false">"Heat pump"</string>
     <string name="ui_924716d" formatted="false">"X position (%)"</string>
@@ -629,6 +639,8 @@
     <string name="ui_49cef8a" formatted="false">"Plum"</string>
     <string name="ui_14049fc0" formatted="false">"Leave editor?"</string>
     <string name="ui_f62b0339" formatted="false">"HOME SCREEN ROWS"</string>
+    <string name="ui_b827c173" formatted="false">"Shortcut saved"</string>
+    <string name="ui_56b72025" formatted="false">"Launcher-only shortcuts. Home, Back, volume and power remain controlled by Android."</string>
     <string name="ui_b0db300b" formatted="false">"Your home row"</string>
     <string name="ui_1ef7029e" formatted="false">"Favorites row"</string>
     <string name="ui_24fc7f0f" formatted="false">"Row of selected apps"</string>
@@ -657,6 +669,8 @@
     <string name="ui_935166f4" formatted="false">"Use shared style"</string>
     <string name="ui_d6bf4079" formatted="false">"Continue watching"</string>
     <string name="ui_a7d6bd6d" formatted="false">"Continue watching (if available)"</string>
+    <string name="ui_3654d294" formatted="false">"Continue watching: Android permission required"</string>
+    <string name="ui_2e023782" formatted="false">"Continue watching access allowed"</string>
     <string name="ui_ce5296ea" formatted="false">"Restore failed"</string>
     <string name="ui_8aed877" formatted="false">"Restore"</string>
     <string name="ui_25fb19f8" formatted="false">"Restore and send the previous version to this profile\'s TVs? The current draft will be discarded."</string>
@@ -787,6 +801,7 @@
     <string name="ui_28035a" formatted="false">"Type"</string>
     <string name="ui_305e85ac" formatted="false">"Type: "</string>
     <string name="ui_a291e6ec" formatted="false">"Card type"</string>
+    <string name="ui_e7cbc04c" formatted="false">"Remote control"</string>
     <string name="ui_13b4be64" formatted="false">"Remote: arrows = pointer, OK = click, CH +/− = scroll, Menu = options, Back = Home cards. No periodic reload. Integration previews do not capture this web view."</string>
     <string name="ui_6683aeff" formatted="false">"TVs"</string>
     <string name="ui_135cc81d" formatted="false">"A real HA dashboard, on demand"</string>

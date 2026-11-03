@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 /** User-driven setup; never disables another launcher or grants itself permissions. */
 public final class LauncherSetupActivity extends CardScreen {
-    TextView homeStatus, overlayStatus;
+    TextView homeStatus, overlayStatus, playbackStatus;
 
     static boolean offerOnFirstLaunch(SharedPreferences prefs) {
         return !prefs.getBoolean("setup_seen", false) && !prefs.contains("home_redesign_v2");
@@ -45,6 +45,8 @@ public final class LauncherSetupActivity extends CardScreen {
         overlayStatus=text("",14,0xffb1bdc8);overlayStatus.setPadding(0,dp(16),0,dp(4));box.addView(overlayStatus);
         button(box,I18n.t("Superposition · autorisation facultative"),()->confirm(I18n.t("Superposition facultative"), I18n.t("Les cartes HA, le menu d’appui long et l’accueil fonctionnent sans cette autorisation. Elle ne remplace pas le launcher par défaut. Ouvrir les réglages Android pour l’autoriser ?"),()->openSettings(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,Uri.parse("package:"+getPackageName())))));
         box.addView(text(I18n.t("Aucune autorisation de stockage global, d’accessibilité ou de notifications n’est nécessaire aux fonctions actuelles. Les photos sont choisies par le sélecteur Android."),12,0xffb1bdc8));
+        playbackStatus=text("",14,0xffb1bdc8);box.addView(playbackStatus);
+        button(box,I18n.t("Autoriser la reprise de lecture"),()->PlaybackPermission.request(this));
         button(box,I18n.t("Configurer la connexion Home Assistant"),()->startActivity(new Intent(this,SettingsActivity.class)));
         button(footer,I18n.t("Continuer vers l’accueil"),this::complete);
         button(footer,I18n.t("Actualiser l’état"),this::refresh);
@@ -55,7 +57,9 @@ public final class LauncherSetupActivity extends CardScreen {
         if(homeStatus==null)return;
         homeStatus.setText(homeMessage(getPackageName(),effectiveHome(this),roleHeld(this)));
         overlayStatus.setText(Settings.canDrawOverlays(this)?I18n.t("✓ Superposition autorisée · facultative"):I18n.t("Superposition non autorisée · facultative, le launcher fonctionne sans elle"));
+        playbackStatus.setText(PlaybackPermission.granted(this)?I18n.t("Reprise de lecture autorisée"):I18n.t("Reprise de lecture : autorisation Android nécessaire"));
     }
+    @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){super.onRequestPermissionsResult(request,permissions,results);if(request==PlaybackPermission.REQUEST)refresh();}
     void requestHome(){
         if(Build.VERSION.SDK_INT>=29){
             RoleManager roles=getSystemService(RoleManager.class);

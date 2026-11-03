@@ -44,15 +44,17 @@ public class MainActivity extends Activity {
     boolean offerSetup;
     android.widget.FrameLayout root;
     HaCardSurface haCards;
-    @Override public void onCreate(Bundle b){super.onCreate(b);offerSetup=LauncherSetupActivity.offerOnFirstLaunch(CardStore.prefs(this));requestWindowFeature(Window.FEATURE_NO_TITLE);getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);launcherView=new LauncherView(this);root=new android.widget.FrameLayout(this);root.addView(launcherView,new android.widget.FrameLayout.LayoutParams(-1,-1));haCards=new HaCardSurface(this,launcherView);root.addView(haCards,new android.widget.FrameLayout.LayoutParams(-1,-1));setContentView(root);}
-    @Override public void onResume(){super.onResume();if(offerSetup){offerSetup=false;startActivity(new Intent(this,LauncherSetupActivity.class));return;}if(haCards!=null)haCards.resume();if(launcherView!=null){launcherView.reload();String page=getIntent().getStringExtra("page");if(page!=null){launcherView.navigate(page);getIntent().removeExtra("page");}}}
+    // Leave inactivity and Ambient Mode to Android, including while wallpaper photos rotate.
+    @Override public void onCreate(Bundle b){super.onCreate(b);offerSetup=LauncherSetupActivity.offerOnFirstLaunch(CardStore.prefs(this));requestWindowFeature(Window.FEATURE_NO_TITLE);getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);launcherView=new LauncherView(this);root=new android.widget.FrameLayout(this);root.addView(launcherView,new android.widget.FrameLayout.LayoutParams(-1,-1));haCards=new HaCardSurface(this,launcherView);root.addView(haCards,new android.widget.FrameLayout.LayoutParams(-1,-1));setContentView(root);}
+    @Override public void onResume(){super.onResume();if(offerSetup){offerSetup=false;startActivity(new Intent(this,LauncherSetupActivity.class));return;}if(haCards!=null)haCards.resume();if(launcherView!=null){launcherView.reload();String page=getIntent().getStringExtra("page");if(page!=null){launcherView.navigate(page);getIntent().removeExtra("page");}launcherView.post(()->{if(launcherView.active&&!isFinishing()&&PlaybackPermission.offer(CardStore.prefs(this),PlaybackPermission.granted(this),PlaybackPermission.supported(this)))PlaybackPermission.request(this);});}}
+    @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){super.onRequestPermissionsResult(request,permissions,results);if(request==PlaybackPermission.REQUEST&&launcherView!=null&&launcherView.active)launcherView.reloadContinue();}
     @Override public void onPause(){if(haCards!=null)haCards.pause();if(launcherView!=null)launcherView.pause();super.onPause();}
-    @Override public boolean dispatchKeyEvent(KeyEvent e){return haCards!=null&&haCards.key(e)||super.dispatchKeyEvent(e);}
-    @Override public void onDestroy(){if(haCards!=null)haCards.destroy();super.onDestroy();}
+    @Override public boolean dispatchKeyEvent(KeyEvent e){return RemoteShortcuts.dispatchApp(this,e)||haCards!=null&&haCards.key(e)||super.dispatchKeyEvent(e);}
+    @Override public void onDestroy(){if(haCards!=null)haCards.destroy();if(launcherView!=null)launcherView.artwork.close();super.onDestroy();}
     @Override public void onNewIntent(Intent intent){super.onNewIntent(intent);setIntent(intent);}
     @Override public void onBackPressed(){if(launcherView!=null)launcherView.goBack();}
 
-    static class AppEntry { String label,pkg,activity; AppIconRenderer icon; }
+    static class AppEntry { String label,pkg,activity; AppIconRenderer icon; WatchNextStore.Item resume; }
     static class EntityItem { String id,name,state,domain; Map<String,Object> custom; JSONObject haState; }
     static class LauncherView extends View {
         final MainActivity activity; final Paint p=new Paint(3); final Paint stroke=new Paint(3); final List<AppEntry> apps=new ArrayList<>(); final List<AppEntry> favoriteApps=new ArrayList<>(); final List<AppEntry> resumeApps=new ArrayList<>(); final List<EntityItem> homeEntities=new ArrayList<>();
@@ -61,14 +63,18 @@ public class MainActivity extends Activity {
         boolean dashboardPage=false,active=false,remoteFetching=false;int dashboardOffset=0;String pendingCardId=null;
         final Runnable clockTick=this::tick;
         WallpaperSlideshow slideshow;
+        WatchNextStore watchNext;
+        final ContinueArtwork artwork=new ContinueArtwork(getContext(),this::invalidate);
+        int resumeOffset;
 
         LauncherView(MainActivity a){super(a);activity=a;setFocusable(true);setFocusableInTouchMode(true);hero=BitmapFactory.decodeResource(getResources(),R.drawable.living_room_hero);haMark=getResources().getDrawable(R.drawable.app_icon,a.getTheme());brandLogo=new BrandLogo(a);stroke.setStyle(Paint.Style.STROKE);prefs=a.getSharedPreferences(HaClient.PREFS,MODE_PRIVATE);if(!prefs.getBoolean("home_redesign_v2",false))prefs.edit().putBoolean("home_redesign_v2",true).putInt("wallpaper_mode",0).putInt("background_dim",8).apply();NativeCards.init(a);slideshow=new WallpaperSlideshow(this);}
         void tick(){if(!active)return;time=android.text.format.DateFormat.getTimeFormat(activity).format(new Date());invalidate();postDelayed(clockTick,30000);}
-        void pause(){active=false;if(slideshow!=null)slideshow.stop();removeCallbacks(clockTick);if(live!=null){live.stop();live=null;}pendingCardId=null;clearAppPress();dismissAppMenu();}
+        void pause(){active=false;if(slideshow!=null)slideshow.stop();removeCallbacks(clockTick);if(live!=null){live.stop();live=null;}if(watchNext!=null){watchNext.close();watchNext=null;}pendingCardId=null;clearAppPress();dismissAppMenu();}
         void reload(){pause();active=true;prefs=activity.getSharedPreferences(HaClient.PREFS,MODE_PRIVATE);if(prefs.getInt("wallpaper_mode",0)==4)slideshow.start();loadCustomWallpaper();loadApps();customCards=CardStore.active(activity);loadEntities();haOnline=false;
+            reloadContinue();
             live=new HaLiveClient(activity,new HaLiveClient.Listener(){public void states(Map<String,JSONObject> next){states=next;loadEntities();}public void connection(boolean online){haOnline=online;invalidate();}public void configuration(JSONObject snapshot)throws Exception{applyPanel(snapshot);}public Bitmap preview(){return capturePreview();}});live.start();refreshRemote();tick();
             if(!initialPageApplied){initialPageApplied=true;if(prefs.getBoolean("start_dashboard",false)){dashboardPage=true;row=4;col=2;}else{appsPage=prefs.getBoolean("start_apps",false);if(appsPage){row=4;col=1;}}}normalizeSelection();requestFocus();invalidate();}
-        void applyPanel(JSONObject snapshot)throws Exception{if(!active||!PanelStore.apply(activity,snapshot))return;pendingCardId=null;clearAppPress();dismissAppMenu();pendingPlacedIndex=-1;customCards=CardStore.active(activity);loadApps();loadEntities();loadCustomWallpaper();if(prefs.getInt("wallpaper_mode",0)==4)slideshow.start();else slideshow.stop();normalizeSelection();invalidate();}
+        void applyPanel(JSONObject snapshot)throws Exception{if(!active||!PanelStore.apply(activity,snapshot))return;pendingCardId=null;clearAppPress();dismissAppMenu();pendingPlacedIndex=-1;customCards=CardStore.active(activity);loadApps();reloadContinue();loadEntities();loadCustomWallpaper();if(prefs.getInt("wallpaper_mode",0)==4)slideshow.start();else slideshow.stop();normalizeSelection();invalidate();}
         Bitmap capturePreview(){
             if(!active||!isShown()||!activity.hasWindowFocus()||getWidth()<1||getHeight()<1)throw new IllegalStateException("Launcher non visible");
             // Draw only our own visible launcher, never Android settings, video or another app.
@@ -84,9 +90,24 @@ public class MainActivity extends Activity {
             if(prefs.getBoolean("show_mobile_apps",true))loadAppsForCategory(pm,Intent.CATEGORY_LAUNCHER,seen);
             apps.sort((a,b)->a.label.compareToIgnoreCase(b.label));
             loadFavoriteApps();
-            resumeApps.clear();
             if(row==0&&col>=apps.size())col=Math.max(0,apps.size()-1);appOffset=Math.min(appOffset,Math.max(0,apps.size()-1));
         }
+        void reloadContinue(){if(watchNext!=null){watchNext.close();watchNext=null;}if(prefs.getBoolean("show_continue",true)){watchNext=new WatchNextStore(activity,this::updateContinue);watchNext.start();}else{resumeApps.clear();resumeOffset=0;}}
+        void updateContinue(List<WatchNextStore.Item> items,boolean available){
+            if(!active)return;
+            long selected=row==3&&col<resumeApps.size()&&resumeApps.get(col).resume!=null?resumeApps.get(col).resume.id:-1;
+            resumeApps.clear();
+            for(WatchNextStore.Item item:items){
+                for(AppEntry owner:apps)if(owner.pkg.equals(item.pkg)){
+                    if(item.intent.resolveActivity(activity.getPackageManager())==null)break;
+                    AppEntry entry=new AppEntry();entry.pkg=owner.pkg;entry.activity=owner.activity;entry.icon=owner.icon;entry.label=item.title;entry.resume=item;resumeApps.add(entry);break;
+                }
+            }
+            if(selected>=0)for(int i=0;i<resumeApps.size();i++)if(resumeApps.get(i).resume.id==selected){col=i;break;}
+            android.util.Log.i("TVA-WatchNext",available?"Readable feed; playable entries="+resumeApps.size():"Feed unavailable or access denied");
+            normalizeSelection();ensureContinueVisible();invalidate();
+        }
+        void ensureContinueVisible(){if(row==3){if(col<resumeOffset)resumeOffset=col;else if(col>=resumeOffset+4)resumeOffset=col-3;}resumeOffset=Math.max(0,Math.min(resumeOffset,Math.max(0,resumeApps.size()-4)));}
         void loadFavoriteApps(){favoriteApps.clear();String saved=prefs.getString("favorite_apps_order","");if(!saved.isEmpty())for(String pkg:saved.split("\\n"))for(AppEntry a:apps)if(a.pkg.equals(pkg)){favoriteApps.add(a);break;}favoriteOffset=Math.min(favoriteOffset,Math.max(0,favoriteApps.size()));}
         boolean isFavorite(AppEntry a){for(AppEntry f:favoriteApps)if(f.pkg.equals(a.pkg))return true;return false;}
         void toggleFavorite(AppEntry a){boolean added=AppFavorites.toggle(prefs,a.pkg);loadFavoriteApps();normalizeSelection();Toast.makeText(activity,a.label+(added?I18n.t(" ajoutée aux favoris"):I18n.t(" retirée des favoris")),Toast.LENGTH_SHORT).show();invalidate();}
@@ -217,7 +238,7 @@ public class MainActivity extends Activity {
         void activatePlaced(boolean hold){if(row!=6||col>=customCards.size())return;Map<String,Object> card=customCards.get(col);if(!placedFocusable(card))return;if(HaCardSurface.isCard(card)){activity.haCards.activate(card);return;}if("app".equals(CardConfig.str(card,"type",""))){if(!hold)launchApp(placedApp(card));return;}NativeCards.activate(activity,card,placedState(card),hold,this::navigate);}
         List<SpatialFocus.Target> homeTargets(){
             List<SpatialFocus.Target> targets=new ArrayList<>();LauncherLayout l=new LauncherLayout(prefs);
-            for(int r:visibleRows()){if(r==4)continue;LauncherLayout.Block b=block(rowBlock(r));int offset=r==5?favoriteOffset:r==1?homeOffset:0,total=r==5?favoriteApps.size():r==1?homeEntities.size():r==3?resumeApps.size():2,count=r==5?favoriteVisibleCount():r==1?homeVisibleCount():r==3?4:2;
+            for(int r:visibleRows()){if(r==4)continue;LauncherLayout.Block b=block(rowBlock(r));int offset=r==5?favoriteOffset:r==1?homeOffset:r==3?resumeOffset:0,total=r==5?favoriteApps.size():r==1?homeEntities.size():r==3?resumeApps.size():2,count=r==5?favoriteVisibleCount():r==1?homeVisibleCount():r==3?4:2;
                 float gap=14,cell=(b.logicalWidth()-gap*(count-1))/count,top=rowStart(),height=r==1?prefs.getInt("home_card_height",108):r==5?b.height/b.scale-top:106;
                 if(r==5){cell=favoriteCellWidth();gap=0;}if(r==2){cell=205;gap=14;top=0;height=66;}
                 float scale=b.scale*(r==2?Math.min(1,b.logicalWidth()/409f):1);
@@ -286,11 +307,20 @@ public class MainActivity extends Activity {
         void drawHouseSummary(Canvas c,float l,float t,float r,float b){glass(c,l,t,r,b,9);txt(c,"MAISON",l+28,t+43,14,0xffffc75d,true);txt(c,haOnline?I18n.t("Connectée"):I18n.t("Hors connexion"),l+28,t+78,21,Color.WHITE,true);int count=Math.min(3,homeEntities.size());for(int i=0;i<count;i++){EntityItem e=homeEntities.get(i);float y=t+116+i*76;rounded(c,l+24,y-25,l+63,y+14,10,domainColor(e.domain)&0x77ffffff|0x22000000);txt(c,domainIcon(e.domain),l+37,y+2,17,domainColor(e.domain),true);txt(c,shorten(e.name,29),l+78,y-4,16,Color.WHITE,true);txt(c,friendlyState(e),l+78,y+19,13,0xffaeb5bc,false);if(i<count-1){p.setColor(0x334f5b64);c.drawRect(l+24,y+38,r-24,y+39,p);}}if(count==0)txt(c,I18n.t("Ajoutez des appareils depuis Home Assistant"),l+28,t+135,15,0xffaeb5bc,false);}
         void drawContinue(Canvas c,float pad,float y,float w){
             float gap=14,cw=(w-pad*2-gap*3)/4f,ch=106;
-            for(int i=0;i<resumeApps.size();i++){
-                AppEntry a=resumeApps.get(i);float x=pad+i*(cw+gap);drawCard(c,x,y,cw,ch,row==3&&col==i,0xee171a20);
-                drawAppIcon(c,a,x+52,y+51,36);
-                txt(c,shorten(a.label,22),x+105,y+41,16,Color.WHITE,true);txt(c,I18n.t("Reprendre"),x+105,y+63,12,0xffa8abb2,false);
-                rounded(c,x+105,y+76,x+cw-18,y+81,3,0xff3a3d44);float progress=(.28f+i*.16f);rounded(c,x+105,y+76,x+105+(cw-123)*progress,y+81,3,0xfff3b75f);
+            for(int i=resumeOffset;i<Math.min(resumeApps.size(),resumeOffset+4);i++){
+                AppEntry a=resumeApps.get(i);float x=pad+(i-resumeOffset)*(cw+gap);drawCard(c,x,y,cw,ch,row==3&&col==i,0xee171a20);
+                Bitmap image=artwork.get(a.resume);float textX=x+105,textWidth=cw-123,barY=y+76;
+                if(image!=null){
+                    c.save();android.graphics.Path clip=new android.graphics.Path();clip.addRoundRect(new RectF(x,y,x+cw,y+ch),prefs.getInt("card_roundness",20),prefs.getInt("card_roundness",20),android.graphics.Path.Direction.CW);c.clipPath(clip);
+                    p.setShader(null);p.setColor(Color.WHITE);c.drawBitmap(image,ContinueArtwork.crop(image.getWidth(),image.getHeight(),cw/ch),new RectF(x,y,x+cw,y+ch),p);
+                    p.setShader(new LinearGradient(0,y,0,y+ch,new int[]{0x11000000,0x88000000,0xee000000},new float[]{0,.45f,1},Shader.TileMode.CLAMP));c.drawRect(x,y,x+cw,y+ch,p);p.setShader(null);c.restore();
+                    textX=x+14;textWidth=cw-28;barY=y+ch-14;
+                    NativeCards.text(c,p,a.label,textX,y+ch-30,Math.max(0,textWidth),16,Color.WHITE,true);
+                }else{
+                    drawAppIcon(c,a,x+52,y+51,36);
+                    NativeCards.text(c,p,a.label,textX,y+41,Math.max(0,textWidth),16,Color.WHITE,true);txt(c,I18n.t("Reprendre"),textX,y+63,12,0xffa8abb2,false);
+                }
+                float progress=a.resume==null?-1:a.resume.progress();if(progress>=0&&textWidth>0){rounded(c,textX,barY,textX+textWidth,barY+5,3,0xff3a3d44);if(progress>0)rounded(c,textX,barY,textX+textWidth*progress,barY+5,3,0xfff3b75f);}
             }
         }
         int appGridColumns(){return Math.max(3,Math.min(12,prefs.getInt("app_grid_columns",10)));}
@@ -385,13 +415,14 @@ public class MainActivity extends Activity {
         String prettyEntityName(String id){String raw=id.contains(".")?id.substring(id.indexOf('.')+1):id;raw=raw.replace('_',' ');if(raw.isEmpty())return I18n.t("Maison");return raw.substring(0,1).toUpperCase(Locale.FRANCE)+raw.substring(1);}
         @Override public boolean onKeyDown(int key,KeyEvent e){
             if(!AppActionsDialog.isConfirm(key))clearAppPress();
-            if(key==KeyEvent.KEYCODE_MENU){openSettings();return true;}
-            if(key==KeyEvent.KEYCODE_SETTINGS){openTvSettings();return true;}
+            String shortcut=RemoteShortcuts.action(prefs,key);
+            if(key==KeyEvent.KEYCODE_MENU||shortcut.equals("menu")){if(e.getRepeatCount()==0)openSettings();return true;}
+            if(key==KeyEvent.KEYCODE_SETTINGS||shortcut.equals("settings")){if(e.getRepeatCount()==0)openTvSettings();return true;}
             if(key==KeyEvent.KEYCODE_CHANNEL_UP||key==KeyEvent.KEYCODE_PAGE_UP){pageSelection(-1);return true;}
             if(key==KeyEvent.KEYCODE_CHANNEL_DOWN||key==KeyEvent.KEYCODE_PAGE_DOWN){pageSelection(1);return true;}
             if(key==KeyEvent.KEYCODE_INFO){showSelectionInfo();return true;}
-            if(key==KeyEvent.KEYCODE_TV||key==KeyEvent.KEYCODE_TV_INPUT){launchNamedApp("TV","Télévision","Live TV");return true;}
-            if(key==KeyEvent.KEYCODE_GUIDE||key==KeyEvent.KEYCODE_DVR||key==KeyEvent.KEYCODE_APP_SWITCH||key==256){showAllApps();return true;}
+            if(key==KeyEvent.KEYCODE_TV||key==KeyEvent.KEYCODE_GUIDE||key==KeyEvent.KEYCODE_TV_CONTENTS_MENU){if(e.getRepeatCount()==0)RemoteShortcuts.launch(activity,"tv");return true;}
+            if(key==KeyEvent.KEYCODE_DVR||key==KeyEvent.KEYCODE_APP_SWITCH||key==KeyEvent.KEYCODE_ALL_APPS||shortcut.equals("apps")){if(e.getRepeatCount()==0)showAllApps();return true;}
             if(handleFreeNavigation(key))return true;
             if(handleFixedNavigation(key))return true;
             if(appKeyDown(key,e))return true;
@@ -402,8 +433,8 @@ public class MainActivity extends Activity {
             if(appsPage)return super.onKeyDown(key,e);
             if(key==KeyEvent.KEYCODE_DPAD_UP){moveVertical(-1);return true;}
             if(key==KeyEvent.KEYCODE_DPAD_DOWN){moveVertical(1);return true;}
-            if(key==KeyEvent.KEYCODE_DPAD_LEFT){col=Math.max(0,col-1);updatePageFromHeader();ensureHomeVisible();ensureFavoriteVisible();invalidate();return true;}
-            if(key==KeyEvent.KEYCODE_DPAD_RIGHT){col=Math.min(rowMax(),col+1);updatePageFromHeader();ensureHomeVisible();ensureFavoriteVisible();invalidate();return true;}
+            if(key==KeyEvent.KEYCODE_DPAD_LEFT){col=Math.max(0,col-1);updatePageFromHeader();ensureHomeVisible();ensureFavoriteVisible();ensureContinueVisible();invalidate();return true;}
+            if(key==KeyEvent.KEYCODE_DPAD_RIGHT){col=Math.min(rowMax(),col+1);updatePageFromHeader();ensureHomeVisible();ensureFavoriteVisible();ensureContinueVisible();invalidate();return true;}
             if(key==KeyEvent.KEYCODE_DPAD_CENTER||key==KeyEvent.KEYCODE_ENTER){activate();return true;}return super.onKeyDown(key,e);
         }
         @Override public boolean onKeyLongPress(int key,KeyEvent e){if(AppActionsDialog.isConfirm(key)&&pendingApp!=null){if(!centerLongHandled)showAppMenu(pendingApp);return true;}if(pendingPlacedIndex>=0&&(key==KeyEvent.KEYCODE_DPAD_CENTER||key==KeyEvent.KEYCODE_ENTER)){if(!centerLongHandled){centerLongHandled=true;activatePlaced(true);}return true;}if((key==KeyEvent.KEYCODE_DPAD_CENTER||key==KeyEvent.KEYCODE_ENTER)&&pendingCardId!=null&&row==1&&col<homeEntities.size()&&pendingCardId.equals(homeEntities.get(col).id)){if(!centerLongHandled){centerLongHandled=true;customAction(homeEntities.get(col),true);}return true;}return super.onKeyLongPress(key,e);}
@@ -433,7 +464,7 @@ public class MainActivity extends Activity {
             return false;
         }
         void moveVertical(int direction){List<Integer> rows=visibleRows();int index=rows.indexOf(row);if(index<0)index=1;row=rows.get(Math.max(0,Math.min(rows.size()-1,index+direction)));clampColumn();invalidate();}
-        void clampColumn(){col=row==4?navigation().normalize(col):Math.max(0,Math.min(col,rowMax()));ensureHomeVisible();ensureFavoriteVisible();ensureDashboardVisible();if(appsPage&&row==0)ensureAppGridVisible();}
+        void clampColumn(){col=row==4?navigation().normalize(col):Math.max(0,Math.min(col,rowMax()));ensureHomeVisible();ensureFavoriteVisible();ensureContinueVisible();ensureDashboardVisible();if(appsPage&&row==0)ensureAppGridVisible();}
         void ensureAppVisible(){if(row!=0)return;int visible=visibleAppCount();if(col<appOffset)appOffset=col;else if(col>=appOffset+visible)appOffset=col-visible+1;}
         void ensureHomeVisible(){if(row!=1)return;int visible=homeVisibleCount();if(col<homeOffset)homeOffset=col;else if(col>=homeOffset+visible)homeOffset=col-visible+1;}
         void ensureFavoriteVisible(){if(row!=5)return;int visible=favoriteVisibleCount();if(col<favoriteOffset)favoriteOffset=col;else if(col>=favoriteOffset+visible)favoriteOffset=col-visible+1;}
@@ -463,7 +494,7 @@ public class MainActivity extends Activity {
         }
         void activate(){if(row==7){openWebDashboard();return;}if(row==6){activatePlaced(false);return;}if(row==4){col=navigation().normalize(col);if(col==NavigationConfig.BRAND){openSettings();return;}if(col==NavigationConfig.VOICE){activity.startActivity(new Intent(activity,VoiceSearchActivity.class));return;}if(col>=5){Map<String,Object> item=navigation().selected(col);if(item!=null){if("app".equals(item.get("type"))){String pkg=CardConfig.str(item,"package","");Intent launch=activity.getPackageManager().getLeanbackLaunchIntentForPackage(pkg);if(launch==null)launch=activity.getPackageManager().getLaunchIntentForPackage(pkg);if(launch!=null){try{activity.startActivity(launch);}catch(Exception e){Toast.makeText(activity,I18n.t("Application indisponible"),Toast.LENGTH_SHORT).show();}}else Toast.makeText(activity,I18n.t("Application absente de cette TV"),Toast.LENGTH_SHORT).show();}else if("ha_dashboard".equals(item.get("type")))activity.startActivity(new Intent(activity,HaDashboardActivity.class).putExtra("dashboard_path",CardConfig.str(item,"path","")));}return;}if(col==0){appsPage=false;dashboardPage=false;row=4;col=0;enterHome();invalidate();}else if(col==1){appsPage=true;dashboardPage=false;row=0;col=0;appGridOffset=0;invalidate();}else if(col==2){dashboardPage=true;appsPage=false;if(webDashboard()){row=7;col=0;}else if(!homeEntities.isEmpty()){row=1;col=Math.min(dashboardOffset,homeEntities.size()-1);}refreshRemote();invalidate();}else if(col==3)openTvSettings();else if(col==4)openSettings();return;}if(row==5){if(col<favoriteApps.size())launchApp(favoriteApps.get(col));return;}if(row==0&&appsPage){if(col<apps.size())launchApp(apps.get(col));return;}if(row==3){if(col<resumeApps.size())launchApp(resumeApps.get(col));return;}if(row==2){if(col==0)scene("scene_movie",I18n.t("Scène cinéma lancée"));else scene("scene_off",I18n.t("Maison éteinte"));return;}if(row==1){if(col<homeEntities.size()){EntityItem e=homeEntities.get(col);if(e.custom!=null)customAction(e,false);else activateEntity(e);}return;}}
         void activateEntity(EntityItem e){String action;if(e.domain.equals("scene")||e.domain.equals("script"))action="turn_on";else if(e.domain.equals("button")||e.domain.equals("input_button"))action="press";else if(e.domain.equals("media_player"))action="media_play_pause";else if(e.domain.equals("sensor")||e.domain.equals("binary_sensor")){Toast.makeText(activity,e.name+" : "+friendlyState(e),Toast.LENGTH_SHORT).show();return;}else action="toggle";HaClient.callService(activity,e.domain,action,e.id,(ok,msg)->activity.runOnUiThread(()->{Toast.makeText(activity,ok?e.name+" commandé":msg,Toast.LENGTH_LONG).show();if(ok)loadEntities();}));}
-        void launchApp(AppEntry a){Intent i=new Intent();i.setClassName(a.pkg,a.activity);i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);try{activity.startActivity(i);}catch(Exception ex){Toast.makeText(activity,I18n.t("Impossible d’ouvrir ")+a.label,Toast.LENGTH_SHORT).show();}}
+        void launchApp(AppEntry a){if(a==null)return;Intent i;if(a.resume!=null)i=new Intent(a.resume.intent);else{i=new Intent();i.setClassName(a.pkg,a.activity);i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);}try{activity.startActivity(i);}catch(Exception ex){Toast.makeText(activity,I18n.t("Impossible d’ouvrir ")+a.label,Toast.LENGTH_SHORT).show();}}
         void scene(String key,String ok){service("scene","turn_on",prefs.getString(key,key.equals("scene_movie")?"scene.soiree_cinema":"scene.tout_eteindre"),ok);}
         void service(String domain,String action,String entity,String ok){HaClient.callService(activity,domain,action,entity,(success,msg)->activity.runOnUiThread(()->Toast.makeText(activity,success?ok:msg,Toast.LENGTH_LONG).show()));}
         void openSettings(){activity.startActivity(new Intent(activity,LauncherSettingsActivity.class));}

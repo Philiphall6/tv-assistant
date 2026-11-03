@@ -28,11 +28,13 @@ Captures fournies et autorisées pour publication par le propriétaire du projet
 
 ## Fonctions
 
-- Applications favorites, formes d’icônes, appui long, reprise de lecture lorsqu’une application fournit ces données.
+- Applications favorites, formes d’icônes, appui long, reprise de lecture avec images et progression lorsqu’une application fournit ces données.
+- Raccourcis de télécommande et association locale d’une touche à une application, dans les limites imposées par le fabricant.
 - Barre configurable : position, dimensions, onglets, couleurs, horloge, statut et recherche vocale.
 - Cartes natives, placement libre, éditeur visuel et YAML dans HA, profils partagés ou différents par TV.
 - Cartes Lovelace réelles dans une surface WebView persistante, ressources fournies par votre HA, sans rechargement périodique de la page. Pointeur télécommande pour les cartes interactives.
 - Fonds unis, image locale, album Google Photos partagé avec cache et synchronisation. Cette dernière fonction dépend du format des albums publics Google et peut nécessiter des adaptations.
+- Respect de l’économiseur d’écran système après inactivité, sans modifier les albums Google ni les délais configurés sur la TV.
 
 L’aperçu réel nécessite que le launcher soit ouvert sur la TV. Un schéma de placement reste disponible pour organiser la disposition ; ce n’est pas une fausse capture en direct. Les cartes personnalisées nécessitent leurs extensions installées dans HA et ne sont pas toutes garanties compatibles avec une télécommande.
 

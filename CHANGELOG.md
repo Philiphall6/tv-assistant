@@ -1,5 +1,16 @@
 # Versions
 
+## Intégration 0.7.2 / Android 2.13.5
+
+- Veille : l’accueil et le tableau de bord HA ne maintiennent plus l’écran allumé en permanence. L’économiseur système peut démarrer après le délai d’inactivité défini sur la TV ; aucun album Google ni réglage de veille n’est modifié.
+- Reprise de lecture : contenus réellement partagés par les applications Android TV, titres, images et progression réelle, avec navigation entre les résultats. Aucun contenu fictif ; icône de l’application en secours si une image est indisponible.
+- Demande explicite de l’autorisation Android de lecture des reprises lorsqu’elle est nécessaire. Le refus est respecté ; aucun historique n’est modifié.
+- Raccourcis de télécommande TCL reconnus par leurs noms système et association locale d’une touche à une application. Les touches Home, Retour, volume et alimentation restent réservées au système ; les touches interceptées par le fabricant ne sont pas garanties.
+- Chargement des images en arrière-plan, cache mémoire limité, validation des adresses et absence de jeton HA dans les requêtes d’illustration.
+- Tests de non-régression de veille, reprises, images et télécommande ; traductions françaises et anglaises des nouvelles commandes.
+
+L’intégration HA met à jour son catalogue de traductions sans modifier les profils. La publication ne redémarre pas HA et n’installe pas automatiquement l’APK. La signature Android reste identique pour conserver les réglages lors d’une mise à jour.
+
 ## Intégration 0.7.1 / Android 2.13.1
 
 - Nouvelle identité d’installation : télévision blanche avec branche connectée sur fond bleu, accompagnée du nom « TV Assistant ».

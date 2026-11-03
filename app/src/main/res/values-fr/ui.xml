@@ -116,6 +116,7 @@
     <string name="ui_750fc830" formatted="false">"Allumé"</string>
     <string name="ui_19be580e" formatted="false">"Android System WebView est indisponible. Mettez-le à jour depuis le Play Store. Retour : Maison"</string>
     <string name="ui_d7fe995f" formatted="false">"Android System WebView indisponible"</string>
+    <string name="ui_b25e5b43" formatted="false">"Android doit autoriser TV Assistant à lire les contenus de reprise partagés par vos applications. Cet accès est en lecture seule ; aucun historique n’est modifié. Vous pouvez refuser et continuer à utiliser le launcher."</string>
     <string name="ui_898a318f" formatted="false">"Animations"</string>
     <string name="ui_f6cc3554" formatted="false">"Animer le ventilateur : "</string>
     <string name="ui_306f0ac5" formatted="false">"Annuler"</string>
@@ -144,6 +145,7 @@
     <string name="ui_490f79ff" formatted="false">"Appliquer et voir sur la TV"</string>
     <string name="ui_f3922c5f" formatted="false">"Appui OK : "</string>
     <string name="ui_d42c2989" formatted="false">"Appui long OK (YAML) · facultatif"</string>
+    <string name="ui_950f7150" formatted="false">"Appuyez sur la touche à associer. Retour pour annuler."</string>
     <string name="ui_3c94aaf" formatted="false">"Arche"</string>
     <string name="ui_36b2be5f" formatted="false">"Ardoise"</string>
     <string name="ui_1bd04a37" formatted="false">"Arrondi des cartes"</string>
@@ -151,6 +153,7 @@
     <string name="ui_3c992cb" formatted="false">"Arrêt"</string>
     <string name="ui_12353081" formatted="false">"Assist réfléchit…"</string>
     <string name="ui_4417c326" formatted="false">"Assist utilise le compte de la TV et ses droits. La transcription utilise le service vocal Android installé, pas le moteur STT de HA. Aucune écoute permanente. Sans service vocal, la saisie texte reste disponible. Le troisième service ouvre une application vocale ou une adresse HTTPS avec {query}. Aucun jeton HA n’est transmis ; n’inscrivez pas de secret dans l’adresse."</string>
+    <string name="ui_f0e7ddf5" formatted="false">"Associer une touche à une application"</string>
     <string name="ui_a278c015" formatted="false">"Assombrissement (%)"</string>
     <string name="ui_276b7b37" formatted="false">"Assombrissement du fond"</string>
     <string name="ui_909714a9" formatted="false">"Assombrissement général"</string>
@@ -170,8 +173,11 @@
     <string name="ui_2c6c5c7b" formatted="false">"Aucune phrase reconnue."</string>
     <string name="ui_743ba974" formatted="false">"Aucune sauvegarde locale"</string>
     <string name="ui_4a2bcd33" formatted="false">"Aucune sélection ne correspond à la recherche"</string>
+    <string name="ui_7c9b1a92" formatted="false">"Aucune touche reçue. Certaines touches sont réservées par la TV."</string>
     <string name="ui_73b7488e" formatted="false">"Autorisation chauffage"</string>
     <string name="ui_fdfb765" formatted="false">"Autorisation requise · un administrateur doit affecter un profil à cette TV dans HA"</string>
+    <string name="ui_680dce7a" formatted="false">"Autorisations Android"</string>
+    <string name="ui_e556a39e" formatted="false">"Autoriser la reprise de lecture"</string>
     <string name="ui_648994af" formatted="false">"BARRE SUPÉRIEURE"</string>
     <string name="ui_3cfe166" formatted="false">"Barre"</string>
     <string name="ui_cef8d5d9" formatted="false">"Barre de navigation"</string>
@@ -222,6 +228,7 @@
     <string name="ui_2dd24176" formatted="false">"Certificat HA non valide pour cette adresse. Utilisez son nom HTTPS valide. Retour : Maison"</string>
     <string name="ui_a4c44ce7" formatted="false">"Certificat HA non valide · vérifiez l’adresse HTTPS"</string>
     <string name="ui_423be27b" formatted="false">"Ces réglages concernent uniquement la barre, jamais les cartes."</string>
+    <string name="ui_15b07313" formatted="false">"Cette touche reste réservée à la navigation ou au système."</string>
     <string name="ui_735df591" formatted="false">"Changer de photo"</string>
     <string name="ui_a9ce061" formatted="false">"Chaque autorisation reste votre choix. Aucun launcher n’est supprimé ou désactivé par l’application."</string>
     <string name="ui_ded6f35f" formatted="false">"Chargement HA…"</string>
@@ -243,6 +250,7 @@
     <string name="ui_ab61fba0" formatted="false">"Choisir TV Assistant comme écran d’accueil"</string>
     <string name="ui_3d7bb27b" formatted="false">"Choisir les appareils et fonctions affichés"</string>
     <string name="ui_4eaed51" formatted="false">"Choisir les cartes de l’accueil"</string>
+    <string name="ui_35610159" formatted="false">"Choisir une application"</string>
     <string name="ui_76bf49ed" formatted="false">"Choisir une application…"</string>
     <string name="ui_d69241d8" formatted="false">"Choisir une carte…"</string>
     <string name="ui_ece4e2ef" formatted="false">"Choisir une destination…"</string>
@@ -489,6 +497,7 @@
     <string name="ui_f8b30618" formatted="false">"La connexion Home Assistant sera conservée."</string>
     <string name="ui_d73e4c8d" formatted="false">"La liste complète est lue par pages. Seules les photos à afficher sont téléchargées en taille TV. Le cache remplace les copies les moins récentes. Hors ligne, seules les photos déjà chargées défilent. La synchronisation fonctionne lorsque le launcher est visible et reprend à son ouverture."</string>
     <string name="ui_d87af0da" formatted="false">"La palette est indisponible ; la couleur personnalisée reste utilisable."</string>
+    <string name="ui_85f3d718" formatted="false">"La reprise Android TV n’est pas disponible sur cet appareil."</string>
     <string name="ui_8dc639ec" formatted="false">"La voix est transcrite par le service Android, puis le texte est envoyé à votre agent HA avec le compte de cette TV."</string>
     <string name="ui_fff58d43" formatted="false">"Langue de reconnaissance (auto = langue Android)"</string>
     <string name="ui_fd16e867" formatted="false">"Langue de reconnaissance (fr, en…)"</string>
@@ -606,6 +615,7 @@
     <string name="ui_e33a02f6" formatted="false">"Placer sur Pour vous"</string>
     <string name="ui_a0e59b51" formatted="false">"Placer une carte existante"</string>
     <string name="ui_1c2550d6" formatted="false">"Plan de placement — aucune capture reçue"</string>
+    <string name="ui_1bd12805" formatted="false">"Plus tard"</string>
     <string name="ui_f49499c5" formatted="false">"Pompe de circulation"</string>
     <string name="ui_1ab799f5" formatted="false">"Pompe à chaleur"</string>
     <string name="ui_924716d" formatted="false">"Position X (%)"</string>
@@ -629,6 +639,8 @@
     <string name="ui_49cef8a" formatted="false">"Prune"</string>
     <string name="ui_14049fc0" formatted="false">"Quitter l’éditeur ?"</string>
     <string name="ui_f62b0339" formatted="false">"RANGÉES DE L’ACCUEIL"</string>
+    <string name="ui_b827c173" formatted="false">"Raccourci enregistré"</string>
+    <string name="ui_56b72025" formatted="false">"Raccourcis locaux au launcher. Home, Retour, volume et alimentation restent gérés par Android."</string>
     <string name="ui_b0db300b" formatted="false">"Rangée Votre maison"</string>
     <string name="ui_1ef7029e" formatted="false">"Rangée des favoris"</string>
     <string name="ui_24fc7f0f" formatted="false">"Rangée d’applications choisies"</string>
@@ -657,6 +669,8 @@
     <string name="ui_935166f4" formatted="false">"Reprendre le style commun"</string>
     <string name="ui_d6bf4079" formatted="false">"Reprise de lecture"</string>
     <string name="ui_a7d6bd6d" formatted="false">"Reprise de lecture (si disponible)"</string>
+    <string name="ui_3654d294" formatted="false">"Reprise de lecture : autorisation Android nécessaire"</string>
+    <string name="ui_2e023782" formatted="false">"Reprise de lecture autorisée"</string>
     <string name="ui_ce5296ea" formatted="false">"Restauration impossible"</string>
     <string name="ui_8aed877" formatted="false">"Restaurer"</string>
     <string name="ui_25fb19f8" formatted="false">"Restaurer et envoyer la version précédente aux TV de ce profil ? Le brouillon actuel sera abandonné."</string>
@@ -787,6 +801,7 @@
     <string name="ui_28035a" formatted="false">"Type"</string>
     <string name="ui_305e85ac" formatted="false">"Type : "</string>
     <string name="ui_a291e6ec" formatted="false">"Type de carte"</string>
+    <string name="ui_e7cbc04c" formatted="false">"Télécommande"</string>
     <string name="ui_13b4be64" formatted="false">"Télécommande : flèches = pointeur, OK = clic, CH +/− = défilement, Menu = options, Retour = cartes Maison. Aucun rechargement périodique. Les aperçus de l’extension ne capturent pas cette vue web."</string>
     <string name="ui_6683aeff" formatted="false">"Téléviseurs"</string>
     <string name="ui_135cc81d" formatted="false">"Un vrai dashboard HA, à la demande"</string>
