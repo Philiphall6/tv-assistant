@@ -20,9 +20,10 @@ Le manifeste accepte Android 11–16. Un modèle CI prévoit les bornes **API 30
 | Home Assistant 2026.10.4 | 7 tests runtime réussis |
 | Éditeur et cartes Chromium | Deux suites réussies |
 | Validateur officiel hassfest | 1 intégration valide, aucune erreur |
+| Validateur HACS sur le dépôt public | 10 contrôles réussis ; dépôt personnalisé, pas une admission au catalogue par défaut |
 | Gitleaks 8.30.1 | Aucun secret détecté dans l’arbre public et son historique neuf |
 
-Le contrôle de confidentialité de l’APK et la conservation de l’empreinte du certificat de signature ont également été vérifiés. Ces résultats ne constituent ni un audit indépendant ni une garantie de sécurité absolue.
+Le contrôle de confidentialité de l’APK et la conservation de l’empreinte du certificat de signature ont également été vérifiés. L’installation de l’ancienne version 2.11.0 puis sa mise à jour par l’APK de production 2.12.0, sans désinstallation, ont réussi sur l’émulateur Android 11. Ces résultats ne constituent ni un audit indépendant ni une garantie de sécurité absolue.
 
 ```sh
 python3 tests/test_ha_panel.py
