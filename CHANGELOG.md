@@ -1,5 +1,13 @@
 # Versions
 
+## Intégration 0.7.3 / Android 2.13.6
+
+- Nouvel écran **Mises à jour et diagnostic** : vérification de la version de l’APK dans les publications stables officielles, option quotidienne désactivée par défaut et indication d’une version disponible. Aucun téléchargement ni installation automatique.
+- Diagnostic technique local avec aperçu, partage, copie ou enregistrement explicite. Liste fermée d’informations, sans données personnelles, journaux bruts ni déchiffrement du jeton HA.
+- Fond intégré **TV Assistant** sur les nouvelles installations, disponible aussi dans les réglages TV et HA ; aucune substitution des fonds existants.
+- Disposition de l’onglet Applications : 3 à 12 applications par rangée, 1 à 6 rangées, taille des icônes et des noms indépendante des favoris. Les grandes icônes sont limitées à la place disponible pour éviter les chevauchements.
+- Tests des versions, URL non fiables, confidentialité du diagnostic, migration des fonds et dimensions de grille ; traduction des nouveaux réglages en français et anglais.
+
 ## Intégration 0.7.2 / Android 2.13.5
 
 - Veille : l’accueil et le tableau de bord HA ne maintiennent plus l’écran allumé en permanence. L’économiseur système peut démarrer après le délai d’inactivité défini sur la TV ; aucun album Google ni réglage de veille n’est modifié.

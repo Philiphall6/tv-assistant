@@ -50,6 +50,8 @@ with sync_playwright() as p:
     assert page.get_by_role("button",name="Choisir : Cookie à 7 côtés",exact=True).get_attribute("aria-pressed")=="true"
     page.screenshot(path="/tmp/ha-tv-icon-shapes-editor.png",full_page=True)
     page.get_by_role("button",name="Fond d’écran",exact=True).click()
+    page.get_by_label("Fond d’écran",exact=True).select_option("6")
+    assert page.evaluate("document.querySelector('home-assistant-tv-panel').config.settings.wallpaper_mode")==6
     assert page.get_by_role("group",name="Couleurs de fond d’écran",exact=True).get_by_role("button").count()==8
     page.get_by_role("button",name="Fond uni : Bleu HA",exact=True).click()
     assert page.get_by_label("Fond d’écran",exact=True).input_value()=="5"
@@ -70,6 +72,10 @@ with sync_playwright() as p:
     assert page.evaluate("saved.settings.wallpaper_mode")==5
     assert page.evaluate("saved.settings.wallpaper_color")=="#3D5A50"
     page.get_by_role("button",name="Rangées",exact=True).click()
+    for label,value,key in (("Applications par rangée","6","app_grid_columns"),("Rangées de la page Applications","2","app_grid_rows"),("Taille des icônes de la page Applications","200","app_grid_icon_size"),("Taille des noms dans la page Applications","22","app_grid_label_size")):
+        page.get_by_label(label,exact=True).fill(value)
+        assert page.evaluate("document.querySelector('home-assistant-tv-panel').config.settings["+json.dumps(key)+"]")==int(value)
+    assert page.evaluate("revision")==2,"grid remains draft before send"
     try:page.get_by_label("Entité du groupe",exact=True).wait_for(timeout=5000)
     except Exception:
         print("Module errors:",errors)

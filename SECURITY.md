@@ -25,6 +25,10 @@ Les captures demandées par l’administrateur et les profils restent privés da
 
 ## Signature et publication
 
+La vérification facultative des mises à jour interroge uniquement l’API publique du dépôt officiel via HTTPS, sans authentification ni identifiant d’appareil. Les redirections sont refusées, les réponses limitées à 512 Kio, les versions et adresses validées ; les brouillons, préversions et APK de test/non signés sont exclus par leur nom. Cette vérification porte sur les métadonnées de publication, **pas sur les octets ni la signature d’un APK téléchargé**. Le bouton ouvre une page officielle : Android reste responsable de la vérification de signature lors de l’installation. Aucun téléchargement ou remplacement silencieux n’est effectué. Les contrôles automatiques sont désactivés par défaut et ne déclenchent aucun réveil.
+
+Le diagnostic ne filtre pas un journal potentiellement sensible : il construit un nouveau document à partir d’une liste fermée de booléens, états techniques prédéfinis et versions validées. Aucune préférence complète, exception, capture ou information domotique n’est exportée. Le partage et l’enregistrement sont explicites, après aperçu. Les informations de connexion HA sont le dernier état observé, sans lecture ni déchiffrement du jeton. Les tests injectent de fausses données privées pour vérifier leur absence du rapport.
+
 L’APK est **signé**, pas rendu indéchiffrable. Le code reste inspectable conformément à sa licence. Conserver la même clé privée de signature permet des mises à jour sans désinstallation. Modifier le mot de passe du coffre ne change pas cette identité. Perdre la clé peut empêcher les mises à jour des installations existantes.
 
 Conservez le coffre de signature et ses mots de passe hors du dépôt, avec permissions restreintes et une sauvegarde chiffrée hors ligne. N’utilisez jamais une clé de débogage comme clé publique de distribution. Les pipelines de validation utilisent uniquement une clé de test temporaire pour un package distinct.

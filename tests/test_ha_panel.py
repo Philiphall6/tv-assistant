@@ -40,7 +40,18 @@ class ValidationTests(unittest.TestCase):
             self.assertEqual(m.parse_yaml(m.as_yaml(cfg)),cfg)
         for color in (None,1,True,"red","#fff","#00112233","url(https://invalid)"):
             with self.subTest(color=color),self.assertRaises(ValueError):m.validate({"schema":1,"settings":{"wallpaper_color":color}})
-        with self.assertRaises(ValueError):m.validate({"schema":1,"settings":{"wallpaper_mode":6}})
+        self.assertEqual(m.validate({"schema":1,"settings":{"wallpaper_mode":6}})["settings"]["wallpaper_mode"],6)
+        with self.assertRaises(ValueError):m.validate({"schema":1,"settings":{"wallpaper_mode":7}})
+
+    def test_applications_grid_settings(self):
+        for columns in (3,6,12):
+            for rows in (1,3,6):
+                for size in (48,106,240):
+                    cfg={"schema":1,"settings":{"app_grid_columns":columns,"app_grid_rows":rows,"app_grid_icon_size":size,"app_grid_label_size":20},"cards":[]}
+                    self.assertEqual(m.parse_yaml(m.as_yaml(cfg)),cfg)
+        for key,bad in (("app_grid_columns",13),("app_grid_rows",0),("app_grid_icon_size",241),("app_grid_label_size",33)):
+            with self.subTest(key=key),self.assertRaises(ValueError):m.validate({"schema":1,"settings":{key:bad}})
+        self.assertEqual(m.validate({"schema":1,"settings":{}})["settings"],{},"No new setting injected into existing profiles")
 
     def test_icon_shapes_roundtrip(self):
         for shape in range(6):

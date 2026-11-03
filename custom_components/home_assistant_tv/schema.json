@@ -458,7 +458,7 @@
   "app_grid_columns": {
     "type": "integer",
     "default": 10,
-    "label": "Colonnes de la page Applications",
+    "label": "Applications par rangée",
     "group": "Rangées",
     "min": 3,
     "max": 12
@@ -468,8 +468,24 @@
     "default": 5,
     "label": "Rangées de la page Applications",
     "group": "Rangées",
-    "min": 2,
+    "min": 1,
     "max": 6
+  },
+  "app_grid_icon_size": {
+    "type": "integer",
+    "default": 106,
+    "label": "Taille des icônes de la page Applications",
+    "group": "Rangées",
+    "min": 48,
+    "max": 240
+  },
+  "app_grid_label_size": {
+    "type": "integer",
+    "default": 15,
+    "label": "Taille des noms dans la page Applications",
+    "group": "Rangées",
+    "min": 10,
+    "max": 32
   },
   "dashboard_rows": {
     "type": "integer",
@@ -814,11 +830,15 @@
   "wallpaper_mode": {
     "type": "integer",
     "min": 0,
-    "max": 5,
-    "default": 0,
+    "max": 6,
+    "default": 6,
     "label": "Fond d’écran",
     "group": "Fond d’écran",
     "options": [
+      [
+        6,
+        "TV Assistant"
+      ],
       [
         0,
         "Salon zen"

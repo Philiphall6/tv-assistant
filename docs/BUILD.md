@@ -33,7 +33,7 @@ export TVA_SIGNING_KEYSTORE=/chemin/prive/signing.p12
 export TVA_SIGNING_ALIAS=release
 export TVA_STORE_PASSWORD_FILE=/chemin/prive/password
 export TVA_KEY_PASSWORD_FILE=/chemin/prive/password
-./scripts/sign-apk.sh release/TVAssistant-2.13.5-release-unsigned.apk release/TVAssistant-2.13.5.apk
+./scripts/sign-apk.sh release/TVAssistant-2.13.6-release-unsigned.apk release/TVAssistant-2.13.6.apk
 ```
 
 Ces fichiers doivent avoir le mode `600` ou `400`, hors de ce dépôt. Le script refuse d’écraser un résultat signé existant. Vérifiez l’empreinte SHA-256 du certificat avec une précédente version avant publication. Ne confondez pas l’empreinte du fichier APK et celle du certificat.

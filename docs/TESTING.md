@@ -7,6 +7,8 @@ Les tests n’utilisent aucun compte HA réel ni commande domotique. Les donnée
 - Tests Chromium : éditeur, navigation, placement, vraies surfaces de cartes simulées et dimensionnement.
 - Instrumentation Android : disposition, icônes, cartes, protocole temps réel, pont WebView, AES-GCM, migration, mauvais serveur et données chiffrées altérées.
 - Régressions Android : fenêtres et vues de l’accueil et du dashboard sans maintien forcé de l’écran, conservation des réglages de veille, reprises synthétiques, images bornées et apprentissage des touches sans lancement d’application réelle.
+- Maintenance : métadonnées de versions synthétiques, refus des URL et préversions non fiables, vérification automatique désactivée par défaut, rapport à liste fermée testé avec des données privées fictives, et écran de diagnostic réel sans appel réseau.
+- Fond intégré et grille Applications : conservation des choix existants, défaut des nouvelles installations, géométrie des grandes icônes avec toutes les dimensions de grille et validation du schéma HA.
 
 Le manifeste accepte Android 11–16. Le workflow [Android](https://github.com/Philiphall6/tv-assistant/actions/workflows/android.yml) exécute les bornes **API 30 et API 36** sur des paquets isolés. Le workflow [Validate](https://github.com/Philiphall6/tv-assistant/actions/workflows/validate.yml) vérifie HACS, Hassfest, le runtime HA, les navigateurs, les traductions et la documentation. Aucun contrôle HACS ou Hassfest n’est ignoré. Consultez le résultat du commit concerné : la présence d’un workflow n’atteste pas sa réussite. Les variantes de firmware, les touches constructeur et toutes les cartes HACS ne sont pas couvertes.
 

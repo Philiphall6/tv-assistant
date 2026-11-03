@@ -35,10 +35,19 @@ Captures fournies et autorisées pour publication par le propriétaire du projet
 - Cartes Lovelace réelles dans une surface WebView persistante, ressources fournies par votre HA, sans rechargement périodique de la page. Pointeur télécommande pour les cartes interactives.
 - Fonds unis, image locale, album Google Photos partagé avec cache et synchronisation. Cette dernière fonction dépend du format des albums publics Google et peut nécessiter des adaptations.
 - Respect de l’économiseur d’écran système après inactivité, sans modifier les albums Google ni les délais configurés sur la TV.
+- Vérification manuelle des mises à jour de l’APK, option quotidienne désactivée par défaut, et diagnostic technique consultable avant partage.
+- Fond intégré TV Assistant sur les nouvelles installations ; les fonds existants sont conservés.
+- Onglet Applications : taille des icônes et des noms, applications par rangée et rangées visibles, indépendamment des favoris de l’accueil.
 
 L’aperçu réel nécessite que le launcher soit ouvert sur la TV. Un schéma de placement reste disponible pour organiser la disposition ; ce n’est pas une fausse capture en direct. Les cartes personnalisées nécessitent leurs extensions installées dans HA et ne sont pas toutes garanties compatibles avec une télécommande.
 
 ## Installation
+
+Dans les paramètres du launcher, **Mises à jour et diagnostic** permet de vérifier la dernière publication stable et d’ouvrir sa page officielle. Le numéro de l’APK est comparé, pas celui de l’intégration HACS. Aucune installation automatique : télécharger l’APK signé puis l’installer en conservant la même signature. La vérification automatique, facultative, se fait au retour à l’accueil au maximum une fois par jour, sans réveiller la TV. GitHub reçoit l’adresse IP de connexion, mais aucun jeton HA ni identifiant de TV.
+
+Le diagnostic est généré localement à partir d’une liste fermée d’informations techniques. Le contenu exact est affiché avant **Partager**, **Enregistrer** ou **Copier** ; aucun envoi automatique. Il ne contient ni journaux bruts, noms d’appareils, identifiants, URL, jetons, profils, photos ou historique. L’état HA correspond au dernier état observé sur l’accueil, pas à un nouveau test réseau.
+
+Les réglages de la grille sont dans **Applications et favoris → Disposition des applications**, ou **Rangées** dans l’éditeur HA. Les grandes icônes s’adaptent à leur cellule : réduire les colonnes ou rangées permet de les agrandir davantage. Dans **Fond d’écran**, choisir **TV Assistant** pour appliquer le nouveau fond à une installation existante.
 
 1. Dans HACS → menu → **Dépôts personnalisés**, ajouter `https://github.com/Philiphall6/tv-assistant`, type **Intégration**. Ce dépôt personnalisé n’est pas une annonce d’inclusion dans le catalogue HACS par défaut.
 2. Télécharger l’intégration, redémarrer HA à un moment approprié, puis ajouter **TV Assistant** dans **Paramètres → Appareils et services**.
