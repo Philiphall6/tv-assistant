@@ -7,6 +7,8 @@
 
 Un launcher Android TV personnalisable et un éditeur multi-TV dans Home Assistant. Projet communautaire indépendant, sans affiliation officielle avec Home Assistant ou Google.
 
+[![Installer TV Assistant avec HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration)
+
 ## Aperçu
 
 ### Accueil sur la TV
@@ -43,21 +45,21 @@ L’aperçu réel nécessite que le launcher soit ouvert sur la TV. Un schéma d
 
 ## Installation
 
-Dans les paramètres du launcher, **Mises à jour et diagnostic** permet de vérifier la dernière publication stable et d’ouvrir sa page officielle. Le numéro de l’APK est comparé, pas celui de l’intégration HACS. Aucune installation automatique : télécharger l’APK signé puis l’installer en conservant la même signature. La vérification automatique, facultative, se fait au retour à l’accueil au maximum une fois par jour, sans réveiller la TV. GitHub reçoit l’adresse IP de connexion, mais aucun jeton HA ni identifiant de TV.
+TV Assistant est disponible dans le **catalogue HACS par défaut**. [HACS doit déjà être installé et configuré](https://www.hacs.xyz/docs/use/).
 
-Le diagnostic est généré localement à partir d’une liste fermée d’informations techniques. Le contenu exact est affiché avant **Partager**, **Enregistrer** ou **Copier** ; aucun envoi automatique. Il ne contient ni journaux bruts, noms d’appareils, identifiants, URL, jetons, profils, photos ou historique. L’état HA correspond au dernier état observé sur l’accueil, pas à un nouveau test réseau.
-
-Les réglages de la grille sont dans **Applications et favoris → Disposition des applications**, ou **Rangées** dans l’éditeur HA. Les grandes icônes s’adaptent à leur cellule : réduire les colonnes ou rangées permet de les agrandir davantage. Dans **Fond d’écran**, choisir **TV Assistant** pour appliquer le nouveau fond à une installation existante.
-
-1. Dans HACS → menu → **Dépôts personnalisés**, ajouter `https://github.com/Philiphall6/tv-assistant`, type **Intégration**. Ce dépôt personnalisé n’est pas une annonce d’inclusion dans le catalogue HACS par défaut.
+1. Cliquer sur [**Installer avec HACS**](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration), ou rechercher **TV Assistant** directement dans HACS. Le bouton ouvre sa fiche dans votre Home Assistant ; si demandé, renseigner l’adresse de votre propre instance dans My Home Assistant.
 2. Télécharger l’intégration, redémarrer HA à un moment approprié, puis ajouter **TV Assistant** dans **Paramètres → Appareils et services**.
 3. Installer l’APK signé depuis les [versions publiées](https://github.com/Philiphall6/tv-assistant/releases). HACS installe l’intégration, **pas l’APK**.
 4. Créer un utilisateur HA dédié à la TV, **non administrateur**, et son jeton longue durée. Le saisir uniquement dans les réglages locaux de la TV avec l’adresse HTTPS de HA.
 5. Activer l’édition depuis HA sur la TV. Depuis votre compte administrateur habituel, ouvrir **TV Assistant**, créer un profil et l’attribuer explicitement à cette TV après vérification de son identifiant.
 
+**Solution de secours :** si TV Assistant n’apparaît pas encore dans votre recherche HACS, aller dans le menu **Dépôts personnalisés**, ajouter `https://github.com/Philiphall6/tv-assistant` avec le type **Intégration**, puis reprendre à l’étape 2.
+
 L’administrateur peut modifier toutes les TV ; leur utilisateur dédié reste non administrateur. Les nouvelles TV n’obtiennent aucun profil tant qu’elles ne sont pas approuvées par cette attribution.
 
 Voir [installation et retour arrière](docs/INSTALLATION.md), [compilation et signature](docs/BUILD.md), [sécurité](SECURITY.md) et [validation](docs/TESTING.md).
+
+Le bouton ne déclenche aucune installation automatique : le téléchargement et le redémarrage restent à confirmer par vous. Il ne contient aucune adresse personnelle ni aucun jeton.
 
 ## Langues
 
@@ -66,6 +68,12 @@ La TV utilise la langue d’Android ; le panneau utilise la langue du compte Hom
 Les dates et nombres suivent les paramètres régionaux. L’horloge suit le format 12/24 heures d’Android. La langue de reconnaissance vocale vaut `auto` par défaut ; un choix explicite comme `fr` ou `en` reste prioritaire. Les anciennes configurations avec une langue explicite sont conservées. Les cartes Lovelace utilisent les traductions fournies par HA et leurs propres extensions ; certains diagnostics techniques peuvent conserver leur langue d’origine.
 
 ## Mise à jour et données
+
+Dans les paramètres du launcher, **Mises à jour et diagnostic** permet de vérifier la dernière publication stable et d’ouvrir sa page officielle. Le numéro de l’APK est comparé, pas celui de l’intégration HACS. Aucune installation automatique : télécharger l’APK signé puis l’installer en conservant la même signature. La vérification automatique, facultative, se fait au retour à l’accueil au maximum une fois par jour, sans réveiller la TV. GitHub reçoit l’adresse IP de connexion, mais aucun jeton HA ni identifiant de TV.
+
+Le diagnostic est généré localement à partir d’une liste fermée d’informations techniques. Le contenu exact est affiché avant **Partager**, **Enregistrer** ou **Copier** ; aucun envoi automatique. Il ne contient ni journaux bruts, noms d’appareils, identifiants, URL, jetons, profils, photos ou historique. L’état HA correspond au dernier état observé sur l’accueil, pas à un nouveau test réseau.
+
+Les réglages de la grille sont dans **Applications et favoris → Disposition des applications**, ou **Rangées** dans l’éditeur HA. Les grandes icônes s’adaptent à leur cellule : réduire les colonnes ou rangées permet de les agrandir davantage. Dans **Fond d’écran**, choisir **TV Assistant** pour appliquer le nouveau fond à une installation existante.
 
 L’APK utilise le même identifiant technique `fr.maison.tvlauncher`, pour préserver les mises à jour des installations précédentes lorsque la signature correspond. Le domaine HA reste `home_assistant_tv` pour la même raison. Ces noms techniques ne sont pas des données personnelles.
 
@@ -77,4 +85,4 @@ Le dépôt ne contient ni jeton, clé de signature, fichier de configuration dom
 
 Code original sous **GPL-3.0-only** : [LICENSE](LICENSE). Les bibliothèques et marques conservent leurs licences et droits respectifs : [THIRD_PARTY.md](THIRD_PARTY.md). Les noms et logos Home Assistant et Google ne sont pas couverts par la licence GPL de ce projet.
 
-Pour contribuer : [guide de contribution](CONTRIBUTING.md), [traductions](docs/LOCALIZATION.md) et [préparation au catalogue HACS](docs/HACS_DEFAULT.md).
+Pour contribuer : [guide de contribution](CONTRIBUTING.md), [traductions](docs/LOCALIZATION.md) et [catalogue HACS et validations](docs/HACS_DEFAULT.md).

@@ -2,7 +2,13 @@
 
 ## Home Assistant et plusieurs TV
 
-Installez le dépôt personnalisé HACS décrit dans le README, redémarrez HA, puis ajoutez l’intégration TV Assistant. Son panneau est réservé aux administrateurs.
+[![Installer TV Assistant avec HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration)
+
+Avec [HACS installé et configuré](https://www.hacs.xyz/docs/use/), cliquez sur le bouton ci-dessus ou recherchez **TV Assistant** dans le catalogue HACS par défaut. Le bouton ouvre la fiche de l’intégration dans votre Home Assistant ; si demandé, renseignez l’adresse de votre propre instance dans My Home Assistant. Aucun téléchargement ni redémarrage n’est lancé automatiquement.
+
+Téléchargez l’intégration, redémarrez HA à un moment approprié, puis ajoutez **TV Assistant** dans **Paramètres → Appareils et services**. Son panneau est réservé aux administrateurs. HACS installe l’intégration, **pas l’APK Android TV**, disponible séparément dans les [versions publiées](https://github.com/Philiphall6/tv-assistant/releases).
+
+Si l’intégration n’apparaît pas encore dans votre recherche, utilisez la solution de secours par **Dépôts personnalisés** décrite dans le [README](../README.md#installation).
 
 Sur chaque TV, saisissez votre propre adresse HTTPS valide et le jeton d’un utilisateur TV non administrateur. Vous pouvez employer un utilisateur distinct par TV pour faciliter la révocation. Dans les réglages de liaison au panneau, donnez un nom à l’appareil. Dans HA, vérifiez l’identifiant affiché par la TV, créez le profil et attribuez-le explicitement. Le profil peut être commun à plusieurs TV ou indépendant.
 

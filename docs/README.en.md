@@ -4,6 +4,8 @@
 
 TV Assistant combines a customizable Android TV launcher with a multi-TV editor inside Home Assistant. It is an independent community project, not an official Home Assistant or Google product.
 
+[![Install TV Assistant with HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration)
+
 ## Preview
 
 ![TV home screen with wallpaper, heat pump card, app favorites and home controls](images/tv-home.jpg)
@@ -25,13 +27,19 @@ Android 9 and 10 are not supported. Default-home behavior varies by manufacturer
 
 ## Installation
 
-1. In HACS, add `https://github.com/Philiphall6/tv-assistant` as a custom **Integration** repository. Default-catalog inclusion is not yet announced.
+TV Assistant is available in the **default HACS catalog**. [HACS must already be installed and configured](https://www.hacs.xyz/docs/use/).
+
+1. Click [**Install with HACS**](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration), or search for **TV Assistant** directly in HACS. The button opens its repository page in your Home Assistant; if prompted, enter your own instance address in My Home Assistant.
 2. Download the integration, restart HA at a suitable time, then add **TV Assistant** in **Settings → Devices & services**.
 3. Install the signed APK from [Releases](https://github.com/Philiphall6/tv-assistant/releases) on the TV. HACS installs the integration, **not the APK**.
 4. Create a dedicated, non-administrator HA user for the TV and a long-lived access token. Enter the HTTPS address and token only in the TV's local settings.
 5. Enable editing from HA on the TV. In your administrator account, open **TV Assistant**, create a profile and explicitly assign it to the TV after checking its identity.
 
+**Fallback:** if TV Assistant does not appear in your HACS search yet, open the **Custom repositories** menu, add `https://github.com/Philiphall6/tv-assistant` with type **Integration**, then continue from step 2.
+
 New TVs cannot read a profile before an administrator assigns one. One profile can serve multiple TVs, or each TV can have a separate profile. See the [installation and rollback guide](INSTALLATION.md) for default-home setup and optional permissions.
+
+The button does not install anything automatically: you still confirm the download and restart. It contains no personal address or token.
 
 ## Features and limits
 
@@ -64,6 +72,6 @@ Adjust the Apps tab in **Apps and favourites → Apps layout** on the TV, or **R
 
 Install updates over the existing APK when the signing certificate matches. Uninstalling erases local settings and credentials. Tokens are encrypted with Android Keystore and excluded from Android backups. The stable package ID is `fr.maison.tvlauncher`; the integration domain is `home_assistant_tv`.
 
-See [build and signing](BUILD.md), [tests](TESTING.md), [contributions](../CONTRIBUTING.md), [translations](LOCALIZATION.md) and [HACS catalog preparation](HACS_DEFAULT.md). Report vulnerabilities using [private reporting](https://github.com/Philiphall6/tv-assistant/security/advisories/new), never a public issue containing credentials.
+See [build and signing](BUILD.md), [tests](TESTING.md), [contributions](../CONTRIBUTING.md), [translations](LOCALIZATION.md) and [HACS catalog and validation](HACS_DEFAULT.md). Report vulnerabilities using [private reporting](https://github.com/Philiphall6/tv-assistant/security/advisories/new), never a public issue containing credentials.
 
 Original code is licensed under [GPL-3.0-only](../LICENSE). [Third-party licenses and trademarks](../THIRD_PARTY.md) remain separate.
