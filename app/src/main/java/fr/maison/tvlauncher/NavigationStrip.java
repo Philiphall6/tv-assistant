@@ -38,7 +38,11 @@ final class NavigationStrip {
         for(int i=0;i<widths.length;i++){
             Map<String,Object> item=config.items.get(i);int mode=mode(prefs,item);
             float fs=textSize(prefs,item)*scale,is=iconSize(prefs,item)*scale;
-            widths[i]=2*padding+(mode==1?is:textWidth(CardConfig.str(item,"label",""),fs,true)+(mode==2?is+8*scale:0));
+            // Regular and bold fonts do not have identical advances. Reserve both
+            // states so a translated label does not truncate when focus moves away.
+            String label=CardConfig.str(item,"label","");
+            float labelWidth=Math.max(textWidth(label,fs,true),textWidth(label,fs,false));
+            widths[i]=2*padding+(mode==1?is:labelWidth+(mode==2?is+8*scale:0));
             widths[i]=Math.max(36*scale,widths[i]);heights[i]=Math.max(62*scale,Math.max(mode==0?0:is+16*scale,mode==1?0:fs*1.3f+16*scale));
             total+=widths[i]+(i>0?gap:0);
         }

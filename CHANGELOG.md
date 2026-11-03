@@ -5,6 +5,7 @@
 - Langue automatique dans le launcher et l’éditeur HA : français, anglais et repli anglais pour les langues non traduites.
 - Ressources Android natives, suivi de la langue du compte HA, conservation des brouillons et des noms personnalisés lors du changement de langue.
 - Dates et nombres régionaux, format d’heure 12/24 heures et reconnaissance vocale `auto` suivant Android, sans modifier les choix explicites existants.
+- Largeur des onglets calculée avec les polices normale et sélectionnée pour éviter les libellés traduits tronqués.
 - Documentation française et anglaise, captures autorisées avec métadonnées supprimées, guides de contribution et de traduction.
 - Workflows HACS et Hassfest sans contrôles ignorés, tests navigateur, documentation, traductions et matrice Android API 30/36.
 - Préparation de candidature au catalogue HACS par défaut, sans annoncer une admission.
