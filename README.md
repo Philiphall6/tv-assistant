@@ -2,6 +2,18 @@
 
 Un launcher Android TV personnalisable et un éditeur multi-TV dans Home Assistant. Projet communautaire indépendant, sans affiliation officielle avec Home Assistant ou Google.
 
+## Aperçu
+
+### Accueil sur la TV
+
+![Accueil TV avec fond d’écran, carte PAC, favoris et commandes de la maison](docs/images/tv-home.jpg)
+
+### Éditeur dans Home Assistant
+
+![Éditeur Home Assistant avec aperçu de la TV et placement des éléments](docs/images/ha-editor.jpg)
+
+Captures fournies et autorisées pour publication par le propriétaire du projet. Elles illustrent une version antérieure au renommage en **TV Assistant** ; les libellés, applications et cartes visibles dépendent de votre configuration. Les métadonnées des fichiers ont été retirées.
+
 ## Compatibilité
 
 - Android **11 à 16** (API 30 à 36), télécommande directionnelle et écran paysage. Android 9 et 10 ne sont pas pris en charge.
@@ -37,7 +49,7 @@ La version Android 2.12.0 utilise le même identifiant technique `fr.maison.tvla
 
 Les anciens jetons sont migrés vers Android Keystore lors de leur lecture avec une adresse HTTPS valide. Les réglages locaux et jetons ne sont pas exportés dans les profils HA. Une nouvelle TV ou une réinstallation après désinstallation nécessite de ressaisir son jeton ; aucune sauvegarde Android des données de l’application n’est autorisée.
 
-Le dépôt ne contient ni jeton, clé de signature, configuration domestique, album personnel, capture d’écran utilisateur, ni ancien historique privé. Les exemples et tests utilisent des données fictives.
+Le dépôt ne contient ni jeton, clé de signature, fichier de configuration domestique, lien d’album personnel, ni ancien historique privé. Les exemples et tests utilisent des données fictives ; seules les deux captures de démonstration ci-dessus ont été expressément autorisées pour publication.
 
 ## Licence
 
