@@ -54,6 +54,8 @@ Captures fournies et autorisées pour publication par le propriétaire du projet
 - Connexion Home Assistant **HTTPS avec certificat valide** obligatoire. Les certificats non valides et les connexions HTTP sont refusés.
 - Le choix du launcher par défaut dépend du fabricant. L’application ne désactive jamais automatiquement le launcher système.
 
+**Amazon Fire TV :** une [adaptation expérimentale pour la communauté](docs/FIRE_TV.md) est en préparation pour Fire OS avec API Android 30 minimum. Aucun Fire TV réel n’a été validé. Vega OS est exclu ; le remplacement de l’accueil Amazon n’est pas garanti. L’APK public 2.13.8 ne contient pas encore ces adaptations.
+
 ## Fonctions
 
 - Applications favorites, formes d’icônes, appui long, reprise de lecture avec images et progression lorsqu’une application fournit ces données.

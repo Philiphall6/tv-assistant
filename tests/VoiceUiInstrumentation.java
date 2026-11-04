@@ -28,7 +28,7 @@ public final class VoiceUiInstrumentation extends Instrumentation {
             final Activity screen=chooser;waitForIdleSync();
             runOnMainSync(()->{
                 List<Button> choices=buttons(screen.getWindow().getDecorView());
-                if(choices.size()!=4||!choices.get(0).getText().toString().contains("Google TV")||!choices.get(1).getText().toString().contains("Assist")||screen.getCurrentFocus()==null)throw new AssertionError("Three visible choices and initial focus required");
+                if(choices.size()!=4||!choices.get(0).getText().toString().equals(TvPlatform.systemSearchLabel(TvPlatform.isFireTv(screen)))||!choices.get(1).getText().toString().contains("Assist")||screen.getCurrentFocus()==null)throw new AssertionError("Three visible choices and initial focus required");
             });
             Thread.sleep(500);
             File image=new File(getTargetContext().getExternalFilesDir(null),"voice-chooser.png");

@@ -31,6 +31,7 @@ final class TechnicalDiagnostics {
             out.put("diagnostic_schema", 1);
             out.put("app_version", AppUpdates.installed(context));
             out.put("android_api", Build.VERSION.SDK_INT);
+            out.put("platform", TvPlatform.isFireTv(context) ? "FIRE_TV" : "ANDROID");
             out.put("release_build", (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0);
             out.put("default_home", context.getPackageName().equals(LauncherSetupActivity.effectiveHome(context)));
             out.put("network", network(context).name());
@@ -39,6 +40,7 @@ final class TechnicalDiagnostics {
             out.put("ha_last_observed", lastConnection.name());
             out.put("ha_profile_enabled", PanelStore.enabled(context));
             out.put("continue_watching_permission", PlaybackPermission.granted(context));
+            out.put("continue_watching_supported", PlaybackPermission.supported(context));
             out.put("overlay_permission", Settings.canDrawOverlays(context));
             out.put("automatic_update_checks", AppUpdates.prefs(context).getBoolean("automatic", false));
             out.put("update_available_cached", AppUpdates.available(context));

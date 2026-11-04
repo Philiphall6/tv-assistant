@@ -97,10 +97,12 @@ final class MaintenanceTest {
             check(!report.contains(canary), "private canaries never exported");
             check(!report.contains("https:") && !report.contains("PRIVATE") && !report.contains("eyJ"), "no addresses or credentials");
             JSONObject json = new JSONObject(report);
-            Set<String> expected = new HashSet<>(Arrays.asList("diagnostic_schema", "app_version", "android_api", "release_build", "default_home", "network", "ha_credential_present", "ha_last_observed", "ha_profile_enabled", "continue_watching_permission", "overlay_permission", "automatic_update_checks", "update_available_cached"));
+            Set<String> expected = new HashSet<>(Arrays.asList("diagnostic_schema", "app_version", "android_api", "platform", "release_build", "default_home", "network", "ha_credential_present", "ha_last_observed", "ha_profile_enabled", "continue_watching_permission", "continue_watching_supported", "overlay_permission", "automatic_update_checks", "update_available_cached"));
             Set<String> keys = new HashSet<>();
             for (java.util.Iterator<String> it=json.keys(); it.hasNext();) keys.add(it.next());
             check(keys.equals(expected), "strict diagnostic allowlist");
+            check(Arrays.asList("ANDROID", "FIRE_TV").contains(json.getString("platform")), "platform is an enum, never a device identifier");
+            check(json.get("continue_watching_supported") instanceof Boolean, "provider availability is a boolean");
             check(json.getString("ha_last_observed").equals("CONNECTED"), "last connection state only");
             check(json.getBoolean("ha_credential_present"), "reports presence without decrypting token");
             check(seeded.equals(prefs.getAll()), "diagnostic never changes or migrates credentials and settings");

@@ -17,6 +17,8 @@ public final class PanelInstrumentation extends Instrumentation {
         try{int id=getTargetContext().getResources().getIdentifier("launcher_profile_schema","raw",getTargetContext().getPackageName());
             try(InputStream in=getTargetContext().getResources().openRawResource(id)){PanelStore.schema=new JSONObject(new String(SharedPhotoAlbum.bounded(in,1024*1024),StandardCharsets.UTF_8));}
             AmbientModeTest.run(this);
+            FireTvCompatibilityTest.run(this);
+            android.util.Log.i("TVA-Tests", "PASS: " + FireTvCompatibilityTest.checks + " experimental Fire TV compatibility checks (not hardware validation)");
             android.util.Log.i("TVA-Tests", "PASS: " + AmbientModeTest.checks + " Ambient Mode checks");
             MaintenanceTest.run(this);
             ApkUpdateTest.run(this);

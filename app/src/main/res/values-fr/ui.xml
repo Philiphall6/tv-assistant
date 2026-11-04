@@ -464,6 +464,7 @@
     <string name="ui_40a10cf" formatted="false">"Fermé"</string>
     <string name="ui_f802c30f" formatted="false">"Fichier ou publication non conforme : installation refusée."</string>
     <string name="ui_3a3f66a7" formatted="false">"Fichier sur le même serveur HA (.yaml ou .json)"</string>
+    <string name="ui_ae72c6af" formatted="false">"Fire TV · support expérimental, non validé sur appareil réel. Utilisez TV Assistant depuis vos applications. Le remplacement de l’accueil et le bouton Home ne sont pas garantis ; aucun composant Amazon n’est désactivé. Alexa n’est pas intégrée. La voix, la reprise et les cartes web dépendent des services disponibles sur cet appareil."</string>
     <string name="ui_3b1c319" formatted="false">"Flèches : pointeur · OK : clic / maintenir · CH ± : défiler · Retour : launcher"</string>
     <string name="ui_21805f" formatted="false">"Fond"</string>
     <string name="ui_7cce0c62" formatted="false">"Fond Salon zen réactivé"</string>
@@ -614,6 +615,7 @@
     <string name="ui_9383a5a7" formatted="false">"Mise à jour disponible : "</string>
     <string name="ui_30370e15" formatted="false">"Mises à jour et diagnostic"</string>
     <string name="ui_fb6cd6e4" formatted="false">"Mode YAML"</string>
+    <string name="ui_b05efae7" formatted="false">"Mode application Fire TV · ouvrez TV Assistant depuis vos applications. Le bouton Home peut revenir à l’accueil Amazon, même si le rôle Accueil est accordé."</string>
     <string name="ui_734f02ce" formatted="false">"Mode local"</string>
     <string name="ui_df2a66f7" formatted="false">"Modifier"</string>
     <string name="ui_2909bde3" formatted="false">"Modifier la carte"</string>
@@ -736,6 +738,7 @@
     <string name="ui_d6dc6cee" formatted="false">"Recharger le tableau de bord"</string>
     <string name="ui_a607c5db" formatted="false">"Recherche"</string>
     <string name="ui_dac6f4e2" formatted="false">"Recherche Android / Google TV"</string>
+    <string name="ui_c9fa32af" formatted="false">"Recherche du système"</string>
     <string name="ui_65afea75" formatted="false">"Recherche vocale"</string>
     <string name="ui_c3730fa4" formatted="false">"Recherche vocale Android"</string>
     <string name="ui_1af0f5f7" formatted="false">"Rechercher"</string>

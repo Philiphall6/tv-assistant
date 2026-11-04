@@ -1,4 +1,7 @@
 {
+  "Recherche du système": "System search",
+  "Fire TV · support expérimental, non validé sur appareil réel. Utilisez TV Assistant depuis vos applications. Le remplacement de l’accueil et le bouton Home ne sont pas garantis ; aucun composant Amazon n’est désactivé. Alexa n’est pas intégrée. La voix, la reprise et les cartes web dépendent des services disponibles sur cet appareil.": "Fire TV · experimental support, not validated on real hardware. Open TV Assistant from your apps. Home replacement and the Home button are not guaranteed; no Amazon component is disabled. Alexa is not integrated. Voice, continue watching and web cards depend on the services available on this device.",
+  "Mode application Fire TV · ouvrez TV Assistant depuis vos applications. Le bouton Home peut revenir à l’accueil Amazon, même si le rôle Accueil est accordé.": "Fire TV app mode · open TV Assistant from your apps. The Home button may return to Amazon Home even when the Home role is granted.",
   "Supprimer le profil": "Delete profile",
   "Supprimer définitivement le profil « {profile} » et son historique ? Les profils encore affectés à une TV doivent d’abord être détachés. Cette action ne réinitialise aucune TV.": "Permanently delete profile “{profile}” and its history? Profiles still assigned to a TV must be detached first. This does not reset any TV.",
   "Profil supprimé. Les autres profils et les réglages des TV sont conservés.": "Profile deleted. Other profiles and TV settings are preserved.",

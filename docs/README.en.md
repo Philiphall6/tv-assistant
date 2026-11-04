@@ -55,6 +55,8 @@ These owner-approved screenshots show a personalized example, not the default co
 
 Android 9 and 10 are not supported. Default-home behavior varies by manufacturer. The launcher never disables the system launcher automatically.
 
+**Amazon Fire TV:** [experimental community support](FIRE_TV.en.md) is being prepared for Fire OS with Android API 30 or newer. No physical Fire TV has been validated. Vega OS is excluded and Amazon Home replacement is not guaranteed. Public APK 2.13.8 does not yet include these adaptations.
+
 ## Installation
 
 TV Assistant is available in the **default HACS catalog**. [HACS must already be installed and configured](https://www.hacs.xyz/docs/use/).

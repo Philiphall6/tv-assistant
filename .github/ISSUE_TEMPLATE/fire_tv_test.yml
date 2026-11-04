@@ -1,0 +1,58 @@
+name: Fire TV community test / Test communautaire Fire TV
+description: Report experimental Fire OS compatibility, without private data.
+title: "[Fire TV] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Experimental Fire OS support is not hardware-certified. Vega OS and Android API below 30 are outside scope.
+        Support Fire OS expérimental, non certifié sur matériel. Vega OS et API Android inférieure à 30 sont hors périmètre.
+        Never post tokens, addresses, device IDs, serial numbers, full profiles or raw logs. No home-control action is required for this report.
+        Aucun jeton, adresse, identifiant, numéro de série, profil complet ou journal brut. Aucune commande domotique n’est nécessaire.
+  - type: input
+    id: model
+    attributes:
+      label: Commercial model and generation / Modèle commercial et génération
+      description: No personal device name or serial number / Sans nom personnel ni numéro de série.
+    validations:
+      required: true
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions
+      description: Fire OS, Android API, APK and source release/commit, HA integration, HA, WebView if available. No addresses.
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Main result / Résultat principal
+      options:
+        - "Works for the tested features / Fonctionne pour les fonctions testées"
+        - "Partially works / Fonctionne partiellement"
+        - "Cannot install or open / Installation ou ouverture impossible"
+    validations:
+      required: true
+  - type: textarea
+    id: results
+    attributes:
+      label: Tests and results / Essais et résultats
+      description: For each feature, say working, failing or not tested. Include reproduction steps for failures; no secrets or raw logs.
+      placeholder: |
+        Installation / opening:
+        Arrows / OK / Back / long press:
+        App launching:
+        HA connection / profile sync:
+        Native cards / Lovelace cards:
+        Home behavior (Amazon Home is an expected limitation):
+        Sleep / return / settings preserved:
+        Other features not tested:
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy / Confidentialité
+      options:
+        - label: I removed private data from text and attachments / J’ai retiré les données privées du texte et des pièces jointes.
+          required: true

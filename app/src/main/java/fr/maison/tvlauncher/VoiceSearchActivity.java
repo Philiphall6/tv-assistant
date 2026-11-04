@@ -19,7 +19,7 @@ public final class VoiceSearchActivity extends CardScreen {
         super.onCreate(state);prefs=CardStore.prefs(this);int provider=getIntent().getIntExtra("provider",prefs.getInt("voice_provider",0));
         if(provider==2){
             screen(I18n.t("Recherche vocale"),I18n.t("Choisissez le service pour cette demande. Aucune écoute n’a commencé."));
-            button(box,I18n.t("Recherche Android / Google TV"),()->chooseProvider(0));
+            button(box,TvPlatform.systemSearchLabel(TvPlatform.isFireTv(this)),()->chooseProvider(0));
             button(box,"Home Assistant Assist",()->chooseProvider(1));
             button(box,customName(),()->chooseProvider(3));
             button(footer,I18n.t("Retour"),this::finish);TvFocus.focusFirst(root);return;
@@ -30,7 +30,7 @@ public final class VoiceSearchActivity extends CardScreen {
             button(box,I18n.t("Ouvrir le service vocal"),this::launchCustomApp);
             button(footer,I18n.t("Retour"),this::finish);TvFocus.focusFirst(root);return;
         }
-        screen(custom?customName():ha?"Home Assistant Assist":I18n.t("Recherche Android / Google TV"),custom?"Transcription Android, puis envoi du texte à votre adresse de recherche HTTPS. Aucun jeton HA transmis.":ha?I18n.t("La voix est transcrite par le service Android, puis le texte est envoyé à votre agent HA avec le compte de cette TV."):I18n.t("Utilise le service de recherche vocale installé sur cette TV."));
+        screen(custom?customName():ha?"Home Assistant Assist":TvPlatform.systemSearchLabel(TvPlatform.isFireTv(this)),custom?"Transcription Android, puis envoi du texte à votre adresse de recherche HTTPS. Aucun jeton HA transmis.":ha?I18n.t("La voix est transcrite par le service Android, puis le texte est envoyé à votre agent HA avec le compte de cette TV."):I18n.t("Utilise le service de recherche vocale installé sur cette TV."));
         speak=button(box,I18n.t("Parler"),this::listen);
         query=field(I18n.t("Votre demande"),"",false);
         send=button(box,custom?I18n.t("Envoyer au service"):ha?I18n.t("Envoyer à Assist"):I18n.t("Rechercher"),()->submit(query.getText().toString()));
