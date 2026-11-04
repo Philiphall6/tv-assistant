@@ -2,11 +2,34 @@
 
 ## Notifications Home Assistant
 
-Nécessite **l’intégration 0.8.0 et l’APK 2.14.0**, ou des versions ultérieures. HACS et l’APK se mettent à jour séparément.
+Nécessite **l’intégration 0.8.1 et l’APK 2.14.0**, ou des versions ultérieures, pour le bouton de test et les entités de notification. Les actions avancées restent compatibles avec l’intégration 0.8.0. HACS et l’APK se mettent à jour séparément ; aucun nouvel APK n’est nécessaire pour passer de 0.8.0 à 0.8.1.
 
 1. Relier et approuver la TV comme indiqué ci-dessous.
 2. Sur la TV, ouvrir **Paramètres → Notifications Home Assistant**, autoriser la superposition dans Android, puis activer la réception. Cette autorisation reste locale : un profil HA ne peut pas l’activer à distance.
-3. Dans **TV Assistant → Téléviseurs**, déplier **Envoyer une notification depuis HA** pour obtenir l’exemple avec le bon identifiant de TV. Le statut de réception est indépendant de l’aperçu de l’éditeur, qui peut être hors ligne pendant une autre application.
+3. Dans **TV Assistant → Téléviseurs**, cliquer sur **Tester la notification** sur la fiche de la TV. Un test de 8 secondes est envoyé uniquement à cette TV. Le retour distingue l’envoi de l’abandon si la réception n’est pas prête, sans réveil ni nouvelle tentative automatique. Le statut de réception est indépendant de l’aperçu de l’éditeur, qui peut être hors ligne pendant une autre application.
+
+### Entité de notification et automatisations
+
+Chaque TV approuvée obtient automatiquement un appareil HA et une entité **Notifications** dans **Paramètres → Appareils et services → TV Assistant**. Son identifiant réel apparaît également sur la fiche TV de l’éditeur. Aucun jeton supplémentaire à saisir.
+
+Dans une automatisation, ajouter l’action **Notifications : Envoyer un message**, sélectionner l’entité de la TV, puis remplir le message et, si souhaité, le titre. Exemple avec un identifiant fictif :
+
+```yaml
+action: notify.send_message
+target:
+  entity_id: notify.tv_exemple_notifications
+data:
+  title: Maison
+  message: Le programme est terminé.
+```
+
+Cette action utilise un bandeau en haut à droite pendant 8 secondes. L’entité est indisponible lorsque la réception est suspendue ou déconnectée ; aucun message n’est conservé pour plus tard. Son état est la date du dernier envoi par cette action, pas une confirmation d’affichage. Aucun texte de message n’est ajouté à ses attributs. Le renommage de la TV conserve l’identité de l’entité ; supprimer la connexion retire son entité. Une TV qui revient doit être approuvée de nouveau. Les TV partageant un profil gardent des entités distinctes.
+
+Il s’agit d’une entité standard `notify` sélectionnable, pas d’une action dédiée `notify.mobile_app_…` comme celle de l’application iPhone. Les droits restent les mêmes : propriétaire actif de la TV, administrateur ou automatisation HA de confiance.
+
+### Options avancées et retrait d’un bandeau
+
+Déplier **Envoyer une notification depuis HA** dans la fiche TV pour obtenir l’exemple avec le bon identifiant TV Assistant. Les actions existantes restent disponibles pour régler la durée, la position et le `tag`.
 
 Exemple d’action HA, avec un identifiant fictif à remplacer par celui affiché dans votre éditeur :
 

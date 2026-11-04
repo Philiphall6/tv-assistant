@@ -252,6 +252,7 @@
     <string name="ui_5d2723f5" formatted="false">"This profile is still assigned to a TV. Assign that TV to another profile or remove its connection before deleting the profile."</string>
     <string name="ui_8644e687" formatted="false">"This profile already exists"</string>
     <string name="ui_35a9d175" formatted="false">"This system does not offer this screen. ADB setup may be required; no changes were made."</string>
+    <string name="ui_a75dd1ef" formatted="false">"This is a test notification. It will disappear in 8 seconds."</string>
     <string name="ui_2dd24176" formatted="false">"Invalid HA certificate for this address. Use its valid HTTPS name. Back: Home"</string>
     <string name="ui_a4c44ce7" formatted="false">"Invalid HA certificate · check the HTTPS address"</string>
     <string name="ui_a220a151" formatted="false">"Different signing certificate: update refused. Do not uninstall your launcher."</string>
@@ -380,6 +381,7 @@
     <string name="ui_d7667bfd" formatted="false">"In HA: TV Assistant — Send a notification action. Find the TV identifier in the TVs tab."</string>
     <string name="ui_ef27ecd7" formatted="false">"In HA → TV Assistant → TVs, compare the identifier below, then assign a saved profile using your admin account."</string>
     <string name="ui_d4e75bb2" formatted="false">"In Android settings, allow TV Assistant to install this update. Then return here and choose Install. You may revoke this permission after installation."</string>
+    <string name="ui_a9980128" formatted="false">"In an HA automation: select the Notifications: Send a message action, then this TV\'s entity. Only title and message are needed."</string>
     <string name="ui_23e0fb69" formatted="false">"Home dashboard"</string>
     <string name="ui_831f8d8c" formatted="false">"Ask for confirmation on tap"</string>
     <string name="ui_a3ec55da" formatted="false">"Checking the APK again before installation…"</string>
@@ -452,9 +454,11 @@
     <string name="ui_7c02d073" formatted="false">"Entity"</string>
     <string name="ui_13fc5112" formatted="false">"Home Assistant entity (optional)"</string>
     <string name="ui_fbc51476" formatted="false">"Displayed entity"</string>
+    <string name="ui_70ab25a9" formatted="false">"Notification entity: "</string>
     <string name="ui_a06933f8" formatted="false">"Heat pump priority entity"</string>
     <string name="ui_d65360c8" formatted="false">"Group entity"</string>
     <string name="ui_3c73450c" formatted="false">"Entities in order (one per line)"</string>
+    <string name="ui_3129421e" formatted="false">"Sending test…"</string>
     <string name="ui_7ce3af8f" formatted="false">"Sent; waiting for the next screenshot."</string>
     <string name="ui_3e6a8205" formatted="false">"Send to service"</string>
     <string name="ui_98d116a5" formatted="false">"Send to profile TVs"</string>
@@ -515,6 +519,7 @@
     <string name="ui_3fed53c0" formatted="false">"General"</string>
     <string name="ui_448fa1ec" formatted="false">"HA unreachable · OK to retry"</string>
     <string name="ui_8d8bd404" formatted="false">"HA unreachable. Check network and address. Menu: retry · Back: Home"</string>
+    <string name="ui_b2e7b989" formatted="false">"HA did not confirm delivery. The test may have been received; no automatic retry."</string>
     <string name="ui_f5b4b790" formatted="false">"HA · Sign in if prompted · Arrows: pointer · OK: click · CH ±: scroll · Menu: options · Back: Home"</string>
     <string name="ui_a2bdb422" formatted="false">"HTTPS and a valid certificate are required. The token is encrypted with Android Keystore and excluded from backups. Use a non-admin TV account."</string>
     <string name="ui_f24732f6" formatted="false">"Height (%)"</string>
@@ -825,6 +830,7 @@
     <string name="ui_20cc1b0a" formatted="false">"Reset launcher?"</string>
     <string name="ui_1a35c32c" formatted="false">"No Assist response received. The request may have run: check before sending it again."</string>
     <string name="ui_4165da6e" formatted="false">"Unrecognized update response. Nothing was downloaded."</string>
+    <string name="ui_c43c6ca0" formatted="false">"Unrecognized response: cannot confirm delivery. No automatic retry."</string>
     <string name="ui_10db8f44" formatted="false">"Response received from Home Assistant."</string>
     <string name="ui_285df72e" formatted="false">"Reset launcher settings"</string>
     <string name="ui_21748ed7" formatted="false">"LOCAL BACKUP"</string>
@@ -907,7 +913,12 @@
     <string name="ui_c9ed0eb9" formatted="false">"Size and spacing"</string>
     <string name="ui_7c5b260a" formatted="false">"Maximum cache size"</string>
     <string name="ui_bd71f71e" formatted="false">"Done"</string>
+    <string name="ui_f11ff3cb" formatted="false">"8-second test on this TV only, without waking it."</string>
+    <string name="ui_e796eb3a" formatted="false">"Test sent to the TV. Check the banner on screen; it disappears after 8 seconds."</string>
+    <string name="ui_89f26f9d" formatted="false">"Test failed: check the HA connection, TV approval and notification activation. Wait one second before retrying."</string>
+    <string name="ui_cd94d352" formatted="false">"Test not sent: TV asleep, disconnected or reception disabled. No message will be retained."</string>
     <string name="ui_369d1b9e" formatted="false">"Test Home Assistant connection"</string>
+    <string name="ui_78061075" formatted="false">"Test notification"</string>
     <string name="ui_4cf70b8" formatted="false">"Text"</string>
     <string name="ui_a2f7db04" formatted="false">"Text ({state}, {name}, {entity})"</string>
     <string name="ui_1ab69ff6" formatted="false">"Displayed text ({state}, {name}, {greeting})"</string>

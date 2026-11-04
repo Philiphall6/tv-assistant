@@ -1,6 +1,6 @@
-/* TV Assistant — local admin editor. No CDN, analytics, eval or HA service calls. */
+/* TV Assistant — local admin editor. No CDN, analytics or eval. Only explicit notification tests call an HA service. */
 import "/home_assistant_tv/icons.js?v=0.7.5";
-import {raw as userText, isRaw, languageOf, translate} from "/home_assistant_tv/localize.js?v=0.7.1";
+import {raw as userText, isRaw, languageOf, translate} from "/home_assistant_tv/localize.js?v=0.8.1";
 const clone = value => JSON.parse(JSON.stringify(value));
 function node(tag, attrs = {}, ...children) {
   const e = document.createElement(tag);
@@ -48,6 +48,7 @@ class HomeAssistantTVPanel extends HTMLElement {
     super(); this.attachShadow({mode:"open"}); this.tab="Disposition"; this.profile="salon"; this.profileTitle="TV salon";
     this.revision=0; this.config={schema:1,settings:{},cards:[]}; this.meta={profiles:[],devices:[],schema:{}};
     this.dirty=false; this.yamlDirty=false; this.yaml=""; this.message=""; this.editIndex=-1;
+    this.notificationTests=new Map();
     this.previewId="";this.previewFrame=null;this.previewMessage="";this.previewBusy=false;this.previewGeneration=0;this.previewAuto=true;this.settingsSections={};this.navEdit=-1;this.selectedBlock="";this.placementIndex=-1;this.showPlacementFrames=true;
     this.resizePreview=()=>this.fitPreview();this.beforeUnload=e=>{if(this.dirty||this.yamlDirty){e.preventDefault();e.returnValue="";}};
     this.visibility=()=>{this.stopPreview();if(!document.hidden)this.schedulePreview(0);};
@@ -102,6 +103,22 @@ class HomeAssistantTVPanel extends HTMLElement {
     if(this.previewId===d.id){this.stopPreview();this.previewFrame=null;this.previewId="";}
     await this.refresh();this.message="Connexion supprimée. Le jeton Home Assistant n’a pas été révoqué.";
   }
+  async testNotification(d){
+    if(d.approved===false||this.notificationTests.get(d.id)?.pending)return;
+    const state={pending:true,text:"Envoi du test…",error:false};this.notificationTests.set(d.id,state);this.render();
+    let timer;
+    try{
+      const result=await Promise.race([
+        this._hass.callWS({type:"call_service",domain:"home_assistant_tv",service:"notify",return_response:true,service_data:{device_ids:[d.id],title:"TV Assistant",message:this.t("Ceci est une notification de test. Elle disparaîtra dans 8 secondes."),duration:8,position:"top_right",tag:"tv_assistant_test"}}),
+        new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error("timeout")),12000);})
+      ]);
+      if(result?.response?.sent===1&&result?.response?.skipped===0)state.text="Test envoyé à la TV. Vérifiez le bandeau à l’écran ; il disparaît après 8 secondes.";
+      else if(result?.response?.sent===0&&result?.response?.skipped===1)state.text="Test non envoyé : TV en veille, déconnectée ou réception désactivée. Aucun message ne sera conservé.";
+      else {state.text="Réponse non reconnue : impossible de confirmer l’envoi. Aucun nouvel essai automatique.";state.error=true;}
+    }catch(e){
+      state.text=e?.message==="timeout"?"HA n’a pas confirmé l’envoi. Le test a peut-être été reçu ; aucun nouvel essai automatique.":"Test impossible : vérifiez la connexion HA, l’autorisation de la TV et l’activation des notifications. Attendez une seconde avant de réessayer.";state.error=true;
+    }finally{clearTimeout(timer);state.pending=false;this.render();}
+  }
   mark(){this.dirty=true;this.updateDraftNotice();this.paintPlacementOverlay();const e=this.shadowRoot.querySelector("#draft");if(e)e.textContent=this.t("Brouillon non envoyé");}
   button(label, fn, cls=""){return this.node("button",{class:`btn ${cls}`,onclick:()=>this.run(fn)},label);}
   async applyYaml(){if(this.yamlDirty){const r=await this.ws("validate",{yaml:this.yaml});this.config=r.config;this.yaml=r.yaml;this.yamlDirty=false;this.dirty=true;}}
@@ -155,6 +172,10 @@ class HomeAssistantTVPanel extends HTMLElement {
       if(d.approved===false)card.append(this.node("p",{class:"notice"},"Nouvelle TV en attente : vérifiez son identité puis affectez explicitement un profil pour autoriser sa lecture. Aucun profil n’est encore transmis."));
       if(d.error)card.append(this.node("p",{class:"error"},d.error));
       card.append(this.node("p",{class:"muted"},d.notifications==="ready"?"Notifications : réception prête":d.notifications==="paused"?"Notifications : veille ou affichage suspendu":"Notifications : non reliées ou désactivées"));
+      const test=this.notificationTests.get(d.id);
+      card.append(this.node("button",{class:"btn primary",disabled:d.approved===false||!!test?.pending,onclick:()=>this.testNotification(d)},test?.pending?"Envoi du test…":"Tester la notification"),this.node("p",{class:`muted ${test?.error?"error":""}`,role:"status","aria-live":"polite"},test?.text||"Test de 8 secondes sur cette TV uniquement, sans la réveiller."));
+      if(d.notification_entity)card.append(this.node("p",{},"Entité de notification : ",this.node("code",{style:{overflowWrap:"anywhere"}},userText(d.notification_entity))));
+      card.append(this.node("p",{class:"muted"},"Dans une automatisation HA : choisissez l’action « Notifications : Envoyer un message », puis l’entité de cette TV. Titre et message suffisent."));
       card.append(this.node("details",{},this.node("summary",{},"Envoyer une notification depuis HA"),
         this.node("p",{class:"notice"},"Activez les notifications sur la TV et autorisez la superposition. Aucun réveil ni rattrapage : les messages en veille ou hors ligne sont abandonnés. L’éditeur peut être hors ligne alors que la réception des notifications est prête."),
         this.node("pre",{style:{whiteSpace:"pre-wrap",overflowWrap:"anywhere"}},userText(`action: home_assistant_tv.notify\ndata:\n  device_ids: [${JSON.stringify(d.id)}]\n  title: TV Assistant\n  message: Test\n  duration: 8\n  position: top_right\n  tag: test`)),

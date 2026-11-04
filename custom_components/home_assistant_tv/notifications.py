@@ -60,17 +60,21 @@ class NotificationHub:
         self.listeners[key] = (identity, send)
         self.ready[key] = bool(ready)
         self.sessions[key] = session
+        self.repository.device_changed(identity)
 
     def remove(self, key):
-        self.listeners.pop(key, None)
+        removed = self.listeners.pop(key, None)
         self.ready.pop(key, None)
         self.sessions.pop(key, None)
+        if removed:
+            self.repository.device_changed(removed[0])
 
     def state(self, key, ready, session):
         require(key in self.listeners, "Abonnement notifications absent")
         require(isinstance(session, str) and re.fullmatch(r"[a-f0-9]{32}", session), "Session invalide")
         self.ready[key] = bool(ready)
         self.sessions[key] = session
+        self.repository.device_changed(self.listeners[key][0])
 
     def status(self, identity):
         keys = [k for k, (device, _) in self.listeners.items() if device == identity]

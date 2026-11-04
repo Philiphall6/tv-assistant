@@ -65,7 +65,7 @@ Captures fournies et autorisées pour publication par le propriétaire du projet
 - Cartes Lovelace réelles dans une surface WebView persistante, ressources fournies par votre HA, sans rechargement périodique de la page. Pointeur télécommande pour les cartes interactives.
 - Fonds unis, image locale, album Google Photos partagé avec cache et synchronisation. Cette dernière fonction dépend du format des albums publics Google et peut nécessiter des adaptations.
 - Respect de l’économiseur d’écran système après inactivité, sans modifier les albums Google ni les délais configurés sur la TV.
-- Notifications HA facultatives au-dessus des applications : aucun réveil, aucune notification en veille et aucun rattrapage à l’allumage. [Configuration et limites](docs/INSTALLATION.md#notifications-home-assistant).
+- Notifications HA facultatives au-dessus des applications : bouton de test dans l’éditeur et entité `notify` par TV pour les automatisations. Aucun réveil, aucune notification en veille et aucun rattrapage à l’allumage. [Configuration et limites](docs/INSTALLATION.md#notifications-home-assistant).
 - Vérification manuelle des mises à jour de l’APK, option quotidienne désactivée par défaut, et diagnostic technique consultable avant partage.
 - Fond intégré TV Assistant sur les nouvelles installations ; les fonds existants sont conservés.
 - Onglet Applications : taille des icônes et des noms, applications par rangée et rangées visibles, indépendamment des favoris de l’accueil.

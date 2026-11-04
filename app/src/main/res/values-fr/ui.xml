@@ -252,6 +252,7 @@
     <string name="ui_5d2723f5" formatted="false">"Ce profil est encore affecté à une TV. Réaffectez cette TV ou supprimez sa connexion avant de supprimer le profil."</string>
     <string name="ui_8644e687" formatted="false">"Ce profil existe déjà"</string>
     <string name="ui_35a9d175" formatted="false">"Ce système ne propose pas cet écran. Une configuration ADB peut être nécessaire ; aucun changement n’a été effectué."</string>
+    <string name="ui_a75dd1ef" formatted="false">"Ceci est une notification de test. Elle disparaîtra dans 8 secondes."</string>
     <string name="ui_2dd24176" formatted="false">"Certificat HA non valide pour cette adresse. Utilisez son nom HTTPS valide. Retour : Maison"</string>
     <string name="ui_a4c44ce7" formatted="false">"Certificat HA non valide · vérifiez l’adresse HTTPS"</string>
     <string name="ui_a220a151" formatted="false">"Certificat différent : mise à jour refusée. Ne désinstallez pas votre launcher."</string>
@@ -380,6 +381,7 @@
     <string name="ui_d7667bfd" formatted="false">"Dans HA : action TV Assistant — Envoyer une notification. L’identifiant de la TV est dans l’onglet Téléviseurs."</string>
     <string name="ui_ef27ecd7" formatted="false">"Dans HA → TV Assistant → Téléviseurs, comparez l’identifiant ci-dessous puis affectez un profil enregistré avec votre compte administrateur."</string>
     <string name="ui_d4e75bb2" formatted="false">"Dans l’écran Android, autorisez uniquement TV Assistant à installer cette mise à jour. Revenez ensuite ici et choisissez Installer. Vous pouvez retirer cette autorisation après l’installation."</string>
+    <string name="ui_a9980128" formatted="false">"Dans une automatisation HA : choisissez l’action « Notifications : Envoyer un message », puis l’entité de cette TV. Titre et message suffisent."</string>
     <string name="ui_23e0fb69" formatted="false">"Dashboard Maison"</string>
     <string name="ui_831f8d8c" formatted="false">"Demander confirmation au clic"</string>
     <string name="ui_a3ec55da" formatted="false">"Dernier contrôle de l’APK avant installation…"</string>
@@ -452,9 +454,11 @@
     <string name="ui_7c02d073" formatted="false">"Entité"</string>
     <string name="ui_13fc5112" formatted="false">"Entité Home Assistant (facultatif)"</string>
     <string name="ui_fbc51476" formatted="false">"Entité affichée"</string>
+    <string name="ui_70ab25a9" formatted="false">"Entité de notification : "</string>
     <string name="ui_a06933f8" formatted="false">"Entité de priorité PAC"</string>
     <string name="ui_d65360c8" formatted="false">"Entité du groupe"</string>
     <string name="ui_3c73450c" formatted="false">"Entités dans l’ordre (une par ligne)"</string>
+    <string name="ui_3129421e" formatted="false">"Envoi du test…"</string>
     <string name="ui_7ce3af8f" formatted="false">"Envoi effectué ; attente de la prochaine capture."</string>
     <string name="ui_3e6a8205" formatted="false">"Envoyer au service"</string>
     <string name="ui_98d116a5" formatted="false">"Envoyer aux TV du profil"</string>
@@ -515,6 +519,7 @@
     <string name="ui_3fed53c0" formatted="false">"Général"</string>
     <string name="ui_448fa1ec" formatted="false">"HA inaccessible · OK pour réessayer"</string>
     <string name="ui_8d8bd404" formatted="false">"HA inaccessible. Vérifiez le réseau et l’adresse. Menu : réessayer · Retour : Maison"</string>
+    <string name="ui_b2e7b989" formatted="false">"HA n’a pas confirmé l’envoi. Le test a peut-être été reçu ; aucun nouvel essai automatique."</string>
     <string name="ui_f5b4b790" formatted="false">"HA · Connexion web habituelle si demandée · Flèches : pointeur · OK : clic · CH ± : défiler · Menu : options · Retour : Maison"</string>
     <string name="ui_a2bdb422" formatted="false">"HTTPS et certificat valide obligatoires. Le jeton est chiffré avec Android Keystore et exclu des sauvegardes. Utilisez un compte TV non administrateur."</string>
     <string name="ui_f24732f6" formatted="false">"Hauteur (%)"</string>
@@ -825,6 +830,7 @@
     <string name="ui_20cc1b0a" formatted="false">"Réinitialiser le launcher ?"</string>
     <string name="ui_1a35c32c" formatted="false">"Réponse Assist non reçue. La demande a pu être exécutée : vérifiez avant de la renvoyer."</string>
     <string name="ui_4165da6e" formatted="false">"Réponse de mise à jour non reconnue. Aucun téléchargement effectué."</string>
+    <string name="ui_c43c6ca0" formatted="false">"Réponse non reconnue : impossible de confirmer l’envoi. Aucun nouvel essai automatique."</string>
     <string name="ui_10db8f44" formatted="false">"Réponse reçue de Home Assistant."</string>
     <string name="ui_285df72e" formatted="false">"Rétablir les réglages du launcher"</string>
     <string name="ui_21748ed7" formatted="false">"SAUVEGARDE LOCALE"</string>
@@ -907,7 +913,12 @@
     <string name="ui_c9ed0eb9" formatted="false">"Taille et espacement"</string>
     <string name="ui_7c5b260a" formatted="false">"Taille maximale du cache"</string>
     <string name="ui_bd71f71e" formatted="false">"Terminer"</string>
+    <string name="ui_f11ff3cb" formatted="false">"Test de 8 secondes sur cette TV uniquement, sans la réveiller."</string>
+    <string name="ui_e796eb3a" formatted="false">"Test envoyé à la TV. Vérifiez le bandeau à l’écran ; il disparaît après 8 secondes."</string>
+    <string name="ui_89f26f9d" formatted="false">"Test impossible : vérifiez la connexion HA, l’autorisation de la TV et l’activation des notifications. Attendez une seconde avant de réessayer."</string>
+    <string name="ui_cd94d352" formatted="false">"Test non envoyé : TV en veille, déconnectée ou réception désactivée. Aucun message ne sera conservé."</string>
     <string name="ui_369d1b9e" formatted="false">"Tester la connexion Home Assistant"</string>
+    <string name="ui_78061075" formatted="false">"Tester la notification"</string>
     <string name="ui_4cf70b8" formatted="false">"Texte"</string>
     <string name="ui_a2f7db04" formatted="false">"Texte ({state}, {name}, {entity})"</string>
     <string name="ui_1ab69ff6" formatted="false">"Texte affiché ({state}, {name}, {greeting})"</string>

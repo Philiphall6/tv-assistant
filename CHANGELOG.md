@@ -1,5 +1,15 @@
 # Versions
 
+## Intégration 0.8.1 / Android 2.14.0 inchangé
+
+- Bouton **Tester la notification** sur chaque fiche TV, avec retour d’envoi, réception non prête ou erreur. Test de 8 secondes, ciblage d’une seule TV, protection contre les doubles clics, sans réveil ni nouvel essai automatique.
+- Appareil HA et entité **Notifications** créés pour chaque TV approuvée. Sélection directe dans l’action standard `notify.send_message`, avec titre facultatif et message, sans recopier d’identifiant TV Assistant.
+- Disponibilité liée au flux de notifications, pas à l’aperçu de l’éditeur. Suppression de l’entité en cas de retrait de la connexion ; identité stable au renommage et au rechargement.
+- Même contrôle du compte actif, du propriétaire et des droits administrateur que les actions avancées existantes. Aucun message ni jeton dans les attributs d’entité ; aucune file d’attente.
+- Traductions françaises/anglaises, tests navigateur et tests des véritables services et registres Home Assistant en environnement isolé.
+
+Mettre à jour l’intégration HACS puis redémarrer HA. L’APK 2.14.0 de la publication précédente est réutilisé sans modification ; aucune réinstallation TV nécessaire.
+
 ## Intégration 0.8.0 / Android 2.14.0
 
 - Notifications HA en bandeaux au-dessus des applications, après activation locale et autorisation Android de superposition. Le bandeau ne prend ni le focus ni les touches de la télécommande.

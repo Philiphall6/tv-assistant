@@ -1,4 +1,12 @@
 {
+  "entity": {
+    "notify": {
+      "tv_notification": {"name": "Notifications"}
+    }
+  },
+  "exceptions": {
+    "notification_not_ready": {"message": "La TV est en veille, déconnectée ou ne reçoit pas les notifications. Le message a été abandonné et ne sera pas renvoyé."}
+  },
   "services": {
     "notify": {
       "name": "Envoyer une notification",

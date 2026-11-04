@@ -1,4 +1,12 @@
 {
+  "entity": {
+    "notify": {
+      "tv_notification": {"name": "Notifications"}
+    }
+  },
+  "exceptions": {
+    "notification_not_ready": {"message": "The TV is asleep, disconnected or not ready to receive notifications. The message was discarded and will not be replayed."}
+  },
   "services": {
     "notify": {
       "name": "Send a notification",

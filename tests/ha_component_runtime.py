@@ -33,6 +33,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         self.hass=SimpleNamespace(data={component.DOMAIN:self.repo},async_create_background_task=schedule,
                                   http=SimpleNamespace(async_register_static_paths=AsyncMock()),
                                   services=SimpleNamespace(async_register=MagicMock(),async_remove=MagicMock()),
+                                  config_entries=SimpleNamespace(async_forward_entry_setups=AsyncMock(),async_unload_platforms=AsyncMock(return_value=True)),
                                   auth=SimpleNamespace(async_get_user=AsyncMock()))
         self.cfg={"schema":1,"settings":{"hero_subtitle":"Test"},"cards":[]}
 

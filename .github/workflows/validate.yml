@@ -54,3 +54,4 @@ jobs:
       - run: python tests/test_cards_browser.py
       - run: python tests/test_localization_browser.py
       - run: docker run --rm --network none -v "$PWD:/work" -w /work ghcr.io/home-assistant/home-assistant:2026.10.4 python tests/ha_component_runtime.py
+      - run: docker run --rm --network none -v "$PWD:/work" -w /work ghcr.io/home-assistant/home-assistant:2026.10.4 python tests/notify_entity_runtime.py

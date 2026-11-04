@@ -27,7 +27,18 @@ class Repository:
         self.render_listeners = {}
         self.previews = {}
         self.preview_requested = {}
+        self.device_observers = set()
+        self.notification_entity_ids = {}
         self.notifications = NotificationHub(self)
+
+    def observe_devices(self, listener):
+        """Observe metadata only; no notification text or credentials are emitted."""
+        self.device_observers.add(listener)
+        return lambda: self.device_observers.discard(listener)
+
+    def device_changed(self, identity):
+        for listener in tuple(self.device_observers):
+            listener(identity)
 
     async def preview(self, identity, timeout=8):
         require(identity in self.data["devices"], "TV inconnue")
@@ -71,6 +82,7 @@ class Repository:
                            "captured_at":now(), "profile":record["profile"], "revision":record.get("applied_revision")})
 
     def close(self):
+        self.device_observers.clear()
         self.notifications.close()
         for _, future in self.previews.values():
             if not future.done():future.set_exception(ProfileError("Intégration en cours de rechargement"))
@@ -102,7 +114,8 @@ class Repository:
         for identity, record in self.data["devices"].items():
             devices.append({k: copy.deepcopy(v) for k, v in record.items() if k != "owner"} | {
                 "id": identity, "online": any(v[0] == identity for v in self.listeners.values()),
-                "notifications": self.notifications.status(identity)})
+                "notifications": self.notifications.status(identity),
+                "notification_entity": self.notification_entity_ids.get(identity)})
         return {"profiles": [{"id": k, "title": v["title"], "revision": v["revision"]} for k, v in self.data["profiles"].items()], "devices": devices}
 
     def notify(self, devices=None):
@@ -155,6 +168,8 @@ class Repository:
             await self.store.async_save(update)
             self.data = update
 
+        self.device_changed(identity)
+
     async def delete_profile(self, profile, expected):
         profile_id(profile)
         async with self.lock:
@@ -196,6 +211,7 @@ class Repository:
         if pending and not pending[1].done():
             pending[1].set_exception(ProfileError("Connexion TV supprimée. Capture annulée."))
         self.preview_requested.pop(identity, None)
+        self.device_changed(identity)
         for send, payload in notifications:
             try:
                 send(payload)
@@ -214,6 +230,7 @@ class Repository:
             await self.store.async_save(update)
             self.data = update
         self.notify({identity})
+        self.device_changed(identity)
 
     async def ack(self, identity, profile, revision, error):
         async with self.lock:

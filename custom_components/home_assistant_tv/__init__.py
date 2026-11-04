@@ -8,18 +8,20 @@ except ImportError:  # Older HA versions before its schema-library migration.
 from homeassistant.components import frontend, panel_custom, websocket_api
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.core import callback, SupportsResponse
-from homeassistant.exceptions import ServiceValidationError, Unauthorized
+from homeassistant.const import Platform
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers import config_validation as cv
 from homeassistant.loader import async_get_integration
 
 from .model import SCHEMA, ProfileError, as_yaml, parse_yaml, parse_card_yaml, profile_id, require, validate
 from .repository import Repository
+from .notification_service import async_send_notification
 
 DOMAIN = "home_assistant_tv"
 PANEL = "home-assistant-tv"
 CARDS_PANEL = "home-assistant-tv-cards"
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+PLATFORMS = [Platform.NOTIFY]
 
 
 async def async_setup(hass, config):
@@ -45,15 +47,8 @@ async def async_setup_entry(hass, entry):
             websocket_api.async_register_command(hass, command)
         hass.data[DOMAIN + "_registered"] = True
     async def send_notification(call):
-        user = await hass.auth.async_get_user(call.context.user_id) if call.context.user_id else None
-        if call.context.user_id and (user is None or not user.is_active):
-            raise Unauthorized()
-        try:
-            return repo(hass).notifications.send(dict(call.data),
-                owner=user.id if user else None, admin=user.is_admin if user else True,
-                dismiss=call.service == "dismiss_notification")
-        except (ValueError, TypeError, OverflowError) as error:
-            raise ServiceValidationError(str(error)) from error
+        return await async_send_notification(hass, repo(hass), dict(call.data), call.context,
+            dismiss=call.service == "dismiss_notification")
     for service in ("notify", "dismiss_notification"):
         hass.services.async_register(DOMAIN, service, send_notification,
             supports_response=SupportsResponse.OPTIONAL)
@@ -66,10 +61,18 @@ async def async_setup_entry(hass, entry):
         config={"integration_version": version}, require_admin=True)
     await panel_custom.async_register_panel(hass, CARDS_PANEL, "home-assistant-tv-cards",
         module_url="/home_assistant_tv/cards.js?v=0.7.1", require_admin=False)
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 
 async def async_unload_entry(hass, entry):
+    manager = getattr(hass.data.get(DOMAIN), "notification_entities", None)
+    if manager:
+        await manager.async_stop()
+    if not await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
+        if manager:
+            manager.start()
+        return False
     for service in ("notify", "dismiss_notification"):
         hass.services.async_remove(DOMAIN, service)
     repository = hass.data.pop(DOMAIN, None)
