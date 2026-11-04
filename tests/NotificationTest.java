@@ -101,6 +101,15 @@ final class NotificationTest {
         });
         test.waitForIdleSync();
         check(before.equals(CardStore.prefs(context).getAll()),"Opening reorganized settings preserves preferences");
+        CardManagerActivity cards=(CardManagerActivity)test.startActivitySync(new Intent(context,CardManagerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        test.runOnMainSync(()->{
+            boolean duplicate=false;
+            for(int i=0;i<cards.box.getChildCount();i++)if(cards.box.getChildAt(i) instanceof android.widget.Button){
+                String label=((android.widget.Button)cards.box.getChildAt(i)).getText().toString();
+                for(String prefix:new String[]{"Disposition : ","Au démarrage : ","Cartes existantes : "})duplicate|=label.startsWith(I18n.t(prefix));
+            }
+            check(!duplicate,"Card editor does not duplicate layout and startup settings");cards.finish();
+        });
     }
     static void shell(Instrumentation test,String command) throws Exception {
         try (java.io.InputStream in=new android.os.ParcelFileDescriptor.AutoCloseInputStream(test.getUiAutomation().executeShellCommand(command))) {

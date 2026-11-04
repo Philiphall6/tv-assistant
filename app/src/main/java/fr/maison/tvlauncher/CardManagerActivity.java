@@ -11,15 +11,11 @@ public class CardManagerActivity extends CardScreen {
     @Override public void onResume(){super.onResume();build();}
     void build(){screen(I18n.t("Cartes & dashboard"),I18n.t("Cartes natives · éditeur visuel et YAML · états HA en direct, sans page web"));
         boolean remote=prefs.getBoolean("cards_remote_enabled",false);
-        button(box,I18n.t("Édition depuis Home Assistant · plusieurs TV"),()->startActivity(new Intent(this,PanelSettingsActivity.class)));
         if(PanelStore.enabled(this))box.addView(text(I18n.t("Le profil du panneau HA est prioritaire. Vos cartes locales et le fichier HA sont conservés."),13,0xffacb9c6));
         button(box,I18n.t("Créer une carte"),()->edit(-1));
         button(box,I18n.t("Ajouter une carte PAC animée"),()->startActivity(new Intent(this,CardEditorActivity.class).putExtra("template",HeatPumpState.TYPE)));
         button(box,I18n.t("Éditer / importer tout le YAML local"),()->startActivity(new Intent(this,CardEditorActivity.class).putExtra("deck",true)));
         button(box,I18n.t("Source : ")+(remote?I18n.t("fichier HA (cache local)"):I18n.t("configuration locale")),this::source);
-        button(box,I18n.t("Disposition : ")+prefs.getInt("dashboard_columns",3)+I18n.t(" colonnes"),()->choices(I18n.t("Colonnes du dashboard"),new String[]{I18n.t("2 colonnes"),I18n.t("3 colonnes"),I18n.t("4 colonnes"),I18n.t("5 colonnes")},i->{prefs.edit().putInt("dashboard_columns",i+2).apply();build();}));
-        button(box,I18n.t("Au démarrage : ")+(prefs.getBoolean("start_dashboard",false)?I18n.t("dashboard Maison"):I18n.t("launcher habituel")),()->{prefs.edit().putBoolean("start_dashboard",!prefs.getBoolean("start_dashboard",false)).apply();build();});
-        button(box,I18n.t("Cartes existantes : ")+(prefs.getBoolean("dashboard_include_entities",true)?I18n.t("visibles avec les cartes personnalisées"):I18n.t("masquées")),()->{prefs.edit().putBoolean("dashboard_include_entities",!prefs.getBoolean("dashboard_include_entities",true)).apply();build();});
         button(box,I18n.t("Aide : format et fichier dans HA"),this::help);
         try{cards=CardConfig.parse(CardStore.local(this));}catch(Exception e){cards=new ArrayList<>();message(e.getMessage());}
         box.addView(text(I18n.t("VOS CARTES LOCALES")+(remote?I18n.t(" — conservées, mais source HA active"):""),13,0xffacb9c6));
