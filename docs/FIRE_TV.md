@@ -1,4 +1,4 @@
-# Amazon Fire TV — préparation expérimentale
+# Amazon Fire TV — version expérimentale
 
 [English](FIRE_TV.en.md) · [Installation générale](INSTALLATION.md)
 
@@ -16,7 +16,7 @@ Le même code et le même APK servent à Android TV et à Fire TV sous Fire OS. 
 
 Ne vous fiez pas uniquement au nom commercial « Fire TV » ou au numéro Fire OS. Vérifiez le modèle, sa génération et son niveau d’API dans les [spécifications Amazon](https://developer.amazon.com/docs/device-specs/identify-fire-tv-devices.html). La gamme comprend aussi des appareils Vega OS, qui ne sont pas des appareils Android. Voir [Fire OS](https://developer.amazon.com/docs/fire-tv/fire-os-overview.html) et [portage vers Vega](https://developer.amazon.com/docs/adbt/port-fire-os-app-to-vega).
 
-## Ce que prépare cette adaptation
+## Ce que contient cette adaptation
 
 - Une entrée dans la liste des applications Android standard, en plus de l’entrée Android TV.
 - La détection de la fonctionnalité officielle `amazon.hardware.fire_tv`, sans collecter de nom, de modèle ou de numéro de série.
@@ -25,24 +25,30 @@ Ne vous fiez pas uniquement au nom commercial « Fire TV » ou au numéro Fire O
 - Aucun encouragement à demander l’accès à la reprise lorsque le fournisseur Android TV est absent.
 - Un diagnostic local indiquant seulement `FIRE_TV` ou `ANDROID`, le niveau d’API et la disponibilité du fournisseur de reprise, sans identifiant d’appareil.
 
-Ces changements doivent être inclus dans l’APK testé. **La version publique 2.13.8 ne contient pas encore cette préparation Fire TV.** Les contributeurs peuvent compiler le code suivant le [guide de compilation](BUILD.md) ; ne distribuez jamais un APK non signé ou une clé privée. Une future publication devra indiquer explicitement cette adaptation dans ses notes.
+**APK 2.13.9, bêta 1 :** [notes de la préversion](https://github.com/Philiphall6/tv-assistant/releases/tag/firetv-2.13.9-beta.1) · [télécharger l’APK signé](https://github.com/Philiphall6/tv-assistant/releases/download/firetv-2.13.9-beta.1/TVAssistant-2.13.9.apk) · [SHA256SUMS](https://github.com/Philiphall6/tv-assistant/releases/download/firetv-2.13.9-beta.1/SHA256SUMS).
+
+La préversion conserve le package et le certificat de signature de la version stable. Son code Android est `64`. La version stable 2.13.8 ne contient pas ces adaptations. Le vérificateur intégré n’installe pas les préversions : ce test nécessite un téléchargement manuel. L’intégration HA reste en version 0.7.5 ; aucune mise à jour ni réinstallation HACS n’est nécessaire pour essayer cet APK.
+
+Les contributeurs peuvent également suivre le [guide de compilation](BUILD.md) ; ne distribuez jamais un APK non signé ou une clé privée.
 
 ## Installation pour les testeurs
 
 1. Vérifier que l’appareil utilise **Fire OS, API 30 minimum**, et non Vega OS.
-2. Utiliser uniquement un APK signé du projet dont les notes mentionnent les essais Fire TV. Pour une mise à jour, garder la même signature et ne pas désinstaller l’application existante.
+2. Télécharger l’APK 2.13.9 et `SHA256SUMS` depuis cette préversion, dans le même dossier. Vérifier le fichier avec `sha256sum -c SHA256SUMS` (Linux) ou comparer `Get-FileHash .\TVAssistant-2.13.9.apk -Algorithm SHA256` à `SHA256SUMS` (PowerShell). Pour une mise à jour, garder la même signature et ne pas désinstaller l’application existante.
 3. Suivre le [guide Amazon de connexion ADB](https://developer.amazon.com/docs/fire-tv/connecting-adb-to-device.html), sur un réseau local de confiance, et accepter l’ordinateur sur l’écran de la TV. Ne jamais exposer ADB sur Internet.
-4. Installer puis ouvrir TV Assistant depuis les applications. Les commandes ci-dessous ciblent explicitement l’appareil ; remplacer `ADRESSE_FIRE_TV` et `VERSION` localement.
+4. Installer puis ouvrir TV Assistant depuis les applications. Les commandes ci-dessous ciblent explicitement l’appareil ; remplacer `ADRESSE_FIRE_TV` localement.
 
 ```sh
 adb connect ADRESSE_FIRE_TV:5555
 adb -s ADRESSE_FIRE_TV:5555 shell getprop ro.build.version.sdk
-adb -s ADRESSE_FIRE_TV:5555 install -r ./TVAssistant-VERSION.apk
+adb -s ADRESSE_FIRE_TV:5555 install -r ./TVAssistant-2.13.9.apk
 adb -s ADRESSE_FIRE_TV:5555 shell am start -n fr.maison.tvlauncher/.MainActivity
 ```
 
 5. Configurer HTTPS et le jeton d’un utilisateur HA non administrateur sur l’appareil, puis approuver la liaison depuis votre compte administrateur dans l’éditeur HA, comme pour Android TV.
 6. Déconnecter ADB et désactiver le débogage une fois les essais terminés. Ne pas partager son adresse dans un ticket public.
+
+**Retour au canal stable :** la recherche intégrée continue de suivre les versions stables. Une future version stable plus récente pourra remplacer cette bêta en conservant les réglages. Android bloque normalement le retour direct de 2.13.9 vers 2.13.8 ; ne désinstallez pas l’application pour forcer ce retour sans accepter la perte des réglages locaux.
 
 ## Limites à connaître
 

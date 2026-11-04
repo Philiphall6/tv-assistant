@@ -1,4 +1,4 @@
-# Amazon Fire TV — experimental preparation
+# Amazon Fire TV — experimental release
 
 [Français](FIRE_TV.md) · [General installation](INSTALLATION.md)
 
@@ -16,7 +16,7 @@ Android TV and Fire TV running Fire OS use the same code and APK. No Amazon acco
 
 Do not rely on the Fire TV product name or Fire OS number alone. Check the exact generation and API level in [Amazon's device specifications](https://developer.amazon.com/docs/device-specs/identify-fire-tv-devices.html). Some Fire TV models run Vega OS instead of Android. See [Fire OS](https://developer.amazon.com/docs/fire-tv/fire-os-overview.html) and [porting to Vega](https://developer.amazon.com/docs/adbt/port-fire-os-app-to-vega).
 
-## Preparation in this code
+## Included adaptations
 
 - Standard Android apps-list entry alongside the Android TV entry.
 - Detection using the official `amazon.hardware.fire_tv` feature, without collecting device names, models or serial numbers.
@@ -25,24 +25,30 @@ Do not rely on the Fire TV product name or Fire OS number alone. Check the exact
 - No request for continue-watching access when the Android TV provider is absent.
 - Local diagnostics expose only `FIRE_TV` or `ANDROID`, API level and provider availability, not device identifiers.
 
-These changes must be included in the APK being tested. **Public APK 2.13.8 does not yet include this Fire TV preparation.** Contributors can follow the [build guide](BUILD.md); never distribute an unsigned APK or private signing key. A future release must explicitly mention this adaptation in its notes.
+**APK 2.13.9, beta 1:** [prerelease notes](https://github.com/Philiphall6/tv-assistant/releases/tag/firetv-2.13.9-beta.1) · [download the signed APK](https://github.com/Philiphall6/tv-assistant/releases/download/firetv-2.13.9-beta.1/TVAssistant-2.13.9.apk) · [SHA256SUMS](https://github.com/Philiphall6/tv-assistant/releases/download/firetv-2.13.9-beta.1/SHA256SUMS).
+
+The prerelease retains the stable package ID and signing certificate. Its Android version code is `64`. Stable APK 2.13.8 does not include these adaptations. The built-in updater excludes prereleases, so testing requires a manual download. The HA integration remains at 0.7.5; no HACS update or reinstallation is needed to try this APK.
+
+Contributors can also follow the [build guide](BUILD.md); never distribute an unsigned APK or private signing key.
 
 ## Test installation
 
 1. Confirm **Fire OS with API 30 or newer**, not Vega OS.
-2. Use a signed project APK whose release notes mention experimental Fire TV testing. Keep the same signing certificate when updating, without uninstalling.
+2. Download APK 2.13.9 and `SHA256SUMS` from this prerelease into the same folder. Check the file with `sha256sum -c SHA256SUMS` (Linux) or compare `Get-FileHash .\TVAssistant-2.13.9.apk -Algorithm SHA256` with `SHA256SUMS` (PowerShell). Keep the same signing certificate when updating, without uninstalling.
 3. Follow [Amazon's ADB connection guide](https://developer.amazon.com/docs/fire-tv/connecting-adb-to-device.html) on a trusted local network and approve the computer on the TV. Never expose ADB to the Internet.
-4. Install and open TV Assistant from the apps list. The following commands explicitly select the device; replace `FIRE_TV_ADDRESS` and `VERSION` locally.
+4. Install and open TV Assistant from the apps list. The following commands explicitly select the device; replace `FIRE_TV_ADDRESS` locally.
 
 ```sh
 adb connect FIRE_TV_ADDRESS:5555
 adb -s FIRE_TV_ADDRESS:5555 shell getprop ro.build.version.sdk
-adb -s FIRE_TV_ADDRESS:5555 install -r ./TVAssistant-VERSION.apk
+adb -s FIRE_TV_ADDRESS:5555 install -r ./TVAssistant-2.13.9.apk
 adb -s FIRE_TV_ADDRESS:5555 shell am start -n fr.maison.tvlauncher/.MainActivity
 ```
 
 5. Enter your HTTPS HA address and a dedicated non-admin user's token on the device. Approve its profile assignment in the HA editor using your administrator account, as on Android TV.
 6. Disconnect ADB and disable debugging afterwards. Never include the device address in public feedback.
+
+**Returning to stable:** the built-in updater keeps following stable releases. A newer future stable release can replace this beta while preserving settings. Android normally blocks a direct downgrade from 2.13.9 to 2.13.8; do not uninstall to force a downgrade unless you accept losing local settings.
 
 ## Limitations
 

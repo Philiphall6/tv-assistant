@@ -54,7 +54,7 @@ Captures fournies et autorisées pour publication par le propriétaire du projet
 - Connexion Home Assistant **HTTPS avec certificat valide** obligatoire. Les certificats non valides et les connexions HTTP sont refusés.
 - Le choix du launcher par défaut dépend du fabricant. L’application ne désactive jamais automatiquement le launcher système.
 
-**Amazon Fire TV :** une [adaptation expérimentale pour la communauté](docs/FIRE_TV.md) est en préparation pour Fire OS avec API Android 30 minimum. Aucun Fire TV réel n’a été validé. Vega OS est exclu ; le remplacement de l’accueil Amazon n’est pas garanti. L’APK public 2.13.8 ne contient pas encore ces adaptations.
+**Amazon Fire TV :** l’[APK expérimental 2.13.9 — bêta 1](https://github.com/Philiphall6/tv-assistant/releases/tag/firetv-2.13.9-beta.1) est proposé aux testeurs sous Fire OS avec API Android 30 minimum. Lire le [guide et les limites](docs/FIRE_TV.md) avant installation. Aucun Fire TV réel n’a été validé. Vega OS est exclu ; le remplacement de l’accueil Amazon n’est pas garanti. Cette préversion manuelle ne remplace ni l’APK stable 2.13.8 ni l’intégration HACS 0.7.5.
 
 ## Fonctions
 
