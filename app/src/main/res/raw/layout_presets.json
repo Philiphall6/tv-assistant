@@ -1,0 +1,26 @@
+[
+  {"id":"classic","name":"Rangées · inspiration Android TV","description":"Barre latérale et rangées compactes.","settings":{
+    "nav_position":2,"nav_scale":80,"nav_width":100,"nav_alignment":1,
+    "layout_greeting_x":5,"layout_greeting_y":3,"layout_greeting_width":90,"layout_greeting_scale":80,
+    "layout_quick_x":5,"layout_quick_y":16,"layout_quick_width":90,"layout_quick_scale":75,
+    "layout_favorites_x":5,"layout_favorites_y":26,"layout_favorites_width":90,"layout_favorites_scale":90,
+    "layout_continue_x":5,"layout_continue_y":54,"layout_continue_width":90,"layout_continue_scale":95,
+    "layout_home_x":5,"layout_home_y":78,"layout_home_width":90,"layout_home_scale":85,
+    "favorite_icon_size":64,"favorite_cell_width":190,"app_icon_shape":1}},
+  {"id":"cinema","name":"Cinéma · inspiration Google TV","description":"Barre en haut, accueil aéré et favoris au centre.","settings":{
+    "nav_position":0,"nav_scale":80,"nav_width":94,"nav_alignment":1,
+    "layout_greeting_x":5,"layout_greeting_y":3,"layout_greeting_width":90,"layout_greeting_scale":100,
+    "layout_quick_x":5,"layout_quick_y":20,"layout_quick_width":90,"layout_quick_scale":75,
+    "layout_favorites_x":5,"layout_favorites_y":31,"layout_favorites_width":90,"layout_favorites_scale":85,
+    "layout_continue_x":5,"layout_continue_y":60,"layout_continue_width":90,"layout_continue_scale":85,
+    "layout_home_x":5,"layout_home_y":81,"layout_home_width":90,"layout_home_scale":80,
+    "favorite_icon_size":72,"favorite_cell_width":210,"app_icon_shape":1}},
+  {"id":"dock","name":"Dock · inspiration Apple TV","description":"Grands favoris en haut et navigation discrète en bas.","settings":{
+    "nav_position":1,"nav_scale":75,"nav_width":80,"nav_alignment":1,
+    "layout_greeting_x":5,"layout_greeting_y":33,"layout_greeting_width":90,"layout_greeting_scale":80,
+    "layout_quick_x":5,"layout_quick_y":46,"layout_quick_width":90,"layout_quick_scale":70,
+    "layout_favorites_x":5,"layout_favorites_y":2,"layout_favorites_width":90,"layout_favorites_scale":110,
+    "layout_continue_x":5,"layout_continue_y":58,"layout_continue_width":90,"layout_continue_scale":85,
+    "layout_home_x":5,"layout_home_y":80,"layout_home_width":90,"layout_home_scale":80,
+    "favorite_icon_size":72,"favorite_cell_width":220,"app_icon_shape":1}}
+]

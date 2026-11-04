@@ -58,8 +58,9 @@ final class CardConfig {
         return result;
     }
     static Map<String,Object> validate(Map<String,Object> c) {
-        keys(c,I18n.t("Carte"),"id","type","name","entity","icon","content","color","enabled","show_state","tap_action","hold_action","actions","frequency_entity","defrost_entity","pump_entity","heating_allowed_entity","animate","placement","interactive","package","show_icon","background","background_opacity","title_size","body_size","lovelace","source_yaml","ha_sizing");
+        keys(c,I18n.t("Carte"),"id","type","name","entity","icon","content","color","enabled","show_state","tap_action","hold_action","actions","frequency_entity","defrost_entity","pump_entity","heating_allowed_entity","animate","placement","interactive","package","show_icon","background","background_opacity","title_size","body_size","lovelace","source_yaml","ha_sizing","conditions");
         String type=str(c,"type","button");
+        if(c.containsKey("conditions"))CardConditions.validate(c.get("conditions"));
         if(!Arrays.asList("button","entity","text",HeatPumpState.TYPE,"app","ha_card").contains(type))throw new IllegalArgumentException("Type non natif : "+type+". Utilisez ha_card pour les vraies cartes Home Assistant.");
         if(type.equals("ha_card")){
             if(c.containsKey("ha_sizing")&&(!(c.get("ha_sizing") instanceof String)||!Arrays.asList("yaml","zone").contains(c.get("ha_sizing"))))throw new IllegalArgumentException("Dimensionnement HA : yaml ou zone attendu");

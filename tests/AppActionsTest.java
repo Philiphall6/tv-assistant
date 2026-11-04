@@ -85,24 +85,25 @@ final class AppActionsTest {
                     check(memory.values.get("favorite_apps_order").equals("org.hidden.app"),"hidden favorite retained after visible removal");
                 } finally {view.dismissAppMenu();view.pause();if(view.hero!=null)view.hero.recycle();}
 
-                int[] calls = new int[3];
+                int[] calls = new int[4];
                 AppActionsDialog.Actions actions = new AppActionsDialog.Actions() {
                     public void favorite(){calls[0]++;} public void information(){calls[1]++;} public void uninstall(){calls[2]++;}
+                    public void rename(){calls[3]++;}
                 };
-                for(int action=0;action<3;action++){
+                for(int action=0;action<4;action++){
                     AppActionsDialog dialog = new AppActionsDialog(host,"IPTVnaptor TV",action==0,false,true,actions);
                     try{
                         dialog.show();dialog.favorite.requestFocus();check(dialog.favorite.hasFocus(),"first item visibly focused");
                         check(dialog.favorite.getCurrentTextColor()==TvFocus.INK,"focused label remains readable");
                         check(dialog.favorite.getText().toString().equals(action==0?"Retirer des favoris":"Ajouter aux favoris"),"contextual favorite label");
                         dialog.dispatchKeyEvent(event(1,23,0,0));
-                        if(action==0)dialog.favorite.performClick();else if(action==1)dialog.information.performClick();else dialog.uninstall.performClick();
+                        if(action==0)dialog.favorite.performClick();else if(action==1)dialog.information.performClick();else if(action==2)dialog.uninstall.performClick();else dialog.rename.performClick();
                         check(!dialog.isShowing()&&calls[action]==1,"selected action dispatched once and popup closed");
                     }finally{dialog.dismiss();}
                 }
                 AppActionsDialog system = new AppActionsDialog(host,"Application système",false,true,false,actions);
                 try{system.show();check(!system.uninstall.isEnabled()&&system.information.isEnabled(),"system apps protected with info accessible");system.onBackPressed();check(!system.isShowing(),"Back dismisses popup");}finally{system.dismiss();}
-                check(Arrays.equals(calls,new int[]{1,1,1}),"no action on release/repeat/Back");
+                check(Arrays.equals(calls,new int[]{1,1,1,1}),"no action on release/repeat/Back");
             });
             check(Objects.equals(savedFavorites,actual.getString("favorite_apps_order",null)),"real user favorites unchanged");
         } finally { instrumentation.runOnMainSync(host::finish); }

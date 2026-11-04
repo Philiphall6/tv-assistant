@@ -46,7 +46,7 @@ final class NotificationTest {
         }
         for(Iterator<String> keys=PanelStore.schema(test.getTargetContext()).keys();keys.hasNext();) {
             String key=keys.next(),category=SettingsCatalog.category(key);
-            check(Arrays.asList("Accueil","Barre","Applications","Cartes","Fond","Démarrage").contains(category),"Every preference has one category");
+            check(Arrays.asList("Accueil","Barre","Applications","Cartes","Fond","Démarrage","Cinéma").contains(category),"Every preference has one category");
             if(key.startsWith("nav_"))check(category.equals("Barre"),"Navigation controls stay together");
         }
         check(SettingsCatalog.category("background_dim").equals("Fond"),"Dimming has one location");

@@ -89,11 +89,14 @@ final class WatchNextStore {
         if(pkg==null||!pkg.matches("[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+")||raw==null||raw.isEmpty()||raw.length()>16384)return null;
         try {
             Intent intent=Intent.parseUri(raw,Intent.URI_INTENT_SCHEME);
-            if(!Intent.ACTION_VIEW.equals(intent.getAction())||intent.getSelector()!=null)return null;
+            boolean explicit=intent.getComponent()!=null&&pkg.equals(intent.getComponent().getPackageName());
+            if(!(Intent.ACTION_VIEW.equals(intent.getAction())||explicit&&(intent.getAction()==null||Intent.ACTION_MAIN.equals(intent.getAction())))||intent.getSelector()!=null)return null;
             if(intent.getPackage()!=null&&!pkg.equals(intent.getPackage()))return null;
             if(intent.getComponent()!=null&&!pkg.equals(intent.getComponent().getPackageName()))return null;
             String scheme=intent.getScheme();
-            if(scheme==null||scheme.equalsIgnoreCase("file")||scheme.equalsIgnoreCase("content")||scheme.equalsIgnoreCase("javascript")||scheme.equalsIgnoreCase("data"))return null;
+            // Jellyfin publishes an explicit activity + item ID, without a data URI.
+            // No-URI launches are allowed only for a component owned by the publisher.
+            if(scheme==null?!explicit:scheme.equalsIgnoreCase("file")||scheme.equalsIgnoreCase("content")||scheme.equalsIgnoreCase("javascript")||scheme.equalsIgnoreCase("data"))return null;
             intent.setPackage(pkg); intent.setClipData(null);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             return intent;

@@ -1,5 +1,20 @@
 # Versions
 
+## Intégration 0.9.0 / Android 2.15.0
+
+- Trois modèles de disposition facultatifs : Rangées, Cinéma et Dock, inspirés d’Android TV, Google TV et Apple TV. Aucun remplacement automatique des cartes, applications ou réglages actuels.
+- Icônes rectangulaires 16:9 et forme personnalisée : proportions, arrondi, taille du logo. Aperçus dans HA et sur la TV ; logos sans étirement et silhouettes remplies sans contour.
+- Annulation des 20 dernières modifications dans la session de l’éditeur HA. Les restaurations restent en brouillon jusqu’à leur envoi explicite.
+- Mode invité avec PIN facultatif, désactivé par défaut, limité aux modifications locales du launcher. PIN dérivé et stocké uniquement sur la TV, hors des exports HA.
+- Conditions d’affichage des cartes selon les états HA, avec masquage en cas de déconnexion ou d’état inconnu ; aucune suppression des cartes.
+- Mode cinéma : informations secondaires masquées, diaporama et animations natives suspendus, pause CSS des cartes compatibles, filtrage des notifications par tag. Toujours aucun réveil ni rattrapage des notifications.
+- Icône Ethernet/Wi-Fi et débit reçu/envoyé facultatifs, sans test de vitesse ni transmission d’adresse réseau. Diagnostic distinguant réseau, données HA et synchronisation de l’éditeur.
+- Renommage local des applications, sélection et diagnostic des sources de reprise. Prise en charge des liens explicites Jellyfin appartenant à l’application émettrice ; les autres services doivent publier des contenus Watch Next compatibles.
+- Capacités HDR déclarées et deux mires HDR10 locales originales, sans modification des réglages constructeur. Diagnostic root facultatif pour appareils déjà rootés, limité à `id -u`, sans installation de root ni commande système supplémentaire.
+- Traductions françaises/anglaises et mise à jour des caches de l’éditeur et des cartes HA. Tests de rendu, navigation, isolation des profils, conditions, PIN, notifications et protocoles de reprise.
+
+Mettre à jour l’intégration via HACS, redémarrer HA et installer l’APK signé en mise à jour, sans désinstaller. Voir [le guide et les limites](docs/LAUNCHER_TOOLS.md). Fire TV reste expérimental ; aucune validation sur matériel Fire TV, des mires HDR physiques ou d’un gestionnaire root réel n’est revendiquée.
+
 ## Intégration 0.8.2 / Android 2.14.0 inchangé
 
 - Lors du retrait d’une connexion TV, conserver l’appareil HA si une autre entité lui reste attachée, même désactivée. Seule l’entité de notification TV Assistant est retirée. Test de non-régression ajouté.

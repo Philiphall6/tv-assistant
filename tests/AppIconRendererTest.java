@@ -18,6 +18,7 @@ public final class AppIconRendererTest {
 
     public static void main(String[] args) {
         nestedMatteChecks();
+        customShapeChecks();
         AppIconRenderer icon = new AppIconRenderer(new ColorDrawable(ART));
         for (int shape = 0; shape <= 2; shape++) {
             Bitmap output = render(icon, shape);
@@ -122,6 +123,26 @@ public final class AppIconRendererTest {
             pixel(filled,64,29,inner,"all shapes filled with inner background, not old square");
             pixel(filled,64,64,ink,"all shapes retain original logo");
         }
+    }
+    private static void customShapeChecks(){
+        AppIconRenderer icon=new AppIconRenderer(new Logo(false));
+        for(int shape:new int[]{AppIconRenderer.RECTANGLE,AppIconRenderer.CUSTOM})for(int ratio:new int[]{50,100,160,250})for(int corner:new int[]{0,18,50})for(int logoSize:new int[]{50,75,100}){
+            Bitmap result=Bitmap.createBitmap(128,128,Bitmap.Config.ARGB_8888);
+            icon.draw(new Canvas(result),64,64,48,shape,ratio,corner,logoSize);
+            Drawable preview=AppIconShape.preview(shape,ART,ratio,corner);preview.setBounds(16,16,112,112);
+            Bitmap mask=Bitmap.createBitmap(128,128,Bitmap.Config.ARGB_8888);preview.draw(new Canvas(mask));
+            int minX=128,minY=128,maxX=0,maxY=0;
+            for(int y=0;y<128;y++)for(int x=0;x<128;x++){
+                int pixel=result.getPixel(x,y);
+                require(Math.abs((pixel>>>24)-(mask.getPixel(x,y)>>>24))<=2,"custom tile matches preview: shape="+shape+" ratio="+ratio+" corners="+corner+" logo="+logoSize+" x="+x+" y="+y);
+                if(pixel==LOGO){minX=Math.min(x,minX);minY=Math.min(y,minY);maxX=Math.max(x,maxX);maxY=Math.max(y,maxY);}
+            }
+            require(maxX>minX&&maxY>minY,"custom shape keeps logo visible");
+            require(Math.abs((maxX-minX)-(maxY-minY))<=1,"logo is never stretched by aspect ratio");
+            require(result.getPixel(64,64)==LOGO,"custom logo centered");
+        }
+        Bitmap rectangle=render(new AppIconRenderer(new ColorDrawable(ART)),AppIconRenderer.RECTANGLE);
+        pixel(rectangle,18,64,ART,"rectangle filled to left edge");pixel(rectangle,64,30,0,"rectangle has 16:9 proportions");
     }
     private static Bitmap legacyFixture(int outer,int inner,int ink){
         Bitmap b=Bitmap.createBitmap(256,256,Bitmap.Config.ARGB_8888);Canvas c=new Canvas(b);Paint p=new Paint();

@@ -13,8 +13,22 @@ import android.graphics.drawable.Drawable;
  * Inspired by Material's cookie/arch silhouettes; no system theme dependency. */
 final class AppIconShape {
     static Path create(int shape) {
+        return create(shape, 160, 18);
+    }
+
+    static RectF bounds(int shape, int ratio) {
+        float aspect=shape==AppIconRenderer.RECTANGLE?16f/9f:shape==AppIconRenderer.CUSTOM?Math.max(50,Math.min(250,ratio))/100f:1;
+        float w=Math.min(1,aspect),h=Math.min(1,1/aspect);
+        return new RectF((1-w)/2,(1-h)/2,(1+w)/2,(1+h)/2);
+    }
+
+    static Path create(int shape, int ratio, int corners) {
         Path p = new Path();
-        if (shape == AppIconRenderer.SQUARE) p.addRect(0, 0, 1, 1, Path.Direction.CW);
+        if(shape==AppIconRenderer.RECTANGLE||shape==AppIconRenderer.CUSTOM){
+            RectF b=bounds(shape,ratio);
+            float radius=Math.min(b.width(),b.height())*(shape==AppIconRenderer.RECTANGLE?.12f:Math.max(0,Math.min(50,corners))/100f);
+            p.addRoundRect(b,radius,radius,Path.Direction.CW);
+        }else if (shape == AppIconRenderer.SQUARE) p.addRect(0, 0, 1, 1, Path.Direction.CW);
         else if (shape == AppIconRenderer.ROUNDED_SQUARE)
             p.addRoundRect(new RectF(0, 0, 1, 1), .22f, .22f, Path.Direction.CW);
         else if (shape == AppIconRenderer.COOKIE_FOUR) {
@@ -47,8 +61,12 @@ final class AppIconShape {
     }
 
     static Drawable preview(int shape, int color) {
+        return preview(shape,color,160,18);
+    }
+
+    static Drawable preview(int shape, int color, int ratio, int corners) {
         return new Drawable() {
-            final Path path = create(shape);
+            final Path path = create(shape,ratio,corners);
             final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             { paint.setColor(color); }
             @Override public void draw(Canvas canvas) {

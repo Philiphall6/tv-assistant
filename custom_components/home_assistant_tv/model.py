@@ -11,11 +11,13 @@ from .navigation import validate_navigation
 
 MAX_BYTES = 262144
 SCHEMA = json.loads(Path(__file__).with_name("schema.json").read_text())
+LAYOUT_PRESETS = json.loads(Path(__file__).with_name("layout_presets.json").read_text())
 ENTITY = r"[a-z0-9_]+\.[a-z0-9_]+"
 PACKAGE = r"[a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)+"
 PAC_KEYS = {"frequency_entity", "defrost_entity", "pump_entity", "heating_allowed_entity"}
 CARD_KEYS = {"id", "type", "name", "entity", "icon", "content", "color", "enabled", "show_state", "tap_action", "hold_action", "actions", "animate", "placement", "interactive", "package", "show_icon", "background", "background_opacity", "title_size", "body_size", "lovelace", "source_yaml", "ha_sizing"} | PAC_KEYS
 ACTION_KEYS = {"action", "name", "perform_action", "service", "data", "target", "confirmation", "navigation_path", "url_path", "package"}
+CARD_KEYS.add("conditions")
 
 
 class ProfileError(ValueError):
@@ -134,6 +136,15 @@ def validate_action(action, entity):
 
 
 def validate_card(card):
+    if "conditions" in card:
+        conditions=card["conditions"]
+        require(isinstance(conditions,list) and len(conditions)<=8,"conditions : 8 maximum")
+        for condition in conditions:
+            keys(condition,{"entity","operator","value"},"Condition")
+            require(isinstance(condition.get("entity"),str) and re.fullmatch(ENTITY,condition["entity"]),"Entité de condition invalide")
+            op=condition.get("operator");value=condition.get("value")
+            require(op in ("state","not_state","above","below"),"Opérateur de condition invalide")
+            require((isinstance(value,str) and 0<len(value)<=255) if op in ("state","not_state") else (type(value) in (int,float) and math.isfinite(value)),"Valeur de condition invalide")
     keys(card, CARD_KEYS, "Carte")
     kind = card.get("type", "button")
     require(kind in ("button", "entity", "text", "heat_pump", "app", "ha_card"), "Type inconnu : utilisez ha_card pour une vraie carte Home Assistant")

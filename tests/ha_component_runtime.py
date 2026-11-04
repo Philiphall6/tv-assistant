@@ -81,6 +81,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(panel.call_args_list[0].kwargs["module_url"],"/home_assistant_tv/panel.js?v=9.8.7")
             self.assertEqual(modules.urls,{"/home_assistant_tv/icons.js?v=9.8.7"})
             self.assertFalse(panel.call_args_list[1].kwargs["require_admin"])
+            self.assertEqual(panel.call_args_list[1].kwargs["module_url"],"/home_assistant_tv/cards.js?v=9.8.7")
             self.assertNotIn("sidebar_title",panel.call_args_list[1].kwargs)
             paths=self.hass.http.async_register_static_paths.call_args.args[0]
             self.assertEqual(len(paths),6)

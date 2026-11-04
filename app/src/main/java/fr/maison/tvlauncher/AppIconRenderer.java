@@ -23,32 +23,57 @@ final class AppIconRenderer {
     static final int COOKIE_FOUR = 3;
     static final int COOKIE_SEVEN = 4;
     static final int ARCH = 5;
+    static final int RECTANGLE = 6;
+    static final int CUSTOM = 7;
     private static final int TEXTURE_SIZE = 256;
     private final Drawable source;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
     private final Matrix matrix = new Matrix();
     private final RectF bounds = new RectF();
     private BitmapShader texture;
+    private Bitmap artwork,rectangularBitmap;
+    private BitmapShader rectangularTexture;
+    private int artworkShape=-1,artworkRatio=-1,artworkSize=-1;
     private final Matrix maskMatrix = new Matrix();
     private final Path mask = new Path();
     private Path unitMask;
     private int maskShape = -1;
     private final RectF maskBounds = new RectF();
+    private int maskRatio=-1,maskCorners=-1;
+    private final Paint backing = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     AppIconRenderer(Drawable source) {
         this.source = source;
     }
 
     void draw(Canvas canvas, float cx, float cy, float radius, int shape) {
+        draw(canvas,cx,cy,radius,shape,160,18,100);
+    }
+
+    void draw(Canvas canvas, float cx, float cy, float radius, int shape, int ratio, int corners, int logoSize) {
         if (radius <= 0) return;
         if (texture == null) prepareTexture();
         float size = radius * 2;
         bounds.set(cx - radius, cy - radius, cx + radius, cy + radius);
-        matrix.setScale(size / TEXTURE_SIZE, size / TEXTURE_SIZE);
-        matrix.postTranslate(bounds.left, bounds.top);
-        texture.setLocalMatrix(matrix);
-        if (unitMask == null || maskShape != shape) {
-            unitMask = AppIconShape.create(shape);maskShape = shape;maskBounds.setEmpty();
+        boolean rectangular=shape==RECTANGLE||shape==CUSTOM;
+        BitmapShader shader=texture;
+        if(rectangular){
+            if(rectangularTexture==null||artworkShape!=shape||artworkRatio!=ratio||artworkSize!=logoSize){
+                if(rectangularBitmap==null)rectangularBitmap=Bitmap.createBitmap(TEXTURE_SIZE,TEXTURE_SIZE,Bitmap.Config.ARGB_8888);
+                Canvas tile=new Canvas(rectangularBitmap);tile.drawColor(backing.getColor(),PorterDuff.Mode.SRC);
+                RectF silhouette=AppIconShape.bounds(shape,ratio);
+                float artSize=TEXTURE_SIZE*Math.min(silhouette.width(),silhouette.height())*(shape==CUSTOM?Math.max(50,Math.min(100,logoSize))/100f:1);
+                float offset=(TEXTURE_SIZE-artSize)/2;
+                tile.drawBitmap(artwork,null,new RectF(offset,offset,offset+artSize,offset+artSize),backing);
+                rectangularTexture=new BitmapShader(rectangularBitmap,Shader.TileMode.CLAMP,Shader.TileMode.CLAMP);
+                artworkShape=shape;artworkRatio=ratio;artworkSize=logoSize;
+            }
+            shader=rectangularTexture;
+        }
+        matrix.setScale(size / TEXTURE_SIZE,size / TEXTURE_SIZE);matrix.postTranslate(bounds.left,bounds.top);
+        shader.setLocalMatrix(matrix);paint.setShader(shader);
+        if (unitMask == null || maskShape != shape || maskRatio != ratio || maskCorners != corners) {
+            unitMask = AppIconShape.create(shape,ratio,corners);maskShape = shape;maskRatio=ratio;maskCorners=corners;maskBounds.setEmpty();
         }
         if (!maskBounds.equals(bounds)) {
             maskMatrix.setScale(size, size);maskMatrix.postTranslate(bounds.left, bounds.top);
@@ -89,7 +114,10 @@ final class AppIconRenderer {
             LegacyIconNormalizer.flattenMatte(bitmap);
         // Extend the artwork's own edge color into transparent corners. A neutral
         // circle behind a dark legacy icon would otherwise look like another rim.
-        canvas.drawColor(backingColor(bitmap), PorterDuff.Mode.DST_OVER);
+        backing.setColor(backingColor(bitmap));
+        backing.setFilterBitmap(true);
+        canvas.drawColor(backing.getColor(), PorterDuff.Mode.DST_OVER);
+        artwork=bitmap;
         texture = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         paint.setShader(texture);
     }

@@ -16,9 +16,9 @@ final class NavigationStrip {
         Tab(int index,RectF rect){this.index=index;this.rect=rect;}
     }
     final List<Tab> tabs=new ArrayList<>();
-    final RectF brand=new RectF(),logo=new RectF(),brandText=new RectF(),clock=new RectF(),status=new RectF(),area=new RectF();
-    final float scale,gap,padding,clockSize,statusSize;
-    final boolean vertical,showClock,showStatus;
+    final RectF brand=new RectF(),logo=new RectF(),brandText=new RectF(),clock=new RectF(),status=new RectF(),network=new RectF(),area=new RectF();
+    final float scale,gap,padding,clockSize,statusSize,networkSize;
+    final boolean vertical,showClock,showStatus,showNetwork,showNetworkIcon,showNetworkRate;
     boolean fullStatus;
     int offset;
     float counterY;
@@ -27,13 +27,18 @@ final class NavigationStrip {
     NavigationStrip(SharedPreferences prefs,LauncherLayout layout,NavigationConfig config,int selected,int previousOffset){
         RectF bar=layout.navigation();scale=layout.navScale;vertical=layout.edge>=2;
         gap=layout.number("nav_tab_gap",8,0,48)*scale;padding=10*scale;
-        showClock=prefs.getBoolean("show_clock",true);showStatus=prefs.getBoolean("show_status",true);
-        clockSize=layout.number("nav_clock_size",20,14,40)*scale;statusSize=layout.number("nav_status_size",14,10,28)*scale;
+        showClock=prefs.getBoolean("show_clock",true);showStatus=prefs.getBoolean("show_status",true)&&!CinemaMode.enabled(prefs);
+        showNetworkIcon=prefs.getBoolean(NetworkStatus.ICON,false)&&!CinemaMode.enabled(prefs);showNetworkRate=prefs.getBoolean(NetworkStatus.RATE,false)&&!CinemaMode.enabled(prefs);showNetwork=showNetworkIcon||showNetworkRate;
+        float cs=layout.number("nav_clock_size",20,14,40)*scale,ss=layout.number("nav_status_size",14,10,28)*scale;
+        float infoHeight=(showClock?cs*1.3f:0)+(showStatus?ss*1.4f:0)+22*scale+8*scale;
+        float infoFit=showNetwork&&!vertical?Math.min(1,(bar.height()-12*scale)/infoHeight):1;
+        clockSize=cs*infoFit;statusSize=ss*infoFit;networkSize=14*scale*infoFit;
         float size=layout.number("nav_logo_size",50,32,76)*scale,outer=16*scale,between=12*scale;
         float brandMin=size+16*scale,brandFull=brandMin+12*scale+textWidth(BRAND_TEXT,20*scale,true);
         float clockWidth=showClock?Math.max(textWidth("88:88",clockSize,true),textWidth(I18n.clockSample(),clockSize,true))+8*scale:0;
         float statusWidth=showStatus?Math.max(textWidth(LinkStatus.summary(prefs,true),statusSize,false),textWidth(I18n.t("● Mode local"),statusSize,false))+4*scale:0;
-        float infoFull=Math.max(clockWidth,statusWidth),infoMin=clockWidth+(showStatus?(showClock?20:12)*scale:0);
+        float networkWidth=(showNetworkIcon?networkSize*1.5f+(showNetworkRate?5*scale:0):0)+(showNetworkRate?textWidth("↓999,9 ↑999,9 Mb/s",networkSize,false):0);
+        float infoFull=Math.max(networkWidth,Math.max(clockWidth,statusWidth)),infoMin=Math.max(networkWidth,clockWidth+(showStatus?(showClock?20:12)*scale:0));
         float[] widths=new float[config.items.size()],heights=new float[widths.length];float total=0;
         for(int i=0;i<widths.length;i++){
             Map<String,Object> item=config.items.get(i);int mode=mode(prefs,item);
@@ -63,9 +68,13 @@ final class NavigationStrip {
             logo.set(brand.left+8*scale,bar.centerY()-size/2,brand.left+8*scale+size,bar.centerY()+size/2);
             brandText.set(logo.right+12*scale,brand.top,Math.max(logo.right+12*scale,brand.right-8*scale),brand.bottom);
             float infoRight=bar.right-outer,infoLeft=infoRight-infoWidth;
-            float clockHeight=clockSize*1.3f,statusHeight=statusSize*1.4f,infoHeight=(showClock?clockHeight:0)+(showStatus&&fullStatus?statusHeight:0)+(showClock&&showStatus&&fullStatus?4*scale:0),infoTop=bar.centerY()-infoHeight/2;
-            if(showStatus){if(fullStatus)status.set(infoLeft,infoTop,infoRight,infoTop+statusHeight);else status.set(infoLeft,bar.centerY()-6*scale,infoLeft+12*scale,bar.centerY()+6*scale);}
+            float clockHeight=clockSize*1.3f,statusHeight=statusSize*1.4f;
+            float upperHeight=(showClock?clockHeight:0)+(showStatus&&fullStatus?statusHeight:0)+(showClock&&showStatus&&fullStatus?4*scale:0);
+            if(showNetwork&&!fullStatus&&showStatus&&!showClock)upperHeight=12*scale;
+            float networkHeight=networkSize*1.6f,infoTop=bar.centerY()-(upperHeight+(showNetwork?networkHeight+(upperHeight>0?4*scale:0):0))/2;
+            if(showStatus){if(fullStatus)status.set(infoLeft,infoTop,infoRight,infoTop+statusHeight);else{float cy=showNetwork?infoTop+upperHeight/2:bar.centerY();status.set(infoLeft,cy-6*scale,infoLeft+12*scale,cy+6*scale);}}
             if(showClock){float top=infoTop+(showStatus&&fullStatus?statusHeight+4*scale:0);clock.set(infoRight-clockWidth,top,infoRight,top+clockHeight);}
+            if(showNetwork){float top=infoTop+upperHeight+(upperHeight>0?4*scale:0);network.set(infoRight-networkWidth,top,infoRight,top+networkHeight);}
             float start=brand.right+(widths.length>0?between:0),end=infoWidth>0?infoLeft-between:bar.right-outer;
             area.set(start,bar.top,Math.max(start,end),bar.bottom);counterY=bar.bottom-8*scale;
         }else{
@@ -73,9 +82,13 @@ final class NavigationStrip {
             logo.set(bar.left+24*scale,bar.top+24*scale,bar.left+24*scale+size,bar.top+24*scale+size);
             brandText.set(logo.right+12*scale,brand.top,Math.max(logo.right+12*scale,brand.right-8*scale),brand.bottom);
             float bottom=bar.bottom-20*scale;
+            if(showNetwork){network.set(bar.left+24*scale,bottom-networkSize*1.6f,bar.right-24*scale,bottom);bottom=network.top-4*scale;}
             if(showClock)clock.set(bar.left+24*scale,bottom-clockSize*1.3f,bar.right-24*scale,bottom);
             if(showStatus){float end=showClock?clock.top-4*scale:bottom;status.set(bar.left+24*scale,end-statusSize*1.4f,bar.right-24*scale,end);}
-            area.set(bar.left+18*scale,bar.top+140*scale,bar.right-18*scale,bar.bottom-((showClock||showStatus)?120:20)*scale);counterY=area.bottom+17*scale;
+            float infoTop=showStatus?status.top:showClock?clock.top:showNetwork?network.top:bar.bottom;
+            float end=bar.bottom-((showClock||showStatus)?120:20)*scale;
+            if(showNetwork)end=Math.min(end,infoTop-20*scale);
+            area.set(bar.left+18*scale,bar.top+140*scale,bar.right-18*scale,end);counterY=area.bottom+17*scale;
         }
         float[] extents=vertical?heights:widths;float room=vertical?area.height():area.width();int count=extents.length;
         offset=Math.max(0,Math.min(previousOffset,count-1));int focused=config.index(selected);

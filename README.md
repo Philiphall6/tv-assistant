@@ -58,6 +58,8 @@ Captures fournies et autorisées pour publication par le propriétaire du projet
 
 ## Fonctions
 
+Depuis l’intégration **0.9.0** et l’APK **2.15.0** : modèles Rangées / Cinéma / Dock, icônes rectangulaires ou personnalisées, annulation dans l’éditeur, PIN invité facultatif, cartes conditionnelles, mode cinéma, indicateurs réseau et diagnostic. Consulter [les réglages et leurs limites](docs/LAUNCHER_TOOLS.md). Aucun modèle ni verrouillage n’est activé automatiquement.
+
 - Applications favorites, formes d’icônes, appui long, reprise de lecture avec images et progression lorsqu’une application fournit ces données.
 - Raccourcis de télécommande et association locale d’une touche à une application, dans les limites imposées par le fabricant.
 - Barre configurable : position, dimensions, onglets, couleurs, horloge, statut et recherche vocale.

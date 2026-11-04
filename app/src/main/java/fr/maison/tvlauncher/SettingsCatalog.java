@@ -3,6 +3,7 @@ package fr.maison.tvlauncher;
 /** Each shared preference belongs to exactly one settings category. */
 final class SettingsCatalog {
     static String category(String key) {
+        if(key.startsWith("cinema_"))return "Cinéma";
         if (key.startsWith("nav_") || key.startsWith("voice_") || key.equals("show_clock") || key.equals("show_status")) return "Barre";
         if (key.startsWith("wallpaper_") || key.startsWith("photo_album_") || key.equals("background_dim")) return "Fond";
         if (key.startsWith("start_")) return "Démarrage";

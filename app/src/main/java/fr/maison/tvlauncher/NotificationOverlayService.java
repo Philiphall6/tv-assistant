@@ -47,6 +47,7 @@ public class NotificationOverlayService extends Service implements NotificationC
         public void onDisplayChanged(int id) { refreshPower(); }
     };
     final SharedPreferences.OnSharedPreferenceChangeListener preferences=(p,key)->{
+        if(key!=null&&key.startsWith("cinema_"))ui.post(()->{if(!CinemaMode.notification(prefs,visibleTag))removeBanner();});
         if (key==null || key.equals(ENABLED) || key.equals("ha_url") || key.equals(TokenStore.ENCRYPTED)
             || key.equals(TokenStore.ORIGIN) || key.equals("ha_panel_enabled") || key.equals("ha_panel_server")
             || key.equals("ha_panel_device_id")) {
@@ -140,6 +141,7 @@ public class NotificationOverlayService extends Service implements NotificationC
         refreshPower();
         if (!ready() || !session.equals(message.session)) return;
         if (message.dismiss) { if (message.tag.equals(visibleTag)) removeBanner(); return; }
+        if(!CinemaMode.notification(prefs,message.tag))return;
         removeBanner();
         LinearLayout view=new LinearLayout(this); view.setOrientation(LinearLayout.VERTICAL);
         view.setPadding(dp(22),dp(16),dp(22),dp(18)); view.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);

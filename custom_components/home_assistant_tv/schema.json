@@ -602,6 +602,33 @@
     "group": "Barre",
     "section": "Informations"
   },
+  "nav_show_network": {
+    "type": "boolean",
+    "default": false,
+    "label": "Afficher l’icône Ethernet / Wi-Fi",
+    "group": "Barre",
+    "section": "Informations"
+  },
+  "nav_show_network_rate": {
+    "type": "boolean",
+    "default": false,
+    "label": "Afficher le débit réseau ↓ / ↑",
+    "group": "Barre",
+    "section": "Informations"
+  },
+  "cinema_mode": {
+    "type": "boolean", "default": false, "label": "Mode cinéma discret",
+    "group": "Apparence", "section": "Mode cinéma"
+  },
+  "cinema_notifications": {
+    "type": "integer", "default": 0, "min": 0, "max": 2,
+    "options": [[0,"Toutes les notifications"],[1,"Uniquement les tags choisis"],[2,"Aucune notification"]],
+    "label": "Notifications en mode cinéma", "group": "Apparence", "section": "Mode cinéma"
+  },
+  "cinema_notification_tags": {
+    "type": "string", "default": "", "max": 1024,
+    "label": "Tags autorisés (séparés par des virgules)", "group": "Apparence", "section": "Mode cinéma"
+  },
   "show_greeting": {
     "type": "boolean",
     "default": true,
@@ -640,7 +667,7 @@
   "app_icon_shape": {
     "type": "integer",
     "min": 0,
-    "max": 5,
+    "max": 7,
     "default": 0,
     "label": "Forme des icônes",
     "group": "Apparence",
@@ -669,8 +696,31 @@
       [
         5,
         "Arche"
+      ],
+      [
+        6,
+        "Rectangle 16:9"
+      ],
+      [
+        7,
+        "Personnalisée"
       ]
     ]
+  },
+  "app_icon_ratio": {
+    "type": "integer", "min": 50, "max": 250, "default": 160,
+    "label": "Proportions personnalisées (largeur / hauteur %)",
+    "group": "Apparence", "section": "Icônes des applications"
+  },
+  "app_icon_corners": {
+    "type": "integer", "min": 0, "max": 50, "default": 18,
+    "label": "Arrondi personnalisé (% du petit côté)",
+    "group": "Apparence", "section": "Icônes des applications"
+  },
+  "app_icon_logo_size": {
+    "type": "integer", "min": 50, "max": 100, "default": 100,
+    "label": "Taille du logo dans la forme personnalisée (%)",
+    "group": "Apparence", "section": "Icônes des applications"
   },
   "favorite_icon_size": {
     "type": "integer",

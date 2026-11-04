@@ -25,9 +25,10 @@ final class AppActionsDialog extends Dialog {
         void favorite();
         void information();
         void uninstall();
+        default void rename() { }
     }
 
-    final Button favorite, information, uninstall;
+    final Button favorite, rename, information, uninstall;
     private boolean waitingForRelease;
 
     AppActionsDialog(Activity activity, String label, boolean isFavorite, boolean systemApp,
@@ -49,6 +50,7 @@ final class AppActionsDialog extends Dialog {
         title.setPadding(dp(8), 0, dp(8), dp(14));
         content.addView(title);
         favorite = button(content, isFavorite ? I18n.t("Retirer des favoris") : I18n.t("Ajouter aux favoris"), actions::favorite);
+        rename = button(content, I18n.t("Renommer l’application"), actions::rename);
         information = button(content, I18n.t("Informations sur l’application"), actions::information);
         uninstall = button(content, I18n.t("Désinstaller"), actions::uninstall);
         uninstall.setEnabled(!systemApp);

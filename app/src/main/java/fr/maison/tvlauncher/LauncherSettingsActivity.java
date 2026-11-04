@@ -19,6 +19,7 @@ public final class LauncherSettingsActivity extends CardScreen {
             case "Applications et favoris":
                 button(box,I18n.t("Afficher ou masquer des applications"),()->open(AppManagerActivity.class));
                 button(box,I18n.t("Icônes, favoris et grille des applications"),()->layout("Applications"));
+                button(box,I18n.t("Sources de reprise de lecture"),()->open(PlaybackSourcesActivity.class));
                 box.addView(text(I18n.t("Les favoris se choisissent par appui long sur une application."),14,0xffc7d1da));
                 break;
             case "Cartes et dashboard":
@@ -38,10 +39,15 @@ public final class LauncherSettingsActivity extends CardScreen {
                 button(box,I18n.t("Installation et autorisations"),()->open(LauncherSetupActivity.class));
                 button(box,I18n.t("Paramètres de la TV"),()->{try { startActivity(new Intent(Settings.ACTION_SETTINGS)); } catch (Exception ignored) { message(I18n.t("Action indisponible")); }});
                 button(box,I18n.t("Mises à jour et diagnostic"),()->open(MaintenanceActivity.class));
+                button(box,I18n.t("Écran et HDR"),()->open(DisplayToolsActivity.class));
+                button(box,I18n.t("Accès root optionnel"),()->open(RootSettingsActivity.class));
                 button(box,I18n.t("Sauvegarde et réinitialisation"),()->appearance(5));
                 break;
             default:
                 section="";
+                button(box,I18n.t("Mode invité"),()->open(GuestModeActivity.class));
+                button(box,I18n.t("Mode cinéma"),()->layout("Cinéma"));
+                button(box,I18n.t("Diagnostic des connexions"),()->open(ConnectionDiagnosticActivity.class));
                 button(box,I18n.t("Accueil et disposition"),()->layout("Accueil"));
                 button(box,I18n.t("Barre de navigation"),()->layout("Barre"));
                 button(box,I18n.t("Applications et favoris"),()->menu("Applications et favoris"));

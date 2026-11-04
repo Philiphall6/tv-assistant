@@ -1,6 +1,6 @@
 /* TV Assistant — local admin editor. No CDN, analytics or eval. Only explicit notification tests call an HA service. */
 import "/home_assistant_tv/icons.js?v=0.7.5";
-import {raw as userText, isRaw, languageOf, translate} from "/home_assistant_tv/localize.js?v=0.8.1";
+import {raw as userText, isRaw, languageOf, translate} from "/home_assistant_tv/localize.js?v=0.9.0";
 const clone = value => JSON.parse(JSON.stringify(value));
 function node(tag, attrs = {}, ...children) {
   const e = document.createElement(tag);
@@ -15,9 +15,15 @@ function node(tag, attrs = {}, ...children) {
   return e;
 }
 // Mirrors AppIconShape's unit-square masks; vector previews stay sharp at any zoom.
-function iconShapePreview(shape) {
+function iconShapePreview(shape,ratio=160,corners=18) {
   const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
   svg.setAttribute("viewBox","0 0 1 1");svg.setAttribute("width","32");svg.setAttribute("height","32");svg.setAttribute("aria-hidden","true");
+  if(shape===6||shape===7){
+    const aspect=shape===6?16/9:Math.max(50,Math.min(250,ratio))/100,w=Math.min(1,aspect),h=Math.min(1,1/aspect);
+    const rect=document.createElementNS(svg.namespaceURI,"rect");
+    for(const [k,v] of Object.entries({x:(1-w)/2,y:(1-h)/2,width:w,height:h,rx:Math.min(w,h)*(shape===6?.12:Math.max(0,Math.min(50,corners))/100),fill:"currentColor"}))rect.setAttribute(k,v);
+    svg.append(rect);return svg;
+  }
   let d;
   if(shape===1)d="M .22 0 H .78 A .22 .22 0 0 1 1 .22 V .78 A .22 .22 0 0 1 .78 1 H .22 A .22 .22 0 0 1 0 .78 V .22 A .22 .22 0 0 1 .22 0 Z";
   else if(shape===2)d="M 0 0 H 1 V 1 H 0 Z";
@@ -84,7 +90,7 @@ class HomeAssistantTVPanel extends HTMLElement {
     finally {this.busy=false;this.render();}
   }
   async refresh(){this.meta=await this.ws("list");}
-  async load(id){this.haDrafts?.clear();const r=await this.ws("get",{profile:id});this.stopPreview();this.previewFrame=null;this.previewId="";this.profile=id;this.profileTitle=r.title;this.revision=r.revision;this.config=r.config||{schema:1,settings:{},cards:[]};this.yaml=r.yaml;this.dirty=false;this.yamlDirty=false;this.editIndex=-1;this.placementIndex=-1;this.navEdit=-1;this.selectedBlock="";}
+  async load(id){this.haDrafts?.clear();const r=await this.ws("get",{profile:id});this.stopPreview();this.previewFrame=null;this.previewId="";this.profile=id;this.profileTitle=r.title;this.revision=r.revision;this.config=r.config||{schema:1,settings:{},cards:[]};this.yaml=r.yaml;this.dirty=false;this.yamlDirty=false;this.editIndex=-1;this.placementIndex=-1;this.navEdit=-1;this.selectedBlock="";this.resetUndo();}
   discard(){return !(this.dirty||this.yamlDirty)||window.confirm(this.t("Abandonner les modifications non envoyées ?"));}
   async deleteProfile(){
     if(!this.meta.profiles.some(p=>p.id===this.profile))return;
@@ -119,7 +125,24 @@ class HomeAssistantTVPanel extends HTMLElement {
       state.text=e?.message==="timeout"?"HA n’a pas confirmé l’envoi. Le test a peut-être été reçu ; aucun nouvel essai automatique.":"Test impossible : vérifiez la connexion HA, l’autorisation de la TV et l’activation des notifications. Attendez une seconde avant de réessayer.";state.error=true;
     }finally{clearTimeout(timer);state.pending=false;this.render();}
   }
-  mark(){this.dirty=true;this.updateDraftNotice();this.paintPlacementOverlay();const e=this.shadowRoot.querySelector("#draft");if(e)e.textContent=this.t("Brouillon non envoyé");}
+  resetUndo(){this.undoProfile=this.profile;this.undoSteps=[];this.undoCurrent=clone(this.config);this.undoControl=null;}
+  undoEdit(){
+    if(!this.undoSteps?.length||this.undoProfile!==this.profile)return;
+    if(this.haDrafts?.size||this.yamlDirty){this.message=this.t("Validez ou abandonnez le brouillon YAML avant d’annuler une autre modification.");this.error=true;this.render();return;}
+    const placed=this.config.cards[this.placementIndex]?.id,edited=this.config.cards[this.editIndex]?.id;
+    this.config=this.undoSteps.pop();this.undoCurrent=clone(this.config);this.undoControl=null;
+    if(this.tab==="YAML")this.tab="Disposition";
+    this.editIndex=edited?this.config.cards.findIndex(c=>c.id===edited):-1;this.placementIndex=placed?this.config.cards.findIndex(c=>c.id===placed):-1;
+    this.presetUndo=null;this.mark(false);this.render();
+  }
+  mark(record=true){
+    if(record&&this.undoProfile===this.profile&&this.undoCurrent&&JSON.stringify(this.config)!==JSON.stringify(this.undoCurrent)){
+      const control=this.shadowRoot.activeElement,now=Date.now();
+      if(!control||control!==this.undoControl||now-(this.undoTime||0)>600){this.undoSteps.push(clone(this.undoCurrent));if(this.undoSteps.length>20)this.undoSteps.shift();}
+      this.undoControl=control;this.undoTime=now;this.undoCurrent=clone(this.config);
+    }
+    this.dirty=true;this.updateDraftNotice();this.paintPlacementOverlay();const e=this.shadowRoot.querySelector("#draft");if(e)e.textContent=this.t("Brouillon non envoyé");const undo=this.shadowRoot.querySelector("#undo-edit");if(undo)undo.disabled=!this.undoSteps?.length;
+  }
   button(label, fn, cls=""){return this.node("button",{class:`btn ${cls}`,onclick:()=>this.run(fn)},label);}
   async applyYaml(){if(this.yamlDirty){const r=await this.ws("validate",{yaml:this.yaml});this.config=r.config;this.yaml=r.yaml;this.yamlDirty=false;this.dirty=true;}}
   async save(){if(this.haDrafts?.size)throw Error("Validez le YAML de chaque carte HA modifiée avant d’enregistrer.");await this.applyYaml();const valid=await this.ws("validate",{config:this.config});const r=await this.ws("save",{profile:this.profile,title:this.profileTitle,revision:this.revision,config:valid.config});this.config=r.config;this.yaml=r.yaml;this.revision=r.revision;this.dirty=false;await this.refresh();this.message=this.f("Profil « {profile} » enregistré, version {revision}. Envoyé aux TV connectées affectées à ce profil ; les autres le recevront au retour à l’accueil.",{profile:this.profileTitle,revision:r.revision});}
@@ -136,6 +159,7 @@ class HomeAssistantTVPanel extends HTMLElement {
   }
   renderContent(){
     if(!this.shadowRoot)return;
+    if(this.config&&this.undoProfile!==this.profile)this.resetUndo();
     const s=this.node("main",{class:"shell"});
     s.append(this.node("header",{class:"top"},this.node("div",{class:"brand"},this.node("button",{class:"btn",title:"Ouvrir le menu Home Assistant",onclick:()=>this.dispatchEvent(new CustomEvent("hass-toggle-menu",{bubbles:true,composed:true}))},"☰"),this.node("img",{class:"brand-icon",src:"/home_assistant_tv/brand-icon.svg"+(this.integrationVersion?"?v="+this.integrationVersion:""),alt:"",width:40,height:40,"aria-hidden":"true"}),this.node("div",{},this.node("h1",{},"TV Assistant"),this.node("div",{class:"muted"},this.t("Éditeur TV")+(this.integrationVersion?" · "+this.integrationVersion:"")))),this.node("span",{id:"draft",class:"badge"},this.dirty||this.yamlDirty?"Brouillon non envoyé":`Version ${this.revision}`)));
     const select=this.node("select",{"aria-label":"Profil",onchange:e=>this.run(async()=>{if(this.discard()){await this.load(e.target.value);this.message="";}})});
@@ -143,6 +167,7 @@ class HomeAssistantTVPanel extends HTMLElement {
     for(const p of profiles)select.append(this.node("option",{value:p.id},userText(p.title)));select.value=this.profile;
     s.append(this.node("div",{class:"toolbar"},select,this.node("input",{value:this.profileTitle,"aria-label":"Nom du profil",maxLength:80,oninput:e=>{this.profileTitle=e.target.value;this.mark();}}),this.button("Nouveau profil",async()=>{if(!this.discard())return;const id=window.prompt(this.t("Identifiant unique du profil (ex. chambre, salon, cuisine)"));if(!id)return;if(!/^[a-z0-9][a-z0-9_-]{0,39}$/.test(id))throw Error("Identifiant invalide");if(this.meta.profiles.some(p=>p.id===id))throw Error("Ce profil existe déjà");this.profile=id;this.profileTitle=id;this.revision=0;this.config={schema:1,settings:{},cards:[]};this.yaml="";this.yamlDirty=false;this.dirty=true;this.editIndex=-1;}),this.button("Envoyer aux TV du profil",()=>this.save(),"primary")));
     if(this.meta.profiles.some(p=>p.id===this.profile))s.querySelector(".toolbar").append(this.button("Supprimer le profil",()=>this.deleteProfile(),"danger"));
+    s.append(this.node("button",{class:"btn",id:"undo-edit",disabled:!this.undoSteps?.length,title:"Historique de cette session, 20 modifications. Reste en brouillon jusqu’à l’envoi.",onclick:()=>this.undoEdit()},"Annuler la dernière modification"));
     s.append(this.node("nav",{class:"tabs"},["Disposition","Barre","Apparence","Fond d’écran","Cartes","Rangées","Favoris","Dashboard HA","Téléviseurs","Aperçu","YAML"].map(t=>this.node("button",{class:`tab ${t===this.tab?"active":""}`,onclick:()=>this.run(async()=>{await this.applyYaml();this.stopPreview();this.tab=t;if(t==="YAML"){const r=await this.ws("validate",{config:this.config});this.yaml=r.yaml;}if(this.hasPreview()){await this.refresh();this.schedulePreview(0);}})},t==="Disposition"?"Écran":t))));
     s.append(this.node("div",{class:`status ${this.error?"error":""}`,role:"status","aria-live":"polite"},this.message));
     if(!this.loaded)s.append(this.node("p",{},this.loadFailed?"Le panneau n’a pas pu être chargé.":"Chargement du panneau…"),...(this.loadFailed?[this.button("Réessayer le chargement",()=>this.initialize())]:[]));
@@ -194,11 +219,15 @@ class HomeAssistantTVPanel extends HTMLElement {
     number.append(range);return number;
   }
   iconShapeControl(rule,change){
-    const buttons=[],choose=value=>{value=Number(value);select.querySelector("select").value=String(value);for(const [id,b] of buttons)b.setAttribute("aria-pressed",String(id===value));change(value);};
+    const buttons=[],choose=value=>{value=Number(value);select.querySelector("select").value=String(value);for(const [id,b] of buttons)b.setAttribute("aria-pressed",String(id===value));change(value);this.refreshIconControls();};
     const select=this.input(rule.label,this.setting("app_icon_shape"),choose,{options:rule.options});
     const previews=this.node("div",{class:"icon-shapes",role:"group","aria-label":"Aperçu des formes"});
-    for(const [id,label] of rule.options){const b=this.node("button",{class:"btn",type:"button",title:label,"aria-label":this.t("Choisir : ")+this.t(label),"aria-pressed":String(id===Number(this.setting("app_icon_shape"))),onclick:()=>choose(id)},iconShapePreview(id));buttons.push([id,b]);previews.append(b);}
-    return this.node("div",{class:"field"},select,previews,this.node("small",{},"Favoris, applications et raccourcis placés. Icônes remplies, sans contour."));
+    for(const [id,label] of rule.options){const b=this.node("button",{class:"btn",type:"button",title:label,"data-icon-shape":id,"aria-label":this.t("Choisir : ")+this.t(label),"aria-pressed":String(id===Number(this.setting("app_icon_shape"))),onclick:()=>choose(id)},iconShapePreview(id,this.setting("app_icon_ratio"),this.setting("app_icon_corners")));buttons.push([id,b]);previews.append(b);}
+    return this.node("div",{class:"field"},select,previews,this.node("small",{},"Favoris, applications et raccourcis placés. Icônes remplies, sans contour."),this.node("small",{},"100 % = carré ; 160 % = rectangle. Le logo garde ses proportions."));
+  }
+  refreshIconControls(){
+    for(const e of this.shadowRoot.querySelectorAll("[data-custom-icon]"))for(const input of e.querySelectorAll("input"))input.disabled=Number(this.setting("app_icon_shape"))!==7;
+    const b=this.shadowRoot.querySelector('[data-icon-shape="7"]');if(b)b.replaceChildren(iconShapePreview(7,this.setting("app_icon_ratio"),this.setting("app_icon_corners")));
   }
   wallpaperColorControl(rule,change){
     const buttons=[],choose=value=>{
@@ -217,8 +246,22 @@ class HomeAssistantTVPanel extends HTMLElement {
     }
     return this.node("div",{class:"field"},color,palette,this.node("small",{},"Choisir une teinte active Couleur unie dans le brouillon. Sans dégradés de photo ; l’assombrissement reste réglable. Pour les couleurs claires, pensez aussi à la couleur des textes."));
   }
+  renderLayoutPresets(s){
+    const presets=this.meta.layout_presets||[];if(!presets.length)return;
+    const section=this.node("details",{class:"preview-options"},this.node("summary",{},"Dispositions prêtes à l’emploi"));
+    section.append(this.node("p",{class:"muted"},"Change uniquement le placement des rangées classiques et la barre. Applications, connexions et cartes libres conservées. Vérifiez leurs chevauchements dans l’aperçu avant d’envoyer."));
+    for(const preset of presets)section.append(this.button(preset.name,async()=>{
+      const values={};for(const [key,value] of Object.entries(preset.settings)){if(!this.meta.schema[key])throw Error(this.t("Modèle incompatible avec cette version"));values[key]=[Object.hasOwn(this.config.settings,key),this.config.settings[key]];}
+      this.presetUndo={profile:this.profile,values};Object.assign(this.config.settings,clone(preset.settings));this.mark();
+    }),this.node("p",{class:"muted"},preset.description));
+    if(this.presetUndo?.profile===this.profile)section.append(this.button("Annuler le dernier modèle",async()=>{
+      for(const [key,[present,value]] of Object.entries(this.presetUndo.values)){if(present)this.config.settings[key]=value;else delete this.config.settings[key];}
+      this.presetUndo=null;this.mark();
+    }));s.append(section);
+  }
   renderSettings(s){
     s.append(this.node("p",{class:"muted"},this.tab==="Disposition"?"Cliquez un cadre dans l’écran pour le régler.":"Les changements restent en brouillon jusqu’à l’envoi."));
+    if(this.tab==="Disposition")this.renderLayoutPresets(s);
     const fields=Object.entries(this.meta.schema).filter(([,r])=>r.group===this.tab),groups=[...new Set(fields.map(([,r])=>r.section||"Général"))];
     if(this.tab==="Disposition")groups.unshift("Éléments libres");
     let section=this.settingsSections[this.tab];if(!groups.includes(section))section=this.tab==="Disposition"?"Éléments libres":groups.includes("Général")?"Général":groups[0];
@@ -230,8 +273,10 @@ class HomeAssistantTVPanel extends HTMLElement {
     const grid=this.node("div",{class:"grid settings-grid"});
     for(const [key,r] of fields){
       if(this.hasPreview()&&(r.section||"Général")!==section)continue;
-      const wrap=this.node("div",{class:"setting"}),change=v=>{this.config.settings[key]=r.type==="integer"?Number(v):v;this.mark();};
+      const customIcon=["app_icon_ratio","app_icon_corners","app_icon_logo_size"].includes(key);
+      const wrap=this.node("div",{class:"setting",...(customIcon?{"data-custom-icon":"true"}:{})}),change=v=>{this.config.settings[key]=r.type==="integer"?Number(v):v;this.mark();if(customIcon)this.refreshIconControls();};
       const control=key==="app_icon_shape"?this.iconShapeControl(r,change):key==="wallpaper_color"?this.wallpaperColorControl(r,change):r.type==="integer"&&!r.options?this.numberControl(r.label,this.setting(key),change,r.min,r.max):this.input(r.label,this.setting(key),change,{type:r.type==="boolean"?"checkbox":r.type==="integer"?"number":r.format==="color"?"color":"text",min:r.min,max:r.max,options:r.options,multiline:["entities","packages"].includes(r.format),list:r.format==="entity"?"hatv-entities":undefined});
+      if(customIcon)for(const input of control.querySelectorAll("input"))input.disabled=Number(this.setting("app_icon_shape"))!==7;
       wrap.append(control);if(Object.prototype.hasOwnProperty.call(this.config.settings,key))wrap.append(this.node("button",{class:"btn local-reset",title:"Revenir au réglage local de la TV","aria-label":this.t("Réglage local : ")+this.t(r.label),onclick:()=>{delete this.config.settings[key];this.mark();this.render();}},"↺"));grid.append(wrap);
     }
     s.append(this.node("section",{class:"card"},this.node("h2",{},this.hasPreview()?section:this.tab),grid));
@@ -260,6 +305,7 @@ class HomeAssistantTVPanel extends HTMLElement {
     let section=this.settingsSections.Barre||"Onglets";this.settingsSections.Barre=section;
     s.append(this.node("div",{class:"subtabs"},sections.map(label=>this.node("button",{class:"btn "+(label===section?"primary":""),onclick:()=>{this.settingsSections.Barre=label;this.render();}},label))));
     if(section!=="Onglets"){
+      if(section==="Informations")s.append(this.node("p",{class:"inspector-note"},"Réseau et HA sont indépendants. Icône orange : Internet non confirmé par Android. Débit ↓ / ↑ : trafic total de la TV, réseau local compris, pas la vitesse maximale de la ligne. Aucun test ni téléchargement ; affichage uniquement sur l’accueil."));
       if(section==="Recherche vocale"){s.append(this.button("Ajouter le micro à la barre",async()=>{const items=this.editNavigation();if(!items.some(i=>i.type==="voice")){if(items.length>=40)throw Error("La barre contient déjà 40 onglets.");items.unshift({id:crypto.randomUUID(),type:"voice",label:"Recherche",icon:"mdi:microphone",display:1});this.mark();}}),this.node("p",{class:"notice"},"Assist utilise le compte de la TV et ses droits. La transcription utilise le service vocal Android installé, pas le moteur STT de HA. Aucune écoute permanente. Sans service vocal, la saisie texte reste disponible. Le troisième service ouvre une application vocale ou une adresse HTTPS avec {query}. Aucun jeton HA n’est transmis ; n’inscrivez pas de secret dans l’adresse."));}
       if(section==="Logo")s.append(this.node("p",{class:"inspector-note"},"TV Assistant : texte et couleur blanche fixes. Le logo reste accessible pour ouvrir les paramètres."));
       const grid=this.node("div",{class:"settings-grid grid"});
@@ -371,7 +417,7 @@ class HomeAssistantTVPanel extends HTMLElement {
   paintPlacementOverlay(){
     if(this.dragging)return;const overlay=this.shadowRoot.querySelector(".placement-overlay");if(!overlay)return;overlay.replaceChildren();if(!["Disposition","Barre"].includes(this.tab)||!this.showPlacementFrames)return;this.paintBlockFrames(overlay);if(this.tab!=="Disposition")return;
     this.config.cards.forEach((c,i)=>{if(!c.placement||c.enabled===false)return;const f=this.node("div",{class:`placement-frame free-frame ${i===this.placementIndex&&!this.selectedBlock?"active":""}`,tabindex:0,role:"button","aria-label":"Placer "+(c.name||c.entity||"Carte")},this.node("span",{},c.name||c.entity?userText(c.name||c.entity):"Carte"),this.node("div",{class:"resize","aria-hidden":"true"}));this.frameStyle(f,c.placement);
-      f.addEventListener("keydown",e=>{const dirs={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};if(!dirs[e.key])return;e.preventDefault();this.movePlacement(c,dirs[e.key][0],dirs[e.key][1],e.shiftKey);this.placementIndex=i;this.selectedBlock="";this.settingsSections.Disposition="Éléments libres";this.mark();this.render();this.shadowRoot.querySelectorAll(".placement-frame.free-frame")[this.config.cards.filter((a,j)=>j<i&&a.placement&&a.enabled!==false).length]?.focus();});
+      f.addEventListener("keydown",e=>{const dirs={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};if(e.key==="Enter"){e.preventDefault();this.placementIndex=i;this.selectedBlock="";this.settingsSections.Disposition="Éléments libres";this.render();return;}if(!dirs[e.key])return;e.preventDefault();this.movePlacement(c,dirs[e.key][0],dirs[e.key][1],e.shiftKey);this.placementIndex=i;this.selectedBlock="";this.settingsSections.Disposition="Éléments libres";this.mark();this.render();this.shadowRoot.querySelectorAll(".placement-frame.free-frame")[this.config.cards.filter((a,j)=>j<i&&a.placement&&a.enabled!==false).length]?.focus();});
       f.addEventListener("pointerdown",e=>{if(e.button!==0)return;e.preventDefault();this.stopPreview();this.dragging=true;this.placementIndex=i;this.selectedBlock="";const initial=clone(c.placement),x=e.clientX,y=e.clientY,g=this.contentGeometry(),bounds=overlay.getBoundingClientRect(),resize=e.target.classList.contains("resize");f.setPointerCapture(e.pointerId);f.classList.add("active");
         const move=ev=>{c.placement=clone(initial);this.movePlacement(c,Math.round((ev.clientX-x)/bounds.width*1920/g.w*100),Math.round((ev.clientY-y)/bounds.height*1080/g.h*100),resize);this.frameStyle(f,c.placement);};
         const finish=ev=>{if(ev.type==="pointercancel")c.placement=initial;f.removeEventListener("pointermove",move);f.removeEventListener("pointerup",finish);f.removeEventListener("pointercancel",finish);this.dragging=false;this.settingsSections.Disposition="Éléments libres";this.mark();this.render();this.schedulePreview();};
@@ -407,6 +453,16 @@ class HomeAssistantTVPanel extends HTMLElement {
     catch(e){if(generation===this.previewGeneration)this.previewMessage=e.message||String(e);}
     finally{if(generation===this.previewGeneration){this.previewBusy=false;this.updatePreview();this.schedulePreview();}}
   }
+  renderConditions(s,c){
+    const list=c.conditions||[],section=this.node("details",list.length?{open:""}:{},this.node("summary",{},"Conditions d’affichage"));
+    section.append(this.node("p",{class:"muted"},"Toutes les conditions doivent être vraies. Hors connexion ou état inconnu : carte masquée, jamais supprimée. Les états HA sont exacts : on, off, playing…"));
+    list.forEach((condition,i)=>section.append(this.node("div",{class:"card"},
+      this.input("Entité de condition",condition.entity,v=>{condition.entity=v;this.mark();},{list:"hatv-entities"}),
+      this.input("Comparaison",condition.operator,v=>{condition.operator=v;condition.value=v==="above"||v==="below"?0:"on";this.mark();this.render();},{options:[["state","Égal à"],["not_state","Différent de"],["above","Supérieur à"],["below","Inférieur à"]]}),
+      this.input("Valeur de condition",condition.value,v=>{condition.value=v;this.mark();},{type:condition.operator==="above"||condition.operator==="below"?"number":"text"}),
+      this.button("Retirer cette condition",async()=>{c.conditions.splice(i,1);if(!c.conditions.length)delete c.conditions;this.mark();}))));
+    if(list.length<8)section.append(this.button("Ajouter une condition",async()=>{(c.conditions||=[]).push({entity:c.entity||"",operator:"state",value:"on"});this.mark();}));s.append(section);
+  }
   renderCards(s){
     s.append(this.node("p",{class:"notice"},"Cartes natives ou vraies cartes Home Assistant : collez le YAML d’une carte HA pour conserver ses styles, animations et actions. Les ressources HACS doivent déjà être installées dans HA. Les cartes utilisent le jeton du compte TV non administrateur ; une connexion web séparée reste possible en secours. Placement dans Disposition → Éléments libres."));
     const split=this.node("div",{class:"split"}),list=this.node("section",{class:"card"}),editor=this.node("section",{class:"card"});
@@ -416,6 +472,7 @@ class HomeAssistantTVPanel extends HTMLElement {
     const c=this.config.cards[this.editIndex];
     if(c){
       editor.append(this.node("h2",{},"Modifier la carte"));
+      this.renderConditions(editor,c);
       const change=(k,v)=>{c[k]=v;this.mark();};
       if(c.type==="ha_card"){this.renderHaCard(editor,c);split.append(list,editor);s.append(split);return;}
       if(/^\s*type\s*:/m.test(c.content||""))editor.append(this.button("Importer ce YAML comme vraie carte HA",async()=>{await this.importHaCard(c,c.content);},"primary"));

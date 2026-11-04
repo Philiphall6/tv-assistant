@@ -21,7 +21,7 @@ final class HeatPumpCard {
         HeatPumpState value=HeatPumpState.evaluate(card,values);
         JSONObject out=new JSONObject();try{out.put("entity_id",priority).put("state",value.label).put("pac_color",value.color).put("pac_running",value.running).put("pac_details",details.toString());}catch(Exception ignored){}return out;
     }
-    static boolean animate(Map<String,Object> card,JSONObject state,boolean online){return HeatPumpState.isCard(card)&&state!=null&&state.optBoolean("pac_running")&&online&&CardConfig.bool(card,"animate",true)&&(Build.VERSION.SDK_INT<26||ValueAnimator.areAnimatorsEnabled());}
+    static boolean animate(Map<String,Object> card,JSONObject state,boolean online){return !CinemaMode.enabled(NativeCards.appearance)&&HeatPumpState.isCard(card)&&state!=null&&state.optBoolean("pac_running")&&online&&CardConfig.bool(card,"animate",true)&&(Build.VERSION.SDK_INT<26||ValueAnimator.areAnimatorsEnabled());}
     static float angle(long uptime){return (uptime%2000L)*360f/2000f;}
     static void draw(Canvas c,Paint p,Map<String,Object> card,JSONObject state,float x,float y,float w,float h,boolean selected,boolean online){
         selected=selected&&CardConfig.bool(card,"interactive",true);float scale=Math.min(1.75f,h/72f),radius=24*scale;

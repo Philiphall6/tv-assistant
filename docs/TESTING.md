@@ -1,5 +1,11 @@
 # Validation
 
+## Nouveaux outils — 0.9.0 / 2.15.0
+
+Les tests couvrent les modèles et leur annulation, les icônes 16:9 et personnalisées (masque rempli, proportions du logo, limites, sauvegarde et édition), le PIN facultatif et son délai après échecs, les cartes conditionnelles hors connexion, les filtres cinéma, les observateurs réseau et les liens explicites Jellyfin. Les tests navigateur vérifient aussi l’annulation des placements, le brouillon avant envoi et la pause CSS sans recréer les cartes.
+
+Les mires sont contrôlées comme vidéos HEVC Main 10, BT.2020/PQ. Cela ne valide pas leur reproduction par une dalle HDR réelle. Le test root utilise une sonde simulée : aucun gestionnaire root réel, aucune TV Fire OS physique et aucun accès aux comptes de streaming ne sont utilisés par les tests.
+
 Les tests n’utilisent aucun compte HA réel ni commande domotique. Les données d’authentification sont des chaînes fictives et les pages web sont interceptées sur des domaines `.invalid`.
 
 - Tests Python : validation YAML/JSON, profils, approbation d’une nouvelle TV, isolation et captures éphémères.

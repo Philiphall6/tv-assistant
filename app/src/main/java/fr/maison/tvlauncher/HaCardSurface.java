@@ -18,7 +18,7 @@ final class HaCardSurface extends FrameLayout {
     WebView web;
     JSONArray positions=new JSONArray();
     String geometry="[]", selected="", address="", credentialKey="", failureMessage="", message=I18n.t("Chargement de la carte HA…");
-    boolean ready, pointerMode, destroyed, paused, refreshAfterLogin, probing;
+    boolean ready, pointerMode, destroyed, paused, refreshAfterLogin, probing, cinemaMotion;
     int probes;
     float pointerX,pointerY;
     long touchDown;
@@ -30,7 +30,8 @@ final class HaCardSurface extends FrameLayout {
     boolean hasReadyCard(){return ready&&web!=null;}
     void update(JSONArray next,String focus){
         if(destroyed)return;
-        String json=next.toString();boolean changed=!json.equals(geometry);positions=next;geometry=json;selected=focus;
+        boolean cinema=CinemaMode.enabled(CardStore.prefs(activity));
+        String json=next.toString();boolean changed=!json.equals(geometry)||cinema!=cinemaMotion;cinemaMotion=cinema;positions=next;geometry=json;selected=focus;
         if(next.length()>0&&PanelStore.enabled(activity))ensureWeb();
         else if(!PanelStore.enabled(activity)){if(web!=null)destroyWeb();if(next.length()>0)message=I18n.t("Reliez ce launcher à l’extension HA pour afficher cette carte");}
         if(changed&&web!=null)sendGeometry();
@@ -75,7 +76,7 @@ final class HaCardSurface extends FrameLayout {
         addView(web,0,new LayoutParams(-1,-1));web.loadUrl(address+(externalAuth?"?external_auth=1":""));startProbe();
     }
     void fail(String value){ready=false;failureMessage=value;message=value;if(web!=null)web.setAlpha(0);launcher.invalidate();}
-    void sendGeometry(){if(web==null)return;web.evaluateJavascript("window.hatvCards&&window.hatvCards.layout("+geometry+")",null);}
+    void sendGeometry(){if(web==null)return;web.evaluateJavascript("window.hatvCards&&(window.hatvCards.layout("+geometry+"),window.hatvCards.motion&&window.hatvCards.motion("+cinemaMotion+"))",null);}
     void startProbe(){removeCallbacks(probe);probes=0;probing=true;postDelayed(probe,300);}
     void probe(){
         if(destroyed||paused||web==null){probing=false;return;}

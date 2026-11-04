@@ -40,6 +40,10 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 
 public class MainActivity extends Activity {
+    @Override public void startActivityForResult(Intent intent,int request,Bundle options){
+        if(GuestMode.protectedIntent(this,intent)){super.startActivityForResult(new Intent(this,GuestModeActivity.class),-1,options);return;}
+        super.startActivityForResult(intent,request,options);
+    }
     private LauncherView launcherView;
     boolean offerSetup;
     android.widget.FrameLayout root;
@@ -58,23 +62,24 @@ public class MainActivity extends Activity {
     static class EntityItem { String id,name,state,domain; Map<String,Object> custom; JSONObject haState; }
     static class LauncherView extends View {
         final MainActivity activity; final Paint p=new Paint(3); final Paint stroke=new Paint(3); final List<AppEntry> apps=new ArrayList<>(); final List<AppEntry> favoriteApps=new ArrayList<>(); final List<AppEntry> resumeApps=new ArrayList<>(); final List<EntityItem> homeEntities=new ArrayList<>();
-        Bitmap hero,customWallpaper; Drawable haMark,wallpaperMark; BrandLogo brandLogo; String loadedWallpaperUri=""; int row=2,col=0,appOffset=0,homeOffset=0,appGridOffset=0,favoriteOffset=0; long lastClockUpdate,lastHomeRefresh; String time=""; boolean haOnline=false,appsPage=false,centerLongHandled=false,initialPageApplied=false; AppEntry pendingApp; int pendingAppRow=-1,pendingAppColumn=-1; AppActionsDialog appMenu; SharedPreferences prefs;
+        Bitmap hero,customWallpaper; Drawable haMark,wallpaperMark; BrandLogo brandLogo; String loadedWallpaperUri=""; int row=2,col=0,appOffset=0,homeOffset=0,appGridOffset=0,favoriteOffset=0; long lastClockUpdate,lastHomeRefresh; String time=""; boolean statesFresh=false,haOnline=false,appsPage=false,centerLongHandled=false,initialPageApplied=false; AppEntry pendingApp; int pendingAppRow=-1,pendingAppColumn=-1; AppActionsDialog appMenu; SharedPreferences prefs;
         HaLiveClient live;Map<String,JSONObject> states=new LinkedHashMap<>();List<Map<String,Object>> customCards=new ArrayList<>();
         boolean dashboardPage=false,active=false,remoteFetching=false;int dashboardOffset=0;String pendingCardId=null;
         final Runnable clockTick=this::tick;
+        final NetworkStatus network=new NetworkStatus();
         WallpaperSlideshow slideshow;
         WatchNextStore watchNext;
         final ContinueArtwork artwork=new ContinueArtwork(getContext(),this::invalidate);
         int resumeOffset;
 
         LauncherView(MainActivity a){super(a);activity=a;setFocusable(true);setFocusableInTouchMode(true);hero=BitmapFactory.decodeResource(getResources(),R.drawable.living_room_hero);haMark=getResources().getDrawable(R.drawable.app_icon,a.getTheme());wallpaperMark=getResources().getDrawable(R.drawable.installation_icon,a.getTheme());brandLogo=new BrandLogo(a);stroke.setStyle(Paint.Style.STROKE);prefs=a.getSharedPreferences(HaClient.PREFS,MODE_PRIVATE);WallpaperBackdrop.initialize(prefs);NativeCards.init(a);slideshow=new WallpaperSlideshow(this);}
-        void tick(){if(!active)return;time=android.text.format.DateFormat.getTimeFormat(activity).format(new Date());invalidate();postDelayed(clockTick,30000);}
-        void pause(){active=false;if(slideshow!=null)slideshow.stop();removeCallbacks(clockTick);if(live!=null){live.stop();live=null;}if(watchNext!=null){watchNext.close();watchNext=null;}pendingCardId=null;clearAppPress();dismissAppMenu();}
-        void reload(){pause();active=true;prefs=activity.getSharedPreferences(HaClient.PREFS,MODE_PRIVATE);if(prefs.getInt("wallpaper_mode",0)==4)slideshow.start();loadCustomWallpaper();loadApps();customCards=CardStore.active(activity);loadEntities();haOnline=false;
+        void tick(){if(!active)return;time=android.text.format.DateFormat.getTimeFormat(activity).format(new Date());boolean showNetwork=NetworkStatus.enabled(prefs);if(showNetwork){network.start(activity);network.sample(prefs.getBoolean(NetworkStatus.RATE,false));}else network.stop();invalidate();postDelayed(clockTick,showNetwork?2000:30000);}
+        void pause(){active=false;network.stop();if(slideshow!=null)slideshow.stop();removeCallbacks(clockTick);if(live!=null){live.stop();live=null;}if(watchNext!=null){watchNext.close();watchNext=null;}pendingCardId=null;clearAppPress();dismissAppMenu();}
+        void reload(){pause();statesFresh=false;haOnline=false;active=true;prefs=activity.getSharedPreferences(HaClient.PREFS,MODE_PRIVATE);if(prefs.getInt("wallpaper_mode",0)==4&&!CinemaMode.enabled(prefs))slideshow.start();loadCustomWallpaper();loadApps();customCards=CardStore.active(activity);loadEntities();haOnline=false;
             reloadContinue();
-            live=new HaLiveClient(activity,new HaLiveClient.Listener(){public void states(Map<String,JSONObject> next){states=next;loadEntities();}public void connection(boolean online){haOnline=online;TechnicalDiagnostics.connection(online);invalidate();}public void statusChanged(){invalidate();}public void configuration(JSONObject snapshot)throws Exception{applyPanel(snapshot);}public Bitmap preview(){return capturePreview();}});live.start();refreshRemote();tick();
+            live=new HaLiveClient(activity,new HaLiveClient.Listener(){public void states(Map<String,JSONObject> next){states=next;statesFresh=true;loadEntities();}public void connection(boolean online){haOnline=online;if(!online)statesFresh=false;TechnicalDiagnostics.connection(online);loadEntities();}public void statusChanged(){invalidate();}public void configuration(JSONObject snapshot)throws Exception{applyPanel(snapshot);}public Bitmap preview(){return capturePreview();}});live.start();refreshRemote();tick();
             if(!initialPageApplied){initialPageApplied=true;if(prefs.getBoolean("start_dashboard",false)){dashboardPage=true;row=4;col=2;}else{appsPage=prefs.getBoolean("start_apps",false);if(appsPage){row=4;col=1;}}}normalizeSelection();requestFocus();invalidate();}
-        void applyPanel(JSONObject snapshot)throws Exception{if(!active||!PanelStore.apply(activity,snapshot))return;pendingCardId=null;clearAppPress();dismissAppMenu();pendingPlacedIndex=-1;customCards=CardStore.active(activity);loadApps();reloadContinue();loadEntities();loadCustomWallpaper();if(prefs.getInt("wallpaper_mode",0)==4)slideshow.start();else slideshow.stop();normalizeSelection();invalidate();}
+        void applyPanel(JSONObject snapshot)throws Exception{if(!active||!PanelStore.apply(activity,snapshot))return;pendingCardId=null;clearAppPress();dismissAppMenu();pendingPlacedIndex=-1;customCards=CardStore.active(activity);loadApps();reloadContinue();loadEntities();loadCustomWallpaper();if(prefs.getInt("wallpaper_mode",0)==4&&!CinemaMode.enabled(prefs))slideshow.start();else slideshow.stop();removeCallbacks(clockTick);tick();normalizeSelection();invalidate();}
         Bitmap capturePreview(){
             if(!active||!isShown()||!activity.hasWindowFocus()||getWidth()<1||getHeight()<1)throw new IllegalStateException("Launcher non visible");
             // Draw only our own visible launcher, never Android settings, video or another app.
@@ -98,6 +103,7 @@ public class MainActivity extends Activity {
             long selected=row==3&&col<resumeApps.size()&&resumeApps.get(col).resume!=null?resumeApps.get(col).resume.id:-1;
             resumeApps.clear();
             for(WatchNextStore.Item item:items){
+                if(!PlaybackSourcesActivity.visible(prefs,item.pkg))continue;
                 for(AppEntry owner:apps)if(owner.pkg.equals(item.pkg)){
                     if(item.intent.resolveActivity(activity.getPackageManager())==null)break;
                     AppEntry entry=new AppEntry();entry.pkg=owner.pkg;entry.activity=owner.activity;entry.icon=owner.icon;entry.label=item.title;entry.resume=item;resumeApps.add(entry);break;
@@ -123,10 +129,12 @@ public class MainActivity extends Activity {
         void clearAppPress(){pendingApp=null;pendingAppRow=-1;pendingAppColumn=-1;}
         void dismissAppMenu(){if(appMenu!=null){appMenu.dismiss();appMenu=null;}}
         void showAppMenu(AppEntry app){
+            if(GuestMode.active(activity)){clearAppPress();centerLongHandled=true;activity.startActivity(new Intent(activity,GuestModeActivity.class));return;}
             if(app==null||activity.isFinishing()||appMenu!=null&&appMenu.isShowing())return;
             clearAppPress();pendingPlacedIndex=-1;centerLongHandled=true;
             appMenu=new AppActionsDialog(activity,app.label,isFavorite(app),AppActionsDialog.systemApp(activity,app.pkg),true,new AppActionsDialog.Actions(){
                 public void favorite(){toggleFavorite(app);}
+                public void rename(){activity.startActivity(new Intent(activity,AppNameActivity.class).putExtra("package",app.pkg));}
                 public void information(){AppActionsDialog.open(activity,AppActionsDialog.informationIntent(app.pkg));}
                 public void uninstall(){if(!AppActionsDialog.systemApp(activity,app.pkg))AppActionsDialog.open(activity,AppActionsDialog.uninstallIntent(app.pkg));}
             });
@@ -153,7 +161,7 @@ public class MainActivity extends Activity {
             for(ResolveInfo r:pm.queryIntentActivities(q,0)){
                 if(r.activityInfo.packageName.equals(activity.getPackageName())||prefs.getStringSet("hidden_apps",java.util.Collections.emptySet()).contains(r.activityInfo.packageName))continue;
                 String key=r.activityInfo.packageName;if(!seen.add(key))continue;
-                AppEntry e=new AppEntry();e.label=r.loadLabel(pm).toString();e.pkg=r.activityInfo.packageName;e.activity=r.activityInfo.name;e.icon=new AppIconRenderer(r.loadIcon(pm));apps.add(e);
+                AppEntry e=new AppEntry();e.pkg=r.activityInfo.packageName;e.label=AppNames.label(prefs,e.pkg,r.loadLabel(pm).toString());e.activity=r.activityInfo.name;e.icon=new AppIconRenderer(r.loadIcon(pm));apps.add(e);
             }
         }
         void loadEntities(){
@@ -163,7 +171,7 @@ public class MainActivity extends Activity {
             else{Set<String> saved=prefs.getStringSet("dashboard_entities",null);if(saved!=null)configured.addAll(saved);else{configured.add(prefs.getString("light_entity","light.salon"));configured.add(prefs.getString("scene_movie","scene.soiree_cinema"));configured.add(prefs.getString("scene_off","scene.tout_eteindre"));}}
             if(prefs.getBoolean("home_source_ha",false)){JSONObject group=states.get(prefs.getString("home_group_entity","group.tv_launcher").trim());JSONObject attrs=group==null?null:group.optJSONObject("attributes");JSONArray members=attrs==null?null:attrs.optJSONArray("entity_id");if(members!=null){configured.clear();for(int i=0;i<members.length();i++){String id=members.optString(i);if(!id.isEmpty())configured.add(id);}}}
             if(prefs.getBoolean("dashboard_include_entities",true))for(String id:configured){EntityItem e=new EntityItem();e.id=id;e.name=prettyEntityName(id);e.haState=states.get(id);e.state=e.haState==null?I18n.t("Indisponible"):e.haState.optString("state");JSONObject attrs=e.haState==null?null:e.haState.optJSONObject("attributes");if(attrs!=null)e.name=attrs.optString("friendly_name",e.name);e.domain=id.contains(".")?id.substring(0,id.indexOf('.')):"homeassistant";homeEntities.add(e);}
-            int index=0;for(Map<String,Object> card:customCards){int slot=index++;if(!CardConfig.bool(card,"enabled",true)||card.containsKey("placement"))continue;EntityItem e=new EntityItem();e.custom=card;e.id="card:"+CardConfig.str(card,"id",String.valueOf(slot));String entity=CardConfig.str(card,"entity","");e.haState=HeatPumpState.isCard(card)?HeatPumpCard.displayState(card,states):states.get(entity);e.domain="custom";e.name=NativeCards.title(card,e.haState);e.state=NativeCards.stateText(e.haState);homeEntities.add(e);}
+            int index=0;for(Map<String,Object> card:customCards){int slot=index++;if(!CardConfig.bool(card,"enabled",true)||!CardConditions.visible(card,states,haOnline&&statesFresh)||card.containsKey("placement"))continue;EntityItem e=new EntityItem();e.custom=card;e.id="card:"+CardConfig.str(card,"id",String.valueOf(slot));String entity=CardConfig.str(card,"entity","");e.haState=HeatPumpState.isCard(card)?HeatPumpCard.displayState(card,states):states.get(entity);e.domain="custom";e.name=NativeCards.title(card,e.haState);e.state=NativeCards.stateText(e.haState);homeEntities.add(e);}
             if(selected!=null)for(int i=0;i<homeEntities.size();i++)if(selected.equals(homeEntities.get(i).id)){col=i;break;}
             homeOffset=Math.min(homeOffset,Math.max(0,homeEntities.size()-1));normalizeSelection();invalidate();
         }
@@ -181,7 +189,7 @@ public class MainActivity extends Activity {
         void sectionTitle(Canvas c,String title,float width){NativeCards.text(c,p,title,0,prefs.getInt("section_title_size",25),width,prefs.getInt("section_title_size",25),tint("section_color",Color.WHITE),true);}
         void drawBody(Canvas c,LauncherLayout l){
             if(appsPage||dashboardPage){c.save();c.translate(l.content.left,l.content.top-118);float w=l.content.width(),h=l.content.height()+118;if(appsPage)drawApplicationsPage(c,w*.045f,w,h);else drawDashboard(c,w*.045f,w,h);c.restore();return;}
-            LauncherLayout.Block b=block("greeting");beginBlock(c,b);if(prefs.getBoolean("show_greeting",true))NativeCards.text(c,p,greeting(),0,prefs.getInt("greeting_size",64),b.logicalWidth(),prefs.getInt("greeting_size",64),tint("greeting_color",Color.WHITE),true);if(prefs.getBoolean("show_subtitle",true))NativeCards.text(c,p,prefs.getString("hero_subtitle",I18n.t("Votre salon, simplement.")),0,prefs.getInt("greeting_size",64)+20+prefs.getInt("subtitle_size",22),b.logicalWidth(),prefs.getInt("subtitle_size",22),tint("subtitle_color",0xffd7d9dc),false);c.restore();
+            LauncherLayout.Block b=block("greeting");beginBlock(c,b);if(!CinemaMode.enabled(prefs)){if(prefs.getBoolean("show_greeting",true))NativeCards.text(c,p,greeting(),0,prefs.getInt("greeting_size",64),b.logicalWidth(),prefs.getInt("greeting_size",64),tint("greeting_color",Color.WHITE),true);if(prefs.getBoolean("show_subtitle",true))NativeCards.text(c,p,prefs.getString("hero_subtitle",I18n.t("Votre salon, simplement.")),0,prefs.getInt("greeting_size",64)+20+prefs.getInt("subtitle_size",22),b.logicalWidth(),prefs.getInt("subtitle_size",22),tint("subtitle_color",0xffd7d9dc),false);}c.restore();
             if(prefs.getBoolean("show_quick",true)){b=block("quick");beginBlock(c,b);drawQuick(c,0,0,b.logicalWidth());c.restore();}
             if(!resumeApps.isEmpty()&&prefs.getBoolean("show_continue",true)){b=block("continue");beginBlock(c,b);sectionTitle(c,I18n.t("Reprendre la lecture"),b.logicalWidth());drawContinue(c,0,rowStart(),b.logicalWidth());c.restore();}
             if(prefs.getBoolean("show_favorites",true)){b=block("favorites");beginBlock(c,b);sectionTitle(c,I18n.t("Vos applications"),b.logicalWidth());drawFavorites(c,0,rowStart(),b.logicalWidth());c.restore();}
@@ -223,7 +231,7 @@ public class MainActivity extends Activity {
             NativeCards.text(c,p,activity.haCards==null?I18n.t("Chargement HA…"):activity.haCards.message,x+16,y+57,w-32,15,0xffbccbd6,false);
         }
         int pendingPlacedIndex=-1;
-        boolean placedVisible(Map<String,Object> card){return card.containsKey("placement")&&CardConfig.bool(card,"enabled",true);}
+        boolean placedVisible(Map<String,Object> card){return card.containsKey("placement")&&CardConfig.bool(card,"enabled",true)&&CardConditions.visible(card,states,haOnline&&statesFresh);}
         AppEntry placedApp(Map<String,Object> card){String pkg=CardConfig.str(card,"package","");for(AppEntry a:apps)if(a.pkg.equals(pkg))return a;return null;}
         boolean placedFocusable(Map<String,Object> card){return placedVisible(card)&&CardConfig.bool(card,"interactive",true)&&(!"app".equals(CardConfig.str(card,"type",""))||placedApp(card)!=null);}
         JSONObject placedState(Map<String,Object> card){return HeatPumpState.isCard(card)?HeatPumpCard.displayState(card,states):states.get(CardConfig.str(card,"entity",""));}
@@ -283,6 +291,11 @@ public class MainActivity extends Activity {
             if(nav.items.size()>strip.tabs.size()&&!strip.tabs.isEmpty())NativeCards.text(c,p,(navOffset>0?"‹ ":"")+(navOffset+1)+"–"+(navOffset+strip.tabs.size())+" / "+nav.items.size()+(navOffset+strip.tabs.size()<nav.items.size()?" ›":""),strip.area.left,strip.counterY,strip.area.width(),11*scale,color,false);
             if(strip.showStatus){int statusColor=LinkStatus.color(prefs,haOnline);if(strip.fullStatus)NativeCards.text(c,p,LinkStatus.summary(prefs,haOnline),strip.status.left,textBaseline(strip.status,strip.statusSize),strip.status.width(),strip.statusSize,statusColor,false);else{p.setColor(statusColor);c.drawCircle(strip.status.centerX(),strip.status.centerY(),4*scale,p);}}
             if(strip.showClock)NativeCards.text(c,p,time,strip.clock.left,textBaseline(strip.clock,strip.clockSize),strip.clock.width(),strip.clockSize,color,true);
+            if(strip.showNetwork){
+                float x=strip.network.left;
+                if(strip.showNetworkIcon){float size=strip.networkSize*1.5f;network.drawIcon(c,new RectF(x,strip.network.centerY()-size/2,x+size,strip.network.centerY()+size/2),color);x+=size+5*scale;}
+                if(strip.showNetworkRate)NativeCards.text(c,p,network.rates.text(I18n.locale()),x,textBaseline(strip.network,strip.networkSize),strip.network.right-x,strip.networkSize,color,false);
+            }
         }
         void drawWallpaper(Canvas c,float w,float h,int mode){if(mode==WallpaperBackdrop.BRAND){WallpaperBackdrop.drawBrand(c,w,h,wallpaperMark);return;}if(WallpaperBackdrop.drawSolid(c,w,h,mode,prefs,p))return;if(mode==4&&slideshow.draw(c,w,h))return;Bitmap image=mode==3?customWallpaper:(mode==0||mode==4)?hero:null;if(image!=null){int fit=prefs.getInt("wallpaper_fit",0);if(fit==2){c.drawBitmap(image,null,new RectF(0,0,w,h),p);return;}float iw=image.getWidth(),ih=image.getHeight(),scale=fit==1?Math.min(w/iw,h/ih):Math.max(w/iw,h/ih);float dw=iw*scale,dh=ih*scale;if(fit==1){p.setColor(0xff080b0f);c.drawRect(0,0,w,h,p);float l=(w-dw)/2,t=(h-dh)/2;c.drawBitmap(image,null,new RectF(l,t,l+dw,t+dh),p);return;}float srcW=w/scale,srcH=h/scale,fx=prefs.getInt("wallpaper_focus_x",50)/100f,fy=prefs.getInt("wallpaper_focus_y",50)/100f,left=(iw-srcW)*fx,top=(ih-srcH)*fy;left=Math.max(0,Math.min(iw-srcW,left));top=Math.max(0,Math.min(ih-srcH,top));c.drawBitmap(image,new Rect((int)left,(int)top,(int)(left+srcW),(int)(top+srcH)),new RectF(0,0,w,h),p);return;}p.setShader(new LinearGradient(0,0,w,h,mode==1?new int[]{0xff203541,0xff101a21,0xff080d11}:new int[]{0xff090b0e,0xff090b0e},null,Shader.TileMode.CLAMP));c.drawRect(0,0,w,h,p);p.setShader(null);}
         float textBaseline(RectF bounds,float size){p.setTextSize(size);p.setTypeface(Typeface.DEFAULT);return bounds.centerY()-(p.ascent()+p.descent())/2;}
@@ -336,7 +349,7 @@ public class MainActivity extends Activity {
         int favoriteVisibleCount(){return Math.max(1,(int)(block("favorites").logicalWidth()/favoriteCellWidth()));}
         float favoriteCellWidth(){return Math.max(prefs.getInt("favorite_icon_size",59)*2+24,prefs.getInt("favorite_cell_width",184));}
         void drawAppIcon(Canvas c,AppEntry app,float cx,float cy,float radius){
-            app.icon.draw(c,cx,cy,radius,prefs.getInt("app_icon_shape",AppIconRenderer.ROUND));
+            app.icon.draw(c,cx,cy,radius,prefs.getInt("app_icon_shape",AppIconRenderer.ROUND),prefs.getInt("app_icon_ratio",160),prefs.getInt("app_icon_corners",18),prefs.getInt("app_icon_logo_size",100));
         }
         void drawAppLabel(Canvas c,AppEntry app,float cx,float baseline,boolean selected){
             if(prefs.getBoolean("show_app_labels",true)){

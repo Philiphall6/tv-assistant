@@ -17,6 +17,32 @@ r = importlib.import_module("hatv_test.repository")
 
 
 class ValidationTests(unittest.TestCase):
+    def test_card_conditions(self):
+        for op,value in (("state","on"),("not_state","off"),("above",5.5),("below",0)):
+            cfg={"schema":1,"settings":{},"cards":[{"type":"button","name":"Device","conditions":[{"entity":"sensor.test","operator":op,"value":value}]}]}
+            self.assertEqual(m.parse_yaml(m.as_yaml(cfg)),cfg)
+        for condition in ({"entity":"bad","operator":"state","value":"on"},{"entity":"sensor.test","operator":"script","value":"run"},{"entity":"sensor.test","operator":"above","value":True},{"entity":"sensor.test","operator":"above","value":"10"},{"entity":"sensor.test","operator":"state","value":1}):
+            with self.subTest(condition=condition),self.assertRaises(ValueError):m.validate({"schema":1,"cards":[{"type":"button","name":"Device","conditions":[condition]}]})
+        with self.assertRaises(ValueError):m.validate({"schema":1,"cards":[{"type":"button","name":"Device","conditions":[{"entity":"sensor.test","operator":"state","value":"on"}]*9}]})
+        for key in ("guest_pin","guest_enabled","root_tools_enabled"):
+            with self.assertRaises(ValueError):m.validate({"schema":1,"settings":{key:True}})
+
+    def test_layout_presets_and_optional_network(self):
+        import json
+        self.assertEqual(len(m.LAYOUT_PRESETS),3)
+        self.assertEqual(m.LAYOUT_PRESETS,json.loads((ROOT/"app/src/main/res/raw/layout_presets.json").read_text()))
+        for preset in m.LAYOUT_PRESETS:
+            settings=preset["settings"]
+            self.assertEqual(m.validate({"schema":1,"settings":settings})["settings"],settings)
+            self.assertTrue(all(k.startswith(("nav_","layout_")) or k in ("favorite_icon_size","favorite_cell_width","app_icon_shape") for k in settings))
+        for key in ("nav_show_network","nav_show_network_rate"):
+            self.assertFalse(m.SCHEMA[key]["default"])
+            for value in (False,True):
+                cfg={"schema":1,"settings":{key:value},"cards":[]}
+                self.assertEqual(m.parse_yaml(m.as_yaml(cfg)),cfg)
+            for bad in (1,"true",None):
+                with self.subTest(key=key,bad=bad),self.assertRaises(ValueError):m.validate({"schema":1,"settings":{key:bad}})
+
     def test_home_information_voice_and_greeting(self):
         cfg={"schema":1,"settings":{"nav_clock_size":40,"nav_status_size":28,"voice_provider":1,"voice_agent_id":"conversation.test","voice_language":"fr","voice_confirm":True,"scene_movie":"scene.test","scene_off":"scene.off"},
              "navigation":[{"id":"voice","type":"voice","label":"Recherche","icon":"mdi:microphone","display":1}],
@@ -54,12 +80,20 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(m.validate({"schema":1,"settings":{}})["settings"],{},"No new setting injected into existing profiles")
 
     def test_icon_shapes_roundtrip(self):
-        for shape in range(6):
+        for shape in range(8):
             cfg={"schema":1,"settings":{"app_icon_shape":shape},"cards":[]}
             self.assertEqual(m.parse_yaml(m.as_yaml(cfg)),cfg)
-        for shape in (-1,6,True,"3",None,3.5):
+        for shape in (-1,8,True,"3",None,3.5):
             with self.subTest(shape=shape),self.assertRaises(ValueError):
                 m.validate({"schema":1,"settings":{"app_icon_shape":shape}})
+
+    def test_custom_icon_geometry(self):
+        for ratio in (50,100,160,250):
+            for corner in (0,18,50):
+                cfg={"schema":1,"settings":{"app_icon_shape":7,"app_icon_ratio":ratio,"app_icon_corners":corner,"app_icon_logo_size":75},"cards":[]}
+                self.assertEqual(m.parse_yaml(m.as_yaml(cfg)),cfg)
+        for key,value in (("app_icon_ratio",49),("app_icon_ratio",251),("app_icon_corners",51),("app_icon_corners",-1),("app_icon_logo_size",49),("app_icon_logo_size",101)):
+            with self.subTest(key=key),self.assertRaises(ValueError):m.validate({"schema":1,"settings":{key:value}})
 
     def test_ha_sizing_roundtrip_and_scope(self):
         raw = "type: custom:button-card\nstyles:\n  card:\n    - height: 72px\n"

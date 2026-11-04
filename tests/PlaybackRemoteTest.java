@@ -56,6 +56,13 @@ final class PlaybackRemoteTest {
         check(!RemoteShortcuts.shouldLaunch(AppActionsTest.event(1,KeyEvent.KEYCODE_F1,0,0)),"release never launches twice");
         check(!RemoteShortcuts.shouldLaunch(AppActionsTest.event(0,KeyEvent.KEYCODE_F1,0,KeyEvent.FLAG_CANCELED)),"cancelled event never launches");
         Intent deep=WatchNextStore.safeIntent("org.example.player","https://example.invalid/watch/1");
+        Intent jellyfin=new Intent().setComponent(new android.content.ComponentName("org.jellyfin.androidtv","org.jellyfin.androidtv.StartupActivity")).putExtra("item_id","synthetic-item");
+        Intent resume=WatchNextStore.safeIntent("org.jellyfin.androidtv",jellyfin.toUri(Intent.URI_INTENT_SCHEME));
+        check(resume!=null&&"synthetic-item".equals(resume.getStringExtra("item_id"))&&resume.getData()==null,"Jellyfin explicit no-URI resume preserved");
+        check(WatchNextStore.safeIntent("org.other.app",jellyfin.toUri(Intent.URI_INTENT_SCHEME))==null,"foreign explicit component rejected");
+        check(WatchNextStore.safeIntent("org.jellyfin.androidtv",new Intent().setPackage("org.jellyfin.androidtv").toUri(Intent.URI_INTENT_SCHEME))==null,"implicit no-URI launch rejected");
+        jellyfin.setAction(Intent.ACTION_DELETE);
+        check(WatchNextStore.safeIntent("org.jellyfin.androidtv",jellyfin.toUri(Intent.URI_INTENT_SCHEME))==null,"explicit destructive action rejected");
         check(deep!=null&&deep.getPackage().equals("org.example.player"),"deep link pinned to publishing app");
         check(deep.getFlags()==(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP),"only approved launch flags");
         for(String raw:new String[]{"", "file:///private/file", "content://private/secret", "javascript:alert(1)",

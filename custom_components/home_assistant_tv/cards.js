@@ -1,6 +1,6 @@
 /* Persistent, authenticated HA card surface. No polling or periodic page reload. */
-import {languageOf, translate} from "/home_assistant_tv/localize.js?v=0.7.1";
-const VERSION = "0.7.1";
+import {languageOf, translate} from "/home_assistant_tv/localize.js?v=0.9.0";
+const VERSION = "0.9.0";
 const loadedResources = new Map();
 let helpersPromise;
 
@@ -140,6 +140,7 @@ class HomeAssistantTvCards extends HTMLElement {
   set hass(value) {
     this._hass = value;
     for (const {element} of this.nodes.values()) if (element) element.hass = value;
+    if(this.cinema&&!this.motionFrame)this.motionFrame=requestAnimationFrame(()=>{this.motionFrame=0;if(this.isConnected)this.applyMotion();});
     if (this.isConnected) this.start();
   }
   get hass() { return this._hass; }
@@ -148,11 +149,13 @@ class HomeAssistantTvCards extends HTMLElement {
     window.hatvCards = {
       status: this.status,
       layout: positions => { if (!Array.isArray(positions)) return; this.geometry = positions; this.renderCards(); },
+      motion: paused => {this.cinema=paused===true;this.applyMotion();},
       retry: () => { this.engine = null; this.renderCards(); },
     };
     this.removeChrome(); this.start();
   }
   disconnectedCallback() {
+    cancelAnimationFrame(this.motionFrame);this.motionFrame=0;this.cinema=false;this.applyMotion();
     this.generation++; this.subscription?.then(unsubscribe => unsubscribe()).catch(() => {});
     this.subscription = null; this.device = null;
     for (const restore of [...(this.restores || [])].reverse()) restore();
@@ -203,6 +206,15 @@ class HomeAssistantTvCards extends HTMLElement {
     const notice = document.createElement("div"); notice.className = "notice error";
     notice.textContent = translate(this.status.error, languageOf(this._hass)); this.stage.append(notice);
   }
+  applyMotion(){
+    let budget=10000;
+    const walk=(root,depth)=>{if(!root||depth>16||budget<=0)return;let style=Array.from(root.children).find(node=>node.matches("style[data-tva-cinema]"));
+      if(this.cinema&&!style){style=document.createElement("style");style.dataset.tvaCinema="";style.textContent="*,*::before,*::after{animation-play-state:paused!important;transition:none!important;scroll-behavior:auto!important}";root.append(style);}
+      if(!this.cinema)style?.remove();
+      for(const node of root.querySelectorAll("*")){if(--budget<=0)break;if(node.shadowRoot)walk(node.shadowRoot,depth+1);}
+    };
+    for(const {slot} of this.nodes.values())walk(slot,0);
+  }
   async renderCards() {
     if (!this._hass || !this.cards || !this.isConnected || !this.received) return;
     const visible = this.geometry.filter(g => this.cards.some(c => c.id === g.id));
@@ -235,7 +247,7 @@ class HomeAssistantTvCards extends HTMLElement {
         record.sizing.set(card.ha_sizing === "zone");
         Object.assign(record.slot.style, {left:g.x+"%", top:g.y+"%", width:g.width+"%", height:g.height+"%"});
       }
-      this.status.rendered = this.nodes.size; this.status.ready = true; delete this.status.error;
+      this.applyMotion();this.status.rendered = this.nodes.size; this.status.ready = true; delete this.status.error;
     } catch (e) { this.fail(e); }
   }
 }

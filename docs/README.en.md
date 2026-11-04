@@ -97,6 +97,8 @@ HA data access and the TV Assistant editor are separate connections. In the TV's
 
 ## Features and limits
 
+Integration **0.9.0** and APK **2.15.0** add Rows / Cinema / Dock layouts, rectangular and custom icon shapes, editor undo, an optional guest PIN, conditional cards, cinema mode, network indicators and clearer diagnostics. Read the [settings and limitations](LAUNCHER_TOOLS.md) (French). No layout or guest lock is enabled automatically.
+
 - Favorite apps, configurable icon shapes, long-press menus and resume content with artwork and progress when apps provide it.
 - Remote shortcuts and local button-to-app assignments, subject to manufacturer restrictions.
 - Adjustable navigation position, size, tabs, colors, clock, status and voice search.

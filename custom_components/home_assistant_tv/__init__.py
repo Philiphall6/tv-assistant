@@ -13,7 +13,7 @@ from homeassistant.helpers.storage import Store
 from homeassistant.helpers import config_validation as cv
 from homeassistant.loader import async_get_integration
 
-from .model import SCHEMA, ProfileError, as_yaml, parse_yaml, parse_card_yaml, profile_id, require, validate
+from .model import SCHEMA, LAYOUT_PRESETS, ProfileError, as_yaml, parse_yaml, parse_card_yaml, profile_id, require, validate
 from .repository import Repository
 from .notification_service import async_send_notification
 
@@ -60,7 +60,7 @@ async def async_setup_entry(hass, entry):
         module_url=f"/home_assistant_tv/panel.js?v={version}",
         config={"integration_version": version}, require_admin=True)
     await panel_custom.async_register_panel(hass, CARDS_PANEL, "home-assistant-tv-cards",
-        module_url="/home_assistant_tv/cards.js?v=0.7.1", require_admin=False)
+        module_url=f"/home_assistant_tv/cards.js?v={version}", require_admin=False)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
@@ -164,7 +164,7 @@ def ws_render_subscribe(hass, connection, msg):
 @callback
 def ws_list(hass, connection, msg):
     try:
-        result(connection, msg, {**repo(hass).overview(), "schema": SCHEMA})
+        result(connection, msg, {**repo(hass).overview(), "schema": SCHEMA, "layout_presets": LAYOUT_PRESETS})
     except ProfileError as err:
         failure(connection, msg, err)
 

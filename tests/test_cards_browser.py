@@ -64,6 +64,12 @@ with sync_playwright() as p:
         assert page.evaluate("getComputedStyle(originalCard.shadowRoot.querySelector('button')).fontSize")=="14px"
         svg=page.evaluate("(()=>{const r=originalCard.shadowRoot.querySelector('svg').getBoundingClientRect();return {width:r.width,height:r.height,scale:Number(surface.shadowRoot.querySelector('.card-content').style.getPropertyValue('--hatv-content-scale'))};})()")
         assert abs(svg["width"]-36*svg["scale"])<.05 and abs(svg["height"]-36*svg["scale"])<.05,svg
+    page.evaluate("hatvCards.motion(true);hatvCards.motion(true)")
+    assert page.evaluate("getComputedStyle(originalCard.shadowRoot.querySelector('button')).animationPlayState")=="paused"
+    assert page.evaluate("originalCard.shadowRoot.querySelectorAll('style[data-tva-cinema]').length")==1
+    page.evaluate("hatvCards.motion(false)")
+    assert page.evaluate("originalCard.shadowRoot.querySelectorAll('style[data-tva-cinema]').length")==0
+    assert page.evaluate("surface.shadowRoot.querySelector('test-card')===originalCard"),"cinema never rebuilds cards"
     page.set_viewport_size({"width":1920,"height":1080})
     page.wait_for_function("Math.abs(originalCard.getBoundingClientRect().width-1920*.9)<1")
     page.get_by_role("button",name="État : 22",exact=True).click()

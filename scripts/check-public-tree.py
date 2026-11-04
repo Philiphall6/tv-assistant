@@ -1,4 +1,4 @@
-"""Conservative tracked-file gate. Reports paths/categories, never matched secret values.
+"""Conservative public-file gate. Reports paths/categories, never matched secret values.
 
 Not a substitute for a secret scanner and manual review of the actual publication.
 """
@@ -6,9 +6,15 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import argparse
 
 root = Path(__file__).resolve().parents[1]
-names = subprocess.check_output(["git", "ls-files", "-z"], cwd=root).decode().split("\0")
+parser = argparse.ArgumentParser()
+parser.add_argument("--include-untracked", action="store_true", help="Also inspect new non-ignored files before staging")
+args = parser.parse_args()
+command = ["git", "ls-files", "-z"]
+if args.include_untracked: command += ["--cached", "--others", "--exclude-standard"]
+names = subprocess.check_output(command, cwd=root).decode().split("\0")
 patterns = {
     "private key": rb"-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----",
     "JWT credential": rb"eyJ[A-Za-z0-9_-]{12,}\.[A-Za-z0-9_-]{12,}\.[A-Za-z0-9_-]{12,}",
@@ -31,4 +37,4 @@ if bad:
     for name, label in bad:
         print(f"BLOCKED: {name}: {label}")
     sys.exit(1)
-print(f"PASS: public-tree gate ({len(list(filter(None, names)))} tracked files); manual privacy review still required")
+print(f"PASS: public-tree gate ({len(list(filter(None, names)))} files); manual privacy review still required")

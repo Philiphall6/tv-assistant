@@ -7,6 +7,7 @@ from browser_assets import serve_localization
 
 root=Path(__file__).resolve().parents[1]
 schema=json.loads((root/"custom_components/home_assistant_tv/schema.json").read_text())
+presets=json.loads((root/"custom_components/home_assistant_tv/layout_presets.json").read_text())
 script=(root/"custom_components/home_assistant_tv/panel.js").read_text()
 with sync_playwright() as p:
     browser=p.chromium.launch(executable_path=os.environ.get("CHROME_BIN"),headless=True,args=["--no-sandbox"])
@@ -16,25 +17,46 @@ with sync_playwright() as p:
     page.goto("https://ha-test.invalid/")
     page.add_script_tag(content=script,type="module")
     page.wait_for_function("() => !!customElements.get('home-assistant-tv-panel')")
-    page.evaluate("""schema=>{
+    page.evaluate("""({schema,presets})=>{
       window.calls=[];window.revision=1;window.saved={schema:1,settings:{hero_subtitle:'Le salon',home_row_title:'Votre maison'},cards:[{id:'one',type:'text',name:'Température',entity:'sensor.test'}]};
       const image=document.createElement('canvas');image.width=16;image.height=9;window.testJpeg=image.toDataURL('image/jpeg').split(',')[1];
       const panel=document.createElement('home-assistant-tv-panel');document.body.append(panel);
       panel.hass={states:{'sensor.test':{state:'21',attributes:{friendly_name:'Température'}}},callWS:async m=>{calls.push(m);
-        if(m.type.endsWith('/list'))return {schema,profiles:[{id:'salon',title:'Salon',revision}],devices:[{id:'tv1',name:'TV salon',profile:'salon',online:true,applied_revision:revision,reported_config:saved,apps:[{package:'org.example.tv',label:'Application test'}]}]};
+        if(m.type.endsWith('/list'))return {schema,layout_presets:presets,profiles:[{id:'salon',title:'Salon',revision}],devices:[{id:'tv1',name:'TV salon',profile:'salon',online:true,applied_revision:revision,reported_config:saved,apps:[{package:'org.example.tv',label:'Application test'}]}]};
         if(m.type.endsWith('/get'))return {title:'Salon',revision,config:structuredClone(saved),yaml:JSON.stringify(saved)};
         if(m.type.endsWith('/validate')){const config=m.config||JSON.parse(m.yaml);if(config.settings?.ha_token)throw Error('Réglage interdit');return {config,yaml:JSON.stringify(config)};}
         if(m.type.endsWith('/save')){if(m.revision!==revision)throw Error('Conflit');saved=structuredClone(m.config);return {config:saved,revision:++revision,yaml:JSON.stringify(saved)};}
         if(m.type.endsWith('/preview')){if(window.offline)throw Error('TV hors ligne');return {device_id:m.device_id,image:testJpeg,captured_at:new Date().toISOString(),profile:'salon',revision};}
         if(m.type.endsWith('/assign'))return null;throw Error('Unexpected command');
       }};
-    }""",schema)
+    }""",{"schema":schema,"presets":presets})
     try:
         page.get_by_role("heading",name="Éléments de Pour vous",exact=True).wait_for(timeout=5000)
     except Exception:
         print("Browser errors:",errors)
         print(page.evaluate("document.querySelector('home-assistant-tv-panel').shadowRoot.textContent.slice(-4000)"))
         raise
+    # Layout templates stay drafts and undo preserves the actual original content.
+    before=page.evaluate("JSON.stringify(document.querySelector('home-assistant-tv-panel').config)")
+    for preset in presets:
+        page.get_by_text("Dispositions prêtes à l’emploi",exact=True).click()
+        page.get_by_role("button",name=preset["name"],exact=True).click()
+        cfg=page.evaluate("document.querySelector('home-assistant-tv-panel').config")
+        assert all(cfg["settings"][k]==v for k,v in preset["settings"].items())
+        assert cfg["cards"]==json.loads(before)["cards"]
+        assert page.evaluate("revision")==1,"presets never auto-send"
+        page.get_by_text("Dispositions prêtes à l’emploi",exact=True).click()
+        page.get_by_role("button",name="Annuler le dernier modèle",exact=True).click()
+        assert page.evaluate("JSON.stringify(document.querySelector('home-assistant-tv-panel').config)")==before
+    page.get_by_role("button",name="Barre",exact=True).click()
+    page.get_by_role("button",name="Informations",exact=True).click()
+    for label,key in (("Afficher l’icône Ethernet / Wi-Fi","nav_show_network"),("Afficher le débit réseau ↓ / ↑","nav_show_network_rate")):
+        page.get_by_label(label,exact=True).check()
+        assert page.evaluate("document.querySelector('home-assistant-tv-panel').config.settings["+json.dumps(key)+"]") is True
+        assert page.evaluate("revision")==1
+        page.evaluate("document.querySelector('home-assistant-tv-panel').render()")
+        page.get_by_role("button",name="Réglage local : "+label,exact=True).click()
+        assert key not in page.evaluate("document.querySelector('home-assistant-tv-panel').config.settings")
     # HA supplies the installed integration version; there is no stale literal.
     version=json.loads((root/"custom_components/home_assistant_tv/manifest.json").read_text())["version"]
     assert page.get_by_text("Éditeur TV",exact=True).count()==1
@@ -49,15 +71,20 @@ with sync_playwright() as p:
     page.get_by_role("button",name="Apparence",exact=True).click()
     page.get_by_label("Texte d’accueil",exact=True).fill("Mon salon personnalisé")
     page.get_by_label("Réglages à modifier",exact=True).select_option("Icônes des applications")
-    assert page.get_by_label("Forme des icônes",exact=True).locator("option").count()==6
-    for value,label in ((3,"Cookie à 4 côtés"),(4,"Cookie à 7 côtés"),(5,"Arche"),(0,"Ronde")):
+    assert page.get_by_label("Forme des icônes",exact=True).locator("option").count()==8
+    for value,label in ((3,"Cookie à 4 côtés"),(4,"Cookie à 7 côtés"),(5,"Arche"),(0,"Ronde"),(6,"Rectangle 16:9"),(7,"Personnalisée")):
         button=page.get_by_role("button",name="Choisir : "+label,exact=True)
         button.click()
         assert button.get_attribute("aria-pressed")=="true"
         assert page.get_by_label("Forme des icônes",exact=True).input_value()==str(value)
         assert page.evaluate("document.querySelector('home-assistant-tv-panel').config.settings.app_icon_shape")==value
         assert page.locator(".icon-shapes button[aria-pressed=true]").count()==1
+    for label,value in (("Proportions personnalisées (largeur / hauteur %)","220"),("Arrondi personnalisé (% du petit côté)","35"),("Taille du logo dans la forme personnalisée (%)","75")):
+        page.get_by_label(label,exact=True).fill(value)
+    assert float(page.locator('[data-icon-shape="7"] rect').get_attribute("height"))<.46
+    page.screenshot(path="/tmp/ha-tv-custom-icons.png",full_page=True)
     page.get_by_label("Forme des icônes",exact=True).select_option("4")
+    assert page.get_by_label("Proportions personnalisées (largeur / hauteur %)",exact=True).is_disabled()
     assert page.get_by_role("button",name="Choisir : Cookie à 7 côtés",exact=True).get_attribute("aria-pressed")=="true"
     page.screenshot(path="/tmp/ha-tv-icon-shapes-editor.png",full_page=True)
     page.get_by_role("button",name="Fond d’écran",exact=True).click()
@@ -80,6 +107,9 @@ with sync_playwright() as p:
     page.get_by_role("status").filter(has_text="version 2").wait_for()
     assert page.evaluate("saved.settings.hero_subtitle")=="Mon salon personnalisé"
     assert page.evaluate("saved.settings.app_icon_shape")==4
+    assert page.evaluate("saved.settings.app_icon_ratio")==220
+    assert page.evaluate("saved.settings.app_icon_corners")==35
+    assert page.evaluate("saved.settings.app_icon_logo_size")==75
     assert page.evaluate("saved.settings.wallpaper_mode")==5
     assert page.evaluate("saved.settings.wallpaper_color")=="#3D5A50"
     page.get_by_role("button",name="Rangées",exact=True).click()
@@ -113,9 +143,15 @@ with sync_playwright() as p:
     page.get_by_label("Titre",exact=True).fill("Lumière")
     page.get_by_label("Entité",exact=True).fill("light.test")
     page.get_by_label("Action au clic",exact=True).select_option("toggle")
+    page.get_by_text("Conditions d’affichage",exact=True).click()
+    page.get_by_role("button",name="Ajouter une condition",exact=True).click()
+    page.get_by_label("Entité de condition",exact=True).fill("switch.example")
+    page.get_by_label("Comparaison",exact=True).select_option("state")
+    page.get_by_label("Valeur de condition",exact=True).fill("on")
     page.get_by_role("button",name="Envoyer aux TV du profil",exact=True).click()
     page.get_by_role("status").filter(has_text="version 3").wait_for()
     assert page.evaluate("saved.cards[1].tap_action.action")=="toggle"
+    assert page.evaluate("saved.cards[1].conditions")==[{"entity":"switch.example","operator":"state","value":"on"}]
     page.get_by_role("button",name="Écran",exact=True).click()
     page.get_by_label("Réglages à modifier",exact=True).select_option("Éléments libres")
     page.get_by_role("button",name="+ Affichage seul",exact=True).click()
@@ -127,10 +163,18 @@ with sync_playwright() as p:
     frame.wait_for()
     frame.focus();page.keyboard.press("ArrowRight")
     assert page.get_by_label("Position X (%)",exact=True).input_value()=="21"
+    page.get_by_role("button",name="Annuler la dernière modification",exact=True).click()
+    assert page.evaluate("document.querySelector('home-assistant-tv-panel').config.cards.at(-1).placement.x")==20
+    assert page.evaluate("revision")==3,"undo stays a draft, never auto-sends"
+    frame=page.get_by_role("button",name="Placer Mon affichage",exact=True)
+    frame.focus();page.keyboard.press("ArrowRight")
     frame=page.get_by_role("button",name="Placer Mon affichage",exact=True)
     box=frame.bounding_box()
     page.mouse.move(box["x"]+10,box["y"]+10);page.mouse.down();page.mouse.move(box["x"]+35,box["y"]+18,steps=5);page.mouse.up()
     assert int(page.get_by_label("Position X (%)",exact=True).input_value())>21
+    page.get_by_role("button",name="Annuler la dernière modification",exact=True).click()
+    assert page.evaluate("document.querySelector('home-assistant-tv-panel').config.cards.at(-1).placement.x")==21,"drag is one undo step"
+    page.get_by_role("button",name="Placer Mon affichage",exact=True).press("Enter")
     assert not page.get_by_label("Cliquable à la télécommande",exact=True).is_checked()
     page.screenshot(path="/tmp/ha-tv-editor-free.png",full_page=True)
     page.get_by_label("Ajouter une application",exact=True).select_option("org.example.tv")

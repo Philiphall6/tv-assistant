@@ -30,6 +30,7 @@
     <string name="ui_b5a3ec07" formatted="false">"+ Free element"</string>
     <string name="ui_16c757" formatted="false">"1 GB"</string>
     <string name="ui_e555103" formatted="false">"10 seconds"</string>
+    <string name="ui_15e23490" formatted="false">"100% = square; 160% = rectangle. The logo keeps its proportions."</string>
     <string name="ui_5678044b" formatted="false">"128 MB"</string>
     <string name="ui_afd85ae3" formatted="false">"15 minutes"</string>
     <string name="ui_1969420b" formatted="false">"2 columns"</string>
@@ -53,6 +54,9 @@
     <string name="ui_1d0e9f94" formatted="false">"Home"</string>
     <string name="ui_ea9ae7d2" formatted="false">"Home screen and layout"</string>
     <string name="ui_d7f6bf8a" formatted="false">"Default home screen"</string>
+    <string name="ui_1799d3bc" formatted="false">"Root access confirmed. No system settings were changed."</string>
+    <string name="ui_cbb39536" formatted="false">"Optional root access"</string>
+    <string name="ui_4fc7041d" formatted="false">"Root access denied. The launcher remains usable without root."</string>
     <string name="ui_74946a56" formatted="false">"Action"</string>
     <string name="ui_8934bbb0" formatted="false">"HA action (e.g. light.turn_on)"</string>
     <string name="ui_f8b0c822" formatted="false">"HA action (light.turn_on) / native destination / URL / package"</string>
@@ -65,7 +69,9 @@
     <string name="ui_bcba4e67" formatted="false">"Quick actions"</string>
     <string name="ui_b78fd3b5" formatted="false">"Quick actions → cards"</string>
     <string name="ui_a9046175" formatted="false">"Enable connection to the HA panel"</string>
+    <string name="ui_5b729117" formatted="false">"Enable guest mode"</string>
     <string name="ui_e608ef94" formatted="false">"Enable TV notifications"</string>
+    <string name="ui_4187bd86" formatted="false">"Enable root tools"</string>
     <string name="ui_baf4232b" formatted="false">"Enable the HA connection and editor link first."</string>
     <string name="ui_81ea7fa9" formatted="false">"Enable linking below to make this TV appear in the HA editor."</string>
     <string name="ui_82adfcd2" formatted="false">"Enable linking on the TV, then refresh this list. Never enter a token in this editor."</string>
@@ -89,10 +95,13 @@
     <string name="ui_1971031f" formatted="false">"Show the Apps tab on startup"</string>
     <string name="ui_27ec879a" formatted="false">"Show"</string>
     <string name="ui_e3196a16" formatted="false">"Show this block"</string>
+    <string name="ui_3d42bc88" formatted="false">"Show in Continue watching: no"</string>
+    <string name="ui_3d42c0fe" formatted="false">"Show in Continue watching: yes"</string>
     <string name="ui_33fcaec9" formatted="false">"Show row"</string>
     <string name="ui_b67b6b9d" formatted="false">"Show greeting"</string>
     <string name="ui_e3c1d0f" formatted="false">"Show the HA dashboard button in Home"</string>
     <string name="ui_261b99a3" formatted="false">"View privacy-safe diagnostics"</string>
+    <string name="ui_89d9da69" formatted="false">"Show network traffic ↓ / ↑"</string>
     <string name="ui_c47cfa36" formatted="false">"Show welcome text"</string>
     <string name="ui_d9c0eb00" formatted="false">"Show welcome subtitle"</string>
     <string name="ui_e3c302fb" formatted="false">"Show quick actions"</string>
@@ -100,6 +109,7 @@
     <string name="ui_75b84789" formatted="false">"Show states"</string>
     <string name="ui_dc8d2bb8" formatted="false">"Show clock"</string>
     <string name="ui_dc9c36be" formatted="false">"Show icon"</string>
+    <string name="ui_72fce466" formatted="false">"Show Ethernet / Wi-Fi icon"</string>
     <string name="ui_ac817811" formatted="false">"Show state"</string>
     <string name="ui_ae73c195" formatted="false">"Show state: "</string>
     <string name="ui_8364b8cc" formatted="false">"Show Home Assistant status"</string>
@@ -117,6 +127,7 @@
     <string name="ui_450229ce" formatted="false">"Add an app"</string>
     <string name="ui_869bc443" formatted="false">"Add a card"</string>
     <string name="ui_f205a9d8" formatted="false">"Add an animated heat pump card"</string>
+    <string name="ui_4ea29919" formatted="false">"Add condition"</string>
     <string name="ui_1c1b48b5" formatted="false">"Add a real HA card"</string>
     <string name="ui_d1430416" formatted="false">"Add devices from Home Assistant"</string>
     <string name="ui_ed771a1b" formatted="false">"Fit without cropping"</string>
@@ -131,6 +142,8 @@
     <string name="ui_898a318f" formatted="false">"Animations"</string>
     <string name="ui_f6cc3554" formatted="false">"Animate fan: "</string>
     <string name="ui_306f0ac5" formatted="false">"Cancel"</string>
+    <string name="ui_2cef429d" formatted="false">"Undo last change"</string>
+    <string name="ui_5eac31d2" formatted="false">"Undo last layout"</string>
     <string name="ui_d7e7fc30" formatted="false">"Cancel download"</string>
     <string name="ui_7544faaa" formatted="false">"Preview"</string>
     <string name="ui_73477376" formatted="false">"Shape preview"</string>
@@ -163,6 +176,7 @@
     <string name="ui_36b2be5f" formatted="false">"Slate"</string>
     <string name="ui_1bd04a37" formatted="false">"Card corner radius"</string>
     <string name="ui_83bdf4ed" formatted="false">"Navigation background corner radius"</string>
+    <string name="ui_2dd173b7" formatted="false">"Custom corners (% of the shorter side)"</string>
     <string name="ui_3c992cb" formatted="false">"Off"</string>
     <string name="ui_12353081" formatted="false">"Assist is thinking…"</string>
     <string name="ui_4417c326" formatted="false">"Assist uses the TV account and its permissions. Transcription uses the installed Android speech service, not HA\'s STT engine. No continuous listening. Text input remains available without a speech service. The third service opens a voice app or an HTTPS address with {query}. No HA token is sent; do not put secrets in the address."</string>
@@ -178,6 +192,7 @@
     <string name="ui_3caa968" formatted="false">"None"</string>
     <string name="ui_da1da96b" formatted="false">"No global storage access or accessibility service is needed. TV notifications are enabled separately; photos use the Android picker."</string>
     <string name="ui_5ed68412" formatted="false">"No synced album"</string>
+    <string name="ui_7e4a6adf" formatted="false">"No HDR format reported by Android"</string>
     <string name="ui_8d88026f" formatted="false">"No browser available. Open the displayed link on a computer."</string>
     <string name="ui_661e93da" formatted="false">"No tabs. The logo and Menu button still open settings."</string>
     <string name="ui_143a1a4c" formatted="false">"No results"</string>
@@ -187,7 +202,9 @@
     <string name="ui_bf0a4014" formatted="false">"No sharing app available. Use Copy or Save."</string>
     <string name="ui_bd67d89" formatted="false">"Current features do not require full storage, accessibility or notification permissions. Photos are selected with Android\'s file picker."</string>
     <string name="ui_7c030800" formatted="false">"No cards selected"</string>
+    <string name="ui_4edf82e" formatted="false">"No notifications"</string>
     <string name="ui_2c6c5c7b" formatted="false">"No speech recognized."</string>
+    <string name="ui_4c6a7ccf" formatted="false">"No continue-watching items currently shared"</string>
     <string name="ui_743ba974" formatted="false">"No local backup"</string>
     <string name="ui_4a2bcd33" formatted="false">"No selected cards match the search"</string>
     <string name="ui_7c9b1a92" formatted="false">"No button received. Some buttons are reserved by the TV."</string>
@@ -202,12 +219,15 @@
     <string name="ui_ca34d51a" formatted="false">"Allow display over other apps"</string>
     <string name="ui_87843871" formatted="false">"Allow installation for TV Assistant"</string>
     <string name="ui_1397f5b5" formatted="false">"Grant overlay permission below first."</string>
+    <string name="ui_2091252a" formatted="false">"Other network"</string>
     <string name="ui_648994af" formatted="false">"TOP BAR"</string>
     <string name="ui_b0101a6a" formatted="false">"Banners over applications. No wake-up, no queue and no missed messages replayed on wake."</string>
     <string name="ui_3cfe166" formatted="false">"Navigation"</string>
     <string name="ui_cef8d5d9" formatted="false">"Navigation bar"</string>
     <string name="ui_ad6a28ae" formatted="false">"Navigation bar · click to adjust"</string>
+    <string name="ui_6b26fa4" formatted="false">"Top navigation, spacious home and centered favorites."</string>
     <string name="ui_631058a8" formatted="false">"Fixed navigation bar, block positions, sizes and colors"</string>
+    <string name="ui_6f7a774b" formatted="false">"Sidebar and compact rows."</string>
     <string name="ui_855ba0af" formatted="false">"Top bar"</string>
     <string name="ui_9d313cf3" formatted="false">"Toggle"</string>
     <string name="ui_3d4a12c" formatted="false">"White"</string>
@@ -259,9 +279,12 @@
     <string name="ui_423be27b" formatted="false">"These settings affect only the navigation bar, never the cards."</string>
     <string name="ui_65984250" formatted="false">"This Android screen is unavailable. Use system settings or the official release page."</string>
     <string name="ui_37f0d97e" formatted="false">"This screen shows the last observed status. The HA preview may be offline while settings are open."</string>
+    <string name="ui_728ac8be" formatted="false">"This layout is managed by Home Assistant. Choose a layout in the HA editor\'s Screen tab, then send the profile."</string>
     <string name="ui_15b07313" formatted="false">"This button remains reserved for navigation or the system."</string>
+    <string name="ui_ec0746ef" formatted="false">"Changes only standard row placement and navigation. Apps, connections and free-positioned cards are preserved. Check for overlaps in the preview before sending."</string>
     <string name="ui_735df591" formatted="false">"Change photo"</string>
     <string name="ui_a9ce061" formatted="false">"Every permission is your choice. The app never removes or disables a launcher."</string>
+    <string name="ui_423605ca" formatted="false">"Each pattern stops after 12 seconds. Back exits immediately. An SDR screenshot cannot demonstrate HDR rendering."</string>
     <string name="ui_ded6f35f" formatted="false">"Loading HA…"</string>
     <string name="ui_3c0427d6" formatted="false">"Loading HA… · Arrows: pointer · OK: click · CH ±: scroll · Menu: options · Back: Home"</string>
     <string name="ui_e97b358" formatted="false">"Loading HA card…"</string>
@@ -295,8 +318,11 @@
     <string name="ui_6ca11a85" formatted="false">"Choose a color or create your own. Changes apply only when you choose Use this color."</string>
     <string name="ui_792b1517" formatted="false">"Target (YAML) · empty = card entity"</string>
     <string name="ui_534898d0" formatted="false">"Target entity_id (optional)"</string>
+    <string name="ui_7851ce95" formatted="false">"Cinema"</string>
+    <string name="ui_7d353cbf" formatted="false">"Cinema · Google TV-inspired"</string>
     <string name="ui_51df8c95" formatted="false">"Clickable with remote"</string>
     <string name="ui_30b71e03" formatted="false">"Click a frame in the screen to adjust it."</string>
+    <string name="ui_d00614e2" formatted="false">"PIN code"</string>
     <string name="ui_a3397b0c" formatted="false">"Rounded corners"</string>
     <string name="ui_910ed665" formatted="false">"Apps page columns"</string>
     <string name="ui_6337df08" formatted="false">"Dashboard columns"</string>
@@ -304,9 +330,11 @@
     <string name="ui_263072ed" formatted="false">"Command sent"</string>
     <string name="ui_fd3abcd6" formatted="false">"Voice command"</string>
     <string name="ui_f3df6213" formatted="false">"Start with the emulator. Each TV can have its own profile or share another TV\'s profile."</string>
+    <string name="ui_4aa704ca" formatted="false">"Comparison"</string>
     <string name="ui_68b8ad6" formatted="false">"Launcher behavior, displayed information and Android apps."</string>
     <string name="ui_9be0138d" formatted="false">"Understood"</string>
     <string name="ui_b1b1a588" formatted="false">"Last verified token account: "</string>
+    <string name="ui_ea6535f5" formatted="false">"Display conditions"</string>
     <string name="ui_9a4d53b1" formatted="false">"YAML configuration"</string>
     <string name="ui_868e1dd4" formatted="false">"Dashboard YAML configuration"</string>
     <string name="ui_6d0d734f" formatted="false">"Card configuration"</string>
@@ -320,7 +348,9 @@
     <string name="ui_bf3f0542" formatted="false">"Configure the HA address and dashboard path."</string>
     <string name="ui_1ed10db" formatted="false">"Confirm before sending to Assist"</string>
     <string name="ui_b3d5ec57" formatted="false">"Confirm before running: "</string>
+    <string name="ui_a9c28e81" formatted="false">"Confirm PIN"</string>
     <string name="ui_93a859" formatted="false">"Confirm sending to custom service"</string>
+    <string name="ui_c68c679" formatted="false">"Confirmed by Android"</string>
     <string name="ui_d6cf3232" formatted="false">"Conflict: this profile has changed. Reload it before deleting."</string>
     <string name="ui_6cdf3f4b" formatted="false">"Connect a TV in 3 steps"</string>
     <string name="ui_e1b5095f" formatted="false">"Connected"</string>
@@ -339,6 +369,7 @@
     <string name="ui_49b97e9d" formatted="false">"Connecting…"</string>
     <string name="ui_939fff17" formatted="false">"Save or restore the layout"</string>
     <string name="ui_452fa580" formatted="false">"Keep a local copy of your layout or restore the original settings."</string>
+    <string name="ui_4ccf93d9" formatted="false">"Keep your PIN: there is no master code or remote recovery. Clearing Android app data also removes settings and the HA connection."</string>
     <string name="ui_4f90c70e" formatted="false">"Home screen content"</string>
     <string name="ui_94f26ae3" formatted="false">"Exact report contents. No raw logs, tokens, addresses, names, profiles, photos or history. HA status is the last observed on the home screen, not a new connection test. Nothing is sent automatically."</string>
     <string name="ui_fb99eb2c" formatted="false">"Continue to home"</string>
@@ -383,6 +414,8 @@
     <string name="ui_d4e75bb2" formatted="false">"In Android settings, allow TV Assistant to install this update. Then return here and choose Install. You may revoke this permission after installation."</string>
     <string name="ui_a9980128" formatted="false">"In an HA automation: select the Notifications: Send a message action, then this TV\'s entity. Only title and message are needed."</string>
     <string name="ui_23e0fb69" formatted="false">"Home dashboard"</string>
+    <string name="ui_19813324" formatted="false">"Encoded levels, left to right:"</string>
+    <string name="ui_cd8c760a" formatted="false">"Requesting access from the root manager…"</string>
     <string name="ui_831f8d8c" formatted="false">"Ask for confirmation on tap"</string>
     <string name="ui_a3ec55da" formatted="false">"Checking the APK again before installation…"</string>
     <string name="ui_5482e523" formatted="false">"Last check from the home screen: "</string>
@@ -391,9 +424,11 @@
     <string name="ui_3448a783" formatted="false">"Move down "</string>
     <string name="ui_17874263" formatted="false">"Custom service destination"</string>
     <string name="ui_8cd73903" formatted="false">"Diagnostic copied."</string>
+    <string name="ui_c9bca111" formatted="false">"Connection diagnostic"</string>
     <string name="ui_77b5f7bf" formatted="false">"Diagnostic saved."</string>
     <string name="ui_38888202" formatted="false">"Privacy-safe diagnostics"</string>
     <string name="ui_810ccfb8" formatted="false">"Native slideshow from a shared Google Photos album. Unofficial reader, no Google account in the launcher."</string>
+    <string name="ui_529994e4" formatted="false">"Does not equal"</string>
     <string name="ui_5f01f54" formatted="false">"Card sizing"</string>
     <string name="ui_b63c03a3" formatted="false">"YAML dimensions"</string>
     <string name="ui_862f5797" formatted="false">"Layout"</string>
@@ -402,6 +437,8 @@
     <string name="ui_88bc6c9e" formatted="false">"Card layout and appearance"</string>
     <string name="ui_e5cb6de3" formatted="false">"Layout and text"</string>
     <string name="ui_6785e0c6" formatted="false">"Layout, fixed navigation bar, sizes and colors"</string>
+    <string name="ui_cf323cad" formatted="false">"Ready-made layouts"</string>
+    <string name="ui_27acc5d4" formatted="false">"Dock · Apple TV-inspired"</string>
     <string name="ui_858f4a2d" formatted="false">"HA data: invalid HTTPS address"</string>
     <string name="ui_273d9521" formatted="false">"HA data: address or token missing"</string>
     <string name="ui_3e5c14e3" formatted="false">"HA data: connecting"</string>
@@ -423,11 +460,13 @@
     <string name="ui_d03bad27" formatted="false">"Bottom gradient"</string>
     <string name="ui_e1c1ec1b" formatted="false">"Left gradient (%)"</string>
     <string name="ui_f43265af" formatted="false">"Left gradient"</string>
+    <string name="ui_b55824bf" formatted="false">"Request timed out. No additional commands will run."</string>
     <string name="ui_202864e6" formatted="false">"Startup"</string>
     <string name="ui_620de133" formatted="false">"Startup, clock and launcher behavior"</string>
     <string name="ui_9a090ad7" formatted="false">"Disable and restore local settings"</string>
     <string name="ui_f1a61679" formatted="false">"Disable slideshow"</string>
     <string name="ui_ba0ae662" formatted="false">"Disable TV notifications"</string>
+    <string name="ui_8a1e3df8" formatted="false">"Disable root tools"</string>
     <string name="ui_3ab2ae6d" formatted="false">"Disabled"</string>
     <string name="ui_4e0fa75a" formatted="false">"Uninstall"</string>
     <string name="ui_a1513c1e" formatted="false">"Details"</string>
@@ -454,6 +493,7 @@
     <string name="ui_7c02d073" formatted="false">"Entity"</string>
     <string name="ui_13fc5112" formatted="false">"Home Assistant entity (optional)"</string>
     <string name="ui_fbc51476" formatted="false">"Displayed entity"</string>
+    <string name="ui_278842c9" formatted="false">"Condition entity"</string>
     <string name="ui_70ab25a9" formatted="false">"Notification entity: "</string>
     <string name="ui_a06933f8" formatted="false">"Heat pump priority entity"</string>
     <string name="ui_d65360c8" formatted="false">"Group entity"</string>
@@ -477,6 +517,7 @@
     <string name="ui_eac03fc8" formatted="false">"FAVORITES"</string>
     <string name="ui_2e363af7" formatted="false">"FOCUS AND CARDS"</string>
     <string name="ui_d3e44daf" formatted="false">"ICON SHAPE"</string>
+    <string name="ui_82c230eb" formatted="false">"CUSTOM SHAPE"</string>
     <string name="ui_c9b4fc4b" formatted="false">"Optional: only hide blocks in For you. Apps and Home pages remain available. Re-enable blocks in Appearance and Rows."</string>
     <string name="ui_232d4bc8" formatted="false">"Favorites"</string>
     <string name="ui_5f970030" formatted="false">"Favorites in order: Android packages, one per line"</string>
@@ -488,6 +529,7 @@
     <string name="ui_f802c30f" formatted="false">"Invalid file or release: installation refused."</string>
     <string name="ui_3a3f66a7" formatted="false">"File on the same HA server (.yaml or .json)"</string>
     <string name="ui_ae72c6af" formatted="false">"Fire TV · experimental support, not validated on real hardware. Open TV Assistant from your apps. Home replacement and the Home button are not guaranteed; no Amazon component is disabled. Alexa is not integrated. Voice, continue watching and web cards depend on the services available on this device."</string>
+    <string name="ui_d7b46f52" formatted="false">"Feed unavailable"</string>
     <string name="ui_3b1c319" formatted="false">"Arrows: pointer · OK: click / hold · CH ±: scroll · Back: launcher"</string>
     <string name="ui_21805f" formatted="false">"Background"</string>
     <string name="ui_7cce0c62" formatted="false">"Calm living room wallpaper restored"</string>
@@ -504,6 +546,8 @@
     <string name="ui_16aecdb" formatted="false">"2 s fade"</string>
     <string name="ui_16af09c" formatted="false">"3 s fade"</string>
     <string name="ui_7e4d8c6e" formatted="false">"Fade in milliseconds (0 = off)"</string>
+    <string name="ui_2eb711bb" formatted="false">"Unknown format"</string>
+    <string name="ui_bb19800f" formatted="false">"Formats reported by Android, not a video\'s active mode or a guarantee for streaming services."</string>
     <string name="ui_57eef18f" formatted="false">"Icon shape"</string>
     <string name="ui_784850e" formatted="false">"Icon shape in favorites and apps, card size and spacing."</string>
     <string name="ui_77b4db48" formatted="false">"Icon shape, size, spacing and focus"</string>
@@ -516,15 +560,18 @@
     <string name="ui_41a5d1a" formatted="false">"Drag frames; drag the bottom-right corner to resize. Arrows: move by 1%, Shift + arrows: resize. Frames are not part of the screenshot."</string>
     <string name="ui_27acdf38" formatted="false">"Google Photos · Synced slideshow"</string>
     <string name="ui_805e0dde" formatted="false">"Google TV takes over · ADB help"</string>
+    <string name="ui_630f162a" formatted="false">"Large favorites at the top and compact bottom navigation."</string>
     <string name="ui_3fed53c0" formatted="false">"General"</string>
     <string name="ui_448fa1ec" formatted="false">"HA unreachable · OK to retry"</string>
     <string name="ui_8d8bd404" formatted="false">"HA unreachable. Check network and address. Menu: retry · Back: Home"</string>
     <string name="ui_b2e7b989" formatted="false">"HA did not confirm delivery. The test may have been received; no automatic retry."</string>
+    <string name="ui_d0aa59d1" formatted="false">"HA responds: API access confirmed. This does not confirm the editor connection."</string>
     <string name="ui_f5b4b790" formatted="false">"HA · Sign in if prompted · Arrows: pointer · OK: click · CH ±: scroll · Menu: options · Back: Home"</string>
     <string name="ui_a2bdb422" formatted="false">"HTTPS and a valid certificate are required. The token is encrypted with Android Keystore and excluded from backups. Use a non-admin TV account."</string>
     <string name="ui_f24732f6" formatted="false">"Height (%)"</string>
     <string name="ui_b1aa9032" formatted="false">"Card height"</string>
     <string name="ui_55b01a33" formatted="false">"Welcome area, brightness and atmosphere"</string>
+    <string name="ui_2acb37bf" formatted="false">"This session\'s history, 20 changes. Remains a draft until sent."</string>
     <string name="ui_82588122" formatted="false">"Home Assistant connected"</string>
     <string name="ui_798c2093" formatted="false">"Home Assistant is not responding. Try again; your draft is kept."</string>
     <string name="ui_ce64ce84" formatted="false">"Home Assistant is not configured"</string>
@@ -562,6 +609,7 @@
     <string name="ui_fb3901d8" formatted="false">"Unavailable"</string>
     <string name="ui_3f4384e7" formatted="false">"Information"</string>
     <string name="ui_9a3c6d3a" formatted="false">"App information"</string>
+    <string name="ui_537507e3" formatted="false">"Below"</string>
     <string name="ui_d5cebd34" formatted="false">"Android installer unavailable. Use the official release page or try again."</string>
     <string name="ui_3481fba7" formatted="false">"Installation cancelled or refused by Android. Your settings are preserved."</string>
     <string name="ui_3de35ec0" formatted="false">"Setup and permissions"</string>
@@ -571,10 +619,12 @@
     <string name="ui_18bb0958" formatted="false">"Install the TV Assistant integration in HA, then enable the connection here."</string>
     <string name="ui_2e6aa99f" formatted="false">"Interactive (otherwise display only)"</string>
     <string name="ui_4d3b52c4" formatted="false">"Heating permission switch"</string>
+    <string name="ui_e4121c15" formatted="false">"Jellyfin: enable home screen integration in its settings. HBO/Max and Apple TV depend on what they publish. IPTVNaptor TV needs a version that publishes the Android TV feed; an app shortcut is not continue watching."</string>
     <string name="ui_cec94af0" formatted="false">"Token for the non-admin TV account"</string>
     <string name="ui_ea3e8c1a" formatted="false">"Long-lived access token"</string>
     <string name="ui_f3241be5" formatted="false">"Protected token saved · leave empty to keep"</string>
     <string name="ui_5c1e44c" formatted="false">"READABILITY"</string>
+    <string name="ui_c468ca49" formatted="false">"The TV maps these levels to its capabilities. Avoid prolonged exposure to static images."</string>
     <string name="ui_98d11f4" formatted="false">"The bar already contains 40 tabs."</string>
     <string name="ui_d911daec" formatted="false">"Configuration changed while editing. Go back and reopen the card to avoid overwriting changes."</string>
     <string name="ui_f8b30618" formatted="false">"The Home Assistant connection will be kept."</string>
@@ -586,6 +636,7 @@
     <string name="ui_2acd7bf1" formatted="false">"Overlay permission is used for optional notifications. It does not replace the default launcher. Open Android settings to grant it?"</string>
     <string name="ui_8f9eb402" formatted="false">"The available version has changed. Check for updates again."</string>
     <string name="ui_8dc639ec" formatted="false">"The Android service transcribes speech, then sends the text to your HA agent using this TV\'s account."</string>
+    <string name="ui_b52f6ae5" formatted="false">"Start HDR10 pattern?"</string>
     <string name="ui_fff58d43" formatted="false">"Recognition language (auto = Android language)"</string>
     <string name="ui_fd16e867" formatted="false">"Recognition language (fr, en…)"</string>
     <string name="ui_429d69a4" formatted="false">"Width (%)"</string>
@@ -601,6 +652,8 @@
     <string name="ui_527adae7" formatted="false">"The panel could not be loaded."</string>
     <string name="ui_2d2589c" formatted="false">"The HA profile takes priority during synchronization. To keep changes, also update Layout or Appearance in HA."</string>
     <string name="ui_74ddc6b3" formatted="false">"The HA panel profile takes priority. Local cards and the HA file are kept."</string>
+    <string name="ui_d31fb871" formatted="false">"The test asks the root manager to run only ‘id -u’. No app data is read. Denying access leaves the launcher working normally."</string>
+    <string name="ui_64a1a5fe" formatted="false">"HDR playback unavailable on this device."</string>
     <string name="ui_9d5943b5" formatted="false">"Unable to read settings"</string>
     <string name="ui_7eb78bde" formatted="false">"Reading and validating…"</string>
     <string name="ui_16a693" formatted="false">"HA cards, long-press menus and the home screen work without this permission. It does not replace the default launcher. Open Android settings to allow it?"</string>
@@ -614,6 +667,7 @@
     <string name="ui_498c0ad1" formatted="false">"Selected cards"</string>
     <string name="ui_16b49e99" formatted="false">"Selected cards ("</string>
     <string name="ui_bfdf36d5" formatted="false">"Selected cards: "</string>
+    <string name="ui_df3dae74" formatted="false">"HA statuses above were observed on the last home-screen visit. Preview can be offline in settings, another app or standby. Local HA does not require Internet."</string>
     <string name="ui_66fe6a08" formatted="false">"Tab label"</string>
     <string name="ui_d4a3cbe4" formatted="false">"Label below each app"</string>
     <string name="ui_475c6b31" formatted="false">"HTTPS link"</string>
@@ -637,6 +691,10 @@
     <string name="ui_6c62ea2f" formatted="false">"Update the HA integration and check this TV\'s authorization."</string>
     <string name="ui_72f2df17" formatted="false">"Move to Home row"</string>
     <string name="ui_d1d383eb" formatted="false">"Update connection"</string>
+    <string name="ui_ee1b132c" formatted="false">"HDR10 pattern · near-black detail"</string>
+    <string name="ui_ba2e7672" formatted="false">"HDR10 pattern · highlights"</string>
+    <string name="ui_1a583c60" formatted="false">"Local HDR10 patterns: 10-bit HEVC, BT.2020 and PQ. For visual checks, not certified calibration. No picture settings are changed. There are no dedicated Dolby Vision or HDR10+ patterns here."</string>
+    <string name="ui_1b1782ad" formatted="false">"Patterns disabled: Android does not report HDR10 output on this display."</string>
     <string name="ui_8209d1fa" formatted="false">"Layout restored"</string>
     <string name="ui_9d76e6f2" formatted="false">"Layout backed up"</string>
     <string name="ui_2ae05d3f" formatted="false">"Update available"</string>
@@ -644,11 +702,15 @@
     <string name="ui_30370e15" formatted="false">"Updates and diagnostics"</string>
     <string name="ui_fb6cd6e4" formatted="false">"YAML mode"</string>
     <string name="ui_b05efae7" formatted="false">"Fire TV app mode · open TV Assistant from your apps. The Home button may return to Amazon Home even when the Home role is granted."</string>
+    <string name="ui_e6e82b72" formatted="false">"Cinema mode"</string>
+    <string name="ui_63cb7c3e" formatted="false">"Discreet cinema mode"</string>
+    <string name="ui_f16d788a" formatted="false">"Guest mode"</string>
     <string name="ui_734f02ce" formatted="false">"Local mode"</string>
     <string name="ui_df2a66f7" formatted="false">"Edit"</string>
     <string name="ui_2909bde3" formatted="false">"Edit card"</string>
     <string name="ui_73e9f594" formatted="false">"Edit local selection"</string>
     <string name="ui_9877699f" formatted="false">"Edit free placement"</string>
+    <string name="ui_96c56614" formatted="false">"Layout incompatible with this version"</string>
     <string name="ui_89b519b5" formatted="false">"Move up"</string>
     <string name="ui_acee1d0b" formatted="false">"Move up "</string>
     <string name="ui_f2d55abf" formatted="false">"Lovelace engine unavailable"</string>
@@ -658,14 +720,18 @@
     <string name="ui_2522ca" formatted="false">"Black"</string>
     <string name="ui_5b7be24b" formatted="false">"Minimal black"</string>
     <string name="ui_132ac" formatted="false">"Name"</string>
+    <string name="ui_b4da0b94" formatted="false">"Display name on this TV only. The app, its data and movie titles remain unchanged."</string>
     <string name="ui_a19a13e7" formatted="false">"TV name"</string>
     <string name="ui_22a16fa2" formatted="false">"TV name"</string>
     <string name="ui_b787794c" formatted="false">"Element name"</string>
     <string name="ui_19ecd281" formatted="false">"Button name in Home"</string>
     <string name="ui_b7867437" formatted="false">"Profile name"</string>
     <string name="ui_a50e104c" formatted="false">"Third service name"</string>
+    <string name="ui_b29809cf" formatted="false">"Custom name"</string>
     <string name="ui_88b8c85b" formatted="false">"Names below apps"</string>
     <string name="ui_132ad" formatted="false">"No"</string>
+    <string name="ui_55336dec" formatted="false">"Not confirmed by Android"</string>
+    <string name="ui_8720e9c4" formatted="false">"Not installed"</string>
     <string name="ui_43d56808" formatted="false">"Not synced"</string>
     <string name="ui_fbeb2a16" formatted="false">"Notifications: disconnected or disabled"</string>
     <string name="ui_176497c6" formatted="false">"Notifications: receiver ready"</string>
@@ -673,6 +739,8 @@
     <string name="ui_fb148735" formatted="false">"Home Assistant notifications"</string>
     <string name="ui_11aa401c" formatted="false">"Notifications enabled · no notifications during standby"</string>
     <string name="ui_49bafc6e" formatted="false">"Notifications disabled"</string>
+    <string name="ui_c1ace0f3" formatted="false">"Cinema mode notifications"</string>
+    <string name="ui_94f78a5" formatted="false">"New PIN (4 to 8 digits)"</string>
     <string name="ui_cd3012a5" formatted="false">"New profile"</string>
     <string name="ui_691f896b" formatted="false">"New TV pending: verify its identity, then explicitly assign a profile to authorize access. No profile has been sent yet."</string>
     <string name="ui_3de6fb47" formatted="false">"New card"</string>
@@ -702,6 +770,8 @@
     <string name="ui_85039a88" formatted="false">"Just open the app"</string>
     <string name="ui_e7907768" formatted="false">"Animated native heat pump"</string>
     <string name="ui_cf6177d6" formatted="false">"LAUNCHER SETTINGS"</string>
+    <string name="ui_978e2882" formatted="false">"Incorrect PIN or security delay. After 5 failed attempts, wait 30 seconds."</string>
+    <string name="ui_caf6796e" formatted="false">"Invalid PIN or confirmation does not match."</string>
     <string name="ui_7cc0b055" formatted="false">"Android package"</string>
     <string name="ui_acb995e" formatted="false">"App package"</string>
     <string name="ui_ea3d51eb" formatted="false">"Startup page"</string>
@@ -718,6 +788,7 @@
     <string name="ui_8e100df8" formatted="false">"Speak"</string>
     <string name="ui_b69206f5" formatted="false">"Share report"</string>
     <string name="ui_e0f9c920" formatted="false">"Share or save"</string>
+    <string name="ui_efe216ca" formatted="false">"Custom"</string>
     <string name="ui_e5d64aef" formatted="false">"Built-in photo"</string>
     <string name="ui_b02916b5" formatted="false">"Photo, gradient or minimal black"</string>
     <string name="ui_484c56a4" formatted="false">"Text below the greeting"</string>
@@ -743,6 +814,7 @@
     <string name="ui_110e0e43" formatted="false">"For lights, covers and scripts together, use a YAML group such as group.tv_launcher. For lights only, an HA light group also works. Group members become this row\'s cards."</string>
     <string name="ui_847070f8" formatted="false">"For multiple commands, add an actions list in YAML mode. HA scripts can combine as many steps as needed."</string>
     <string name="ui_daca583c" formatted="false">"To remove a banner: use home_assistant_tv.dismiss_notification with the same device_ids and tag."</string>
+    <string name="ui_32ca2eb" formatted="false">"For an already rooted device only. No automatic rooting, unlocking, downloads or system changes."</string>
     <string name="ui_51c0f3bb" formatted="false">"For you"</string>
     <string name="ui_be62de34" formatted="false">"Priority"</string>
     <string name="ui_bbc522c8" formatted="false">"Advanced procedure, from a computer"</string>
@@ -757,8 +829,11 @@
     <string name="ui_afa95137" formatted="false">"Profile synchronized"</string>
     <string name="ui_550aa547" formatted="false">"Profile “{profile}” saved, version {revision}. Sent to connected TVs assigned to this profile; others will receive it when returning home."</string>
     <string name="ui_b5aaf783" formatted="false">"Profile needs to be created"</string>
+    <string name="ui_70e928b" formatted="false">"Custom proportions (width / height %)"</string>
+    <string name="ui_8d4f727d" formatted="false">"Protects TV Assistant settings only. Apps, Android and Home Assistant actions remain accessible. The PIN stays on this TV, excluded from backups and HA."</string>
     <string name="ui_49cef8a" formatted="false">"Plum"</string>
     <string name="ui_fa9bf9b4" formatted="false">"Official release"</string>
+    <string name="ui_ffc9b711" formatted="false">"Exit guest mode"</string>
     <string name="ui_14049fc0" formatted="false">"Leave editor?"</string>
     <string name="ui_f62b0339" formatted="false">"HOME SCREEN ROWS"</string>
     <string name="ui_b827c173" formatted="false">"Shortcut saved"</string>
@@ -771,6 +846,7 @@
     <string name="ui_7dbb0a71" formatted="false">"Home page rows"</string>
     <string name="ui_ecdecf79" formatted="false">"Home screen rows"</string>
     <string name="ui_b3c26d32" formatted="false">"Visible rows"</string>
+    <string name="ui_fbcd4b63" formatted="false">"Rows · Android TV-inspired"</string>
     <string name="ui_b72a3ac2" formatted="false">"Crop and fill"</string>
     <string name="ui_d6dc6cee" formatted="false">"Reload dashboard"</string>
     <string name="ui_a607c5db" formatted="false">"Search"</string>
@@ -784,8 +860,10 @@
     <string name="ui_186bd65a" formatted="false">"Search a name or ID…"</string>
     <string name="ui_618537d0" formatted="false">"Search entities"</string>
     <string name="ui_e1df0a00" formatted="false">"Speech recognition unavailable. Enable a compatible Android voice service or type your request."</string>
+    <string name="ui_f4393455" formatted="false">"16:9 rectangle"</string>
     <string name="ui_9580f4a" formatted="false">"Link this launcher to the HA integration to display this card"</string>
     <string name="ui_10e7eaca" formatted="false">"Return to Home row"</string>
+    <string name="ui_fcf4c7c4" formatted="false">"Rename app"</string>
     <string name="ui_cec6bcfd" formatted="false">"Set the scene in Rows → Quick actions before converting."</string>
     <string name="ui_17914a43" formatted="false">"Set both scenes in Rows → Quick actions before converting."</string>
     <string name="ui_66c771d9" formatted="false">"Resume"</string>
@@ -801,6 +879,7 @@
     <string name="ui_1e09de5" formatted="false">"Restore backup"</string>
     <string name="ui_d6c34afb" formatted="false">"Restore previous version"</string>
     <string name="ui_f0e4e769" formatted="false">"Remove "</string>
+    <string name="ui_4eeed4f5" formatted="false">"Remove this condition"</string>
     <string name="ui_add92ed1" formatted="false">"Remove from favorites"</string>
     <string name="ui_3d4cd4be" formatted="false">"Remove custom image"</string>
     <string name="ui_91b3132b" formatted="false">"Back"</string>
@@ -811,6 +890,7 @@
     <string name="ui_a03fa581" formatted="false">"Use the TV\'s local setting"</string>
     <string name="ui_3b2807cb" formatted="false">"Use local tabs"</string>
     <string name="ui_4b7a5f2" formatted="false">"Circle"</string>
+    <string name="ui_de1aa7e2" formatted="false">"Root unavailable. This feature does not root the device."</string>
     <string name="ui_4b7c096" formatted="false">"Red"</string>
     <string name="ui_3a540d64" formatted="false">"RESET"</string>
     <string name="ui_c7ca2c5e" formatted="false">"HA notification receiver connected"</string>
@@ -832,12 +912,17 @@
     <string name="ui_4165da6e" formatted="false">"Unrecognized update response. Nothing was downloaded."</string>
     <string name="ui_c43c6ca0" formatted="false">"Unrecognized response: cannot confirm delivery. No automatic retry."</string>
     <string name="ui_10db8f44" formatted="false">"Response received from Home Assistant."</string>
+    <string name="ui_98f6955d" formatted="false">"Network"</string>
+    <string name="ui_7fb5cdda" formatted="false">"Network and HA are independent. Amber icon: Internet not confirmed by Android. Traffic ↓ / ↑: total TV traffic, including LAN, not maximum connection speed. No speed test or download; shown only in the launcher."</string>
+    <string name="ui_974f714" formatted="false">"Network, Internet, HA data and editor are four separate connections. No identifiers or tokens are displayed."</string>
+    <string name="ui_57501df8" formatted="false">"Restore original name"</string>
     <string name="ui_285df72e" formatted="false">"Reset launcher settings"</string>
     <string name="ui_21748ed7" formatted="false">"LOCAL BACKUP"</string>
     <string name="ui_1bbfe9c1" formatted="false">"SYNC AND STORAGE"</string>
     <string name="ui_4bf342d" formatted="false">"Sand"</string>
     <string name="ui_fb4971e6" formatted="false">"Enter # followed by 6 hexadecimal characters"</string>
     <string name="ui_f524ba30" formatted="false">"Type or speak a request."</string>
+    <string name="ui_90da215e" formatted="false">"Enter a name from 1 to 64 characters, without control characters."</string>
     <string name="ui_832b6620" formatted="false">"Calm living room"</string>
     <string name="ui_110c4ee3" formatted="false">"Greeting and welcome area"</string>
     <string name="ui_ceaf35a8" formatted="false">"Greeting and subtitle"</string>
@@ -860,6 +945,7 @@
     <string name="ui_bed78774" formatted="false">"Movie night"</string>
     <string name="ui_12357d2b" formatted="false">"Source: "</string>
     <string name="ui_5ed06ca1" formatted="false">"Card source"</string>
+    <string name="ui_f1887bd0" formatted="false">"Continue watching sources"</string>
     <string name="ui_a8dc6a38" formatted="false">"Focus style"</string>
     <string name="ui_aa43cb7c" formatted="false">"Style for this tab"</string>
     <string name="ui_568bfb94" formatted="false">"Optional overlay"</string>
@@ -874,6 +960,7 @@
     <string name="ui_fe19e04e" formatted="false">"Remove connection “{tv}”? Its profile is preserved. The TV keeps its local display and HA token. If linking remains enabled on the TV, it will reappear on its next connection, without approval. To remove it permanently, first disable “Edit from Home Assistant” on the TV."</string>
     <string name="ui_7fb52ee4" formatted="false">"Delete profile"</string>
     <string name="ui_56f4e158" formatted="false">"Delete element"</string>
+    <string name="ui_9d127150" formatted="false">"Above"</string>
     <string name="ui_b3ccfd64" formatted="false">"On each launcher, open Home Assistant settings → Edit from Home Assistant. Name the TV and enable the connection. Only explicitly linked TVs receive a profile. A TV in standby or another app appears offline; it will sync when returning home."</string>
     <string name="ui_9a001070" formatted="false">"On the TV: Launcher settings → Home Assistant. Enter your HA HTTPS address and a non-admin user\'s token, then test the connection."</string>
     <string name="ui_3db38a71" formatted="false">"On the TV: open “Edit from Home Assistant”, name the TV and enable linking. Return to the launcher home screen."</string>
@@ -889,6 +976,7 @@
     <string name="ui_3e9b5234" formatted="false">"TV, refresh and placement guides"</string>
     <string name="ui_db66a359" formatted="false">"HA dashboard"</string>
     <string name="ui_db66a4e2" formatted="false">"TV dashboard"</string>
+    <string name="ui_b143808c" formatted="false">"Allowed tags (comma-separated)"</string>
     <string name="ui_5074694f" formatted="false">"Navigation bar size (%)"</string>
     <string name="ui_43b5259b" formatted="false">"Greeting size"</string>
     <string name="ui_5e21bc36" formatted="false">"Clock size"</string>
@@ -901,6 +989,7 @@
     <string name="ui_8eb98dac" formatted="false">"App name size"</string>
     <string name="ui_99563bea" formatted="false">"Row heading size"</string>
     <string name="ui_9a0ac196" formatted="false">"HA logo size"</string>
+    <string name="ui_1de56d0d" formatted="false">"Logo size inside the custom shape (%)"</string>
     <string name="ui_dc16ace0" formatted="false">"Text size"</string>
     <string name="ui_78b53398" formatted="false">"Element text size"</string>
     <string name="ui_849103d3" formatted="false">"Navigation text size"</string>
@@ -913,12 +1002,14 @@
     <string name="ui_c9ed0eb9" formatted="false">"Size and spacing"</string>
     <string name="ui_7c5b260a" formatted="false">"Maximum cache size"</string>
     <string name="ui_bd71f71e" formatted="false">"Done"</string>
+    <string name="ui_e6968836" formatted="false">"HA test failed. Check the address and token in Home Assistant connection."</string>
     <string name="ui_f11ff3cb" formatted="false">"8-second test on this TV only, without waking it."</string>
     <string name="ui_e796eb3a" formatted="false">"Test sent to the TV. Check the banner on screen; it disappears after 8 seconds."</string>
     <string name="ui_89f26f9d" formatted="false">"Test failed: check the HA connection, TV approval and notification activation. Wait one second before retrying."</string>
     <string name="ui_cd94d352" formatted="false">"Test not sent: TV asleep, disconnected or reception disabled. No message will be retained."</string>
     <string name="ui_369d1b9e" formatted="false">"Test Home Assistant connection"</string>
     <string name="ui_78061075" formatted="false">"Test notification"</string>
+    <string name="ui_7d6d0244" formatted="false">"Test root access"</string>
     <string name="ui_4cf70b8" formatted="false">"Text"</string>
     <string name="ui_a2f7db04" formatted="false">"Text ({state}, {name}, {entity})"</string>
     <string name="ui_1ab69ff6" formatted="false">"Displayed text ({state}, {name}, {greeting})"</string>
@@ -940,8 +1031,10 @@
     <string name="ui_2b8743f6" formatted="false">"Every 5 minutes"</string>
     <string name="ui_5b47570" formatted="false">"Every 6 hours"</string>
     <string name="ui_5e3e7f0c" formatted="false">"All cards"</string>
+    <string name="ui_b2709304" formatted="false">"All conditions must match. Offline or unknown state: card hidden, never deleted. HA states must match exactly: on, off, playing…"</string>
     <string name="ui_67006dc6" formatted="false">"Every hour"</string>
     <string name="ui_87fec561" formatted="false">"Every minute"</string>
+    <string name="ui_506853ea" formatted="false">"All notifications"</string>
     <string name="ui_b63065c9" formatted="false">"Transfer"</string>
     <string name="ui_28035a" formatted="false">"Type"</string>
     <string name="ui_305e85ac" formatted="false">"Type: "</string>
@@ -959,17 +1052,21 @@
     <string name="ui_135cc81d" formatted="false">"A real HA dashboard, on demand"</string>
     <string name="ui_5d49297c" formatted="false">"A previous YAML version remains available in the editor."</string>
     <string name="ui_2da2a57d" formatted="false">"A check is already in progress."</string>
+    <string name="ui_cd37fed1" formatted="false">"Only content shared by apps with Android TV. No access to accounts or private histories."</string>
+    <string name="ui_62420dee" formatted="false">"Selected tags only"</string>
     <string name="ui_49ac5ce4" formatted="false">"Uses the voice search service installed on this TV."</string>
     <string name="ui_61fd889b" formatted="false">"Use this color"</string>
     <string name="ui_47d77bb" formatted="false">"Use members of an HA group"</string>
     <string name="ui_d5430cf3" formatted="false">"Use my local cards"</string>
     <string name="ui_7b59e468" formatted="false">"Use the non-admin TV account token"</string>
     <string name="ui_6e801b0d" formatted="false">"YOUR LOCAL CARDS"</string>
+    <string name="ui_249c8edb" formatted="false">"Condition value"</string>
     <string name="ui_69a26ea3" formatted="false">"Validate before saving · the editor runs no actions"</string>
     <string name="ui_2df8e104" formatted="false">"Validate and enable HA file"</string>
     <string name="ui_28e93bfc" formatted="false">"Validate and apply card YAML"</string>
     <string name="ui_18380157" formatted="false">"Validate YAML"</string>
     <string name="ui_5aa13d1c" formatted="false">"Validate the YAML of each modified HA card before saving."</string>
+    <string name="ui_5c918ec8" formatted="false">"Validate or discard the YAML draft before undoing another change."</string>
     <string name="ui_48579bef" formatted="false">"APK version and shareable technical report"</string>
     <string name="ui_936276d7" formatted="false">"Installed version: "</string>
     <string name="ui_1effcc6b" formatted="false">"Previous version restored and sent."</string>
@@ -992,6 +1089,7 @@
     <string name="ui_1beb7e2e" formatted="false">"Unable to check while offline or the network is unavailable. Try again later."</string>
     <string name="ui_b5c5518" formatted="false">"Actual home app check"</string>
     <string name="ui_578351c0" formatted="false">"Check completed."</string>
+    <string name="ui_c79b1004" formatted="false">"Check HA now"</string>
     <string name="ui_be9bf260" formatted="false">"Check the Home button"</string>
     <string name="ui_4fe9c49" formatted="false">"Check for updates"</string>
     <string name="ui_50cf22f3" formatted="false">"Check for new photos"</string>
@@ -1002,6 +1100,7 @@
     <string name="ui_d503c488" formatted="false">"Valid YAML, ready to send."</string>
     <string name="ui_6dcbeb4" formatted="false">"button — action"</string>
     <string name="ui_5380a0c4" formatted="false">"local configuration"</string>
+    <string name="ui_cc6e91aa" formatted="false">"shared item(s)"</string>
     <string name="ui_561cb749" formatted="false">"Home dashboard"</string>
     <string name="ui_4e24846f" formatted="false">"entity — device state"</string>
     <string name="ui_f04eea2f" formatted="false">"HA file (local cache)"</string>
@@ -1025,6 +1124,7 @@
     <string name="ui_38076c01" formatted="false">"Listen"</string>
     <string name="ui_b3f2d25" formatted="false">"Screen"</string>
     <string name="ui_cce7075d" formatted="false">"TV screen"</string>
+    <string name="ui_87e2d740" formatted="false">"Display and HDR"</string>
     <string name="ui_b06918c3" formatted="false">"Edit / import all local YAML"</string>
     <string name="ui_ff11f846" formatted="false">"TV editor"</string>
     <string name="ui_dc1e2b7a" formatted="false">"TV Assistant editor: HA address changed"</string>
@@ -1045,6 +1145,7 @@
     <string name="ui_d3e1235a" formatted="false">"Visual editor · advanced options are preserved when switching to YAML"</string>
     <string name="ui_19f74e8f" formatted="false">"Edit from Home Assistant"</string>
     <string name="ui_836c779c" formatted="false">"Edit from Home Assistant · multiple TVs"</string>
+    <string name="ui_5cd73be9" formatted="false">"Equals"</string>
     <string name="ui_4e1662e4" formatted="false">"Element"</string>
     <string name="ui_6bba7987" formatted="false">"Selected element"</string>
     <string name="ui_2f7ecb36" formatted="false">"Element visible"</string>

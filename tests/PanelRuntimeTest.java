@@ -112,11 +112,11 @@ public final class PanelRuntimeTest {
         check(!PanelStore.enabled(c),"off by default");PanelStore.enable(c,"Test TV","salon");check(PanelStore.enabled(c),"explicit activation");String id=PanelStore.identity(c);check(id.equals(PanelStore.identity(c)),"stable installation identity");
         JSONObject defaults=new JSONObject();for(Iterator<String> it=PanelStore.schema.keys();it.hasNext();){String k=it.next();defaults.put(k,PanelStore.schema.getJSONObject(k).get("default"));}
         check(PanelStore.validate(c,new JSONObject().put("schema",1).put("settings",defaults)).getJSONArray("cards").length()==0,"all shared defaults valid");
-        for(int shape=0;shape<=5;shape++) {
+        for(int shape=0;shape<=7;shape++) {
             JSONObject cfg=new JSONObject().put("schema",1).put("settings",new JSONObject().put("app_icon_shape",shape));
             check(PanelStore.validate(c,cfg).getJSONObject("settings").getInt("app_icon_shape")==shape,"all icon shapes roundtrip");
         }
-        for(int bad:new int[]{-1,6})reject(()->PanelStore.validate(c,new JSONObject().put("schema",1).put("settings",new JSONObject().put("app_icon_shape",bad))));
+        for(int bad:new int[]{-1,8})reject(()->PanelStore.validate(c,new JSONObject().put("schema",1).put("settings",new JSONObject().put("app_icon_shape",bad))));
         for(int edge=0;edge<4;edge++)for(int size:new int[]{70,100,160}){
             memory.values.put("nav_position",edge);memory.values.put("nav_scale",size);LauncherLayout layout=new LauncherLayout(memory.prefs);
             check(layout.content.left>=0&&layout.content.top>=0&&layout.content.right<=1920&&layout.content.bottom<=1080,"navigation leaves valid content area");
