@@ -1,5 +1,16 @@
 # Versions
 
+## Intégration 0.8.0 / Android 2.14.0
+
+- Notifications HA en bandeaux au-dessus des applications, après activation locale et autorisation Android de superposition. Le bandeau ne prend ni le focus ni les touches de la télécommande.
+- Aucune notification en veille, pendant l’économiseur d’écran ou sur un écran verrouillé. Aucun réveil, historique, file d’attente ou rattrapage ; les messages de l’ancienne session sont rejetés après le réveil.
+- Actions `home_assistant_tv.notify` et `home_assistant_tv.dismiss_notification` : sélection des TV, titre, texte, quatre positions, durée de 3 à 60 secondes et identifiant pour remplacer ou retirer le bandeau.
+- Réception réservée au compte propriétaire de la TV approuvée. Envoi par son propriétaire, un administrateur ou une automatisation HA ; aucun nouveau port réseau sur la TV.
+- État de réception distinct de l’état de l’éditeur et exemples d’actions dans **TV Assistant → Téléviseurs**.
+- Paramètres du launcher regroupés par fonction, connexion HA séparée des cartes et des autorisations système, suppression des entrées redondantes. Réglages existants conservés.
+
+Les deux composants doivent être mis à jour. Fonction texte uniquement, facultative, avec un indicateur de service Android. Après un redémarrage ou un arrêt forcé, ouvrir le launcher pour relancer la réception. Certains fabricants ou applications peuvent bloquer les superpositions. Les cartes conditionnelles ne font pas partie de cette version.
+
 ## Intégration 0.7.5 / Android 2.13.8
 
 - Téléchargement de l’APK depuis les publications stables GitHub, sur demande depuis **Mises à jour et diagnostic**, avec progression et annulation.

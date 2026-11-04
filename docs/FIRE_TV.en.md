@@ -27,7 +27,7 @@ Do not rely on the Fire TV product name or Fire OS number alone. Check the exact
 
 **APK 2.13.9, beta 1:** [prerelease notes](https://github.com/Philiphall6/tv-assistant/releases/tag/firetv-2.13.9-beta.1) · [download the signed APK](https://github.com/Philiphall6/tv-assistant/releases/download/firetv-2.13.9-beta.1/TVAssistant-2.13.9.apk) · [SHA256SUMS](https://github.com/Philiphall6/tv-assistant/releases/download/firetv-2.13.9-beta.1/SHA256SUMS).
 
-The prerelease retains the stable package ID and signing certificate. Its Android version code is `64`. Stable APK 2.13.8 does not include these adaptations. The built-in updater excludes prereleases, so testing requires a manual download. The HA integration remains at 0.7.5; no HACS update or reinstallation is needed to try this APK.
+The prerelease retains the stable package ID and signing certificate. Its Android version code is `64`. APK 2.14.0 (code `65`) retains these adaptations and can replace this beta without uninstalling, but Fire TV support remains experimental. The built-in updater excludes prereleases. Notifications require HA integration 0.8.0 and overlay permission supported by the firmware; they have not been validated on physical Fire TV hardware.
 
 Contributors can also follow the [build guide](BUILD.md); never distribute an unsigned APK or private signing key.
 

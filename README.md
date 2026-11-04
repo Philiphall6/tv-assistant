@@ -54,7 +54,7 @@ Captures fournies et autorisées pour publication par le propriétaire du projet
 - Connexion Home Assistant **HTTPS avec certificat valide** obligatoire. Les certificats non valides et les connexions HTTP sont refusés.
 - Le choix du launcher par défaut dépend du fabricant. L’application ne désactive jamais automatiquement le launcher système.
 
-**Amazon Fire TV :** l’[APK expérimental 2.13.9 — bêta 1](https://github.com/Philiphall6/tv-assistant/releases/tag/firetv-2.13.9-beta.1) est proposé aux testeurs sous Fire OS avec API Android 30 minimum. Lire le [guide et les limites](docs/FIRE_TV.md) avant installation. Aucun Fire TV réel n’a été validé. Vega OS est exclu ; le remplacement de l’accueil Amazon n’est pas garanti. Cette préversion manuelle ne remplace ni l’APK stable 2.13.8 ni l’intégration HACS 0.7.5.
+**Amazon Fire TV :** les adaptations de l’[APK expérimental 2.13.9 — bêta 1](https://github.com/Philiphall6/tv-assistant/releases/tag/firetv-2.13.9-beta.1) sont conservées dans l’APK 2.14.0, mais Fire OS reste expérimental (API Android 30 minimum). Lire le [guide et les limites](docs/FIRE_TV.md) avant installation. Aucun Fire TV réel n’a été validé. Vega OS est exclu ; le remplacement de l’accueil Amazon et les superpositions ne sont pas garantis.
 
 ## Fonctions
 
@@ -65,6 +65,7 @@ Captures fournies et autorisées pour publication par le propriétaire du projet
 - Cartes Lovelace réelles dans une surface WebView persistante, ressources fournies par votre HA, sans rechargement périodique de la page. Pointeur télécommande pour les cartes interactives.
 - Fonds unis, image locale, album Google Photos partagé avec cache et synchronisation. Cette dernière fonction dépend du format des albums publics Google et peut nécessiter des adaptations.
 - Respect de l’économiseur d’écran système après inactivité, sans modifier les albums Google ni les délais configurés sur la TV.
+- Notifications HA facultatives au-dessus des applications : aucun réveil, aucune notification en veille et aucun rattrapage à l’allumage. [Configuration et limites](docs/INSTALLATION.md#notifications-home-assistant).
 - Vérification manuelle des mises à jour de l’APK, option quotidienne désactivée par défaut, et diagnostic technique consultable avant partage.
 - Fond intégré TV Assistant sur les nouvelles installations ; les fonds existants sont conservés.
 - Onglet Applications : taille des icônes et des noms, applications par rangée et rangées visibles, indépendamment des favoris de l’accueil.
@@ -101,7 +102,9 @@ Dans les paramètres du launcher, **Mises à jour et diagnostic** permet de vér
 
 Le diagnostic est généré localement à partir d’une liste fermée d’informations techniques. Le contenu exact est affiché avant **Partager**, **Enregistrer** ou **Copier** ; aucun envoi automatique. Il ne contient ni journaux bruts, noms d’appareils, identifiants, URL, jetons, profils, photos ou historique. L’état HA correspond au dernier état observé sur l’accueil, pas à un nouveau test réseau.
 
-Les réglages de la grille sont dans **Applications et favoris → Disposition des applications**, ou **Rangées** dans l’éditeur HA. Les grandes icônes s’adaptent à leur cellule : réduire les colonnes ou rangées permet de les agrandir davantage. Dans **Fond d’écran**, choisir **TV Assistant** pour appliquer le nouveau fond à une installation existante.
+Les réglages de la grille sont dans **Applications et favoris → Icônes, favoris et grille des applications**, ou **Rangées** dans l’éditeur HA. Les grandes icônes s’adaptent à leur cellule : réduire les colonnes ou rangées permet de les agrandir davantage. Dans **Fond d’écran**, choisir **TV Assistant** pour appliquer le nouveau fond à une installation existante.
+
+Les paramètres locaux sont regroupés en **Accueil**, **Barre**, **Applications**, **Cartes**, **Fond**, **Connexion HA**, **Notifications**, **Télécommande et démarrage** et **Système et maintenance**. Les mises à jour et le diagnostic sont dans cette dernière rubrique ; les préférences existantes sont conservées.
 
 L’APK utilise le même identifiant technique `fr.maison.tvlauncher`, pour préserver les mises à jour des installations précédentes lorsque la signature correspond. Le domaine HA reste `home_assistant_tv` pour la même raison. Ces noms techniques ne sont pas des données personnelles.
 

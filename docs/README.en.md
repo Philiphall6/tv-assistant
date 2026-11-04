@@ -46,6 +46,18 @@ These owner-approved screenshots show a personalized example, not the default co
 
 ## Requirements
 
+### Optional Home Assistant notifications
+
+Integration **0.8.0** and APK **2.14.0** add text banners over other applications. Enable reception locally in **Settings → Home Assistant notifications** and grant Android overlay permission. The HA editor cannot grant this consent remotely.
+
+In **TV Assistant → TVs**, expand the notification instructions for an example using your TV identifier. Use `home_assistant_tv.notify` with `device_ids`, `message`, optional `title`, `duration` (3–60 seconds), `position` (one of the four corners) and `tag`. Use `home_assistant_tv.dismiss_notification` with the same `device_ids` and `tag` to remove a banner. Titles are limited to 80 characters and messages to 600; long text may be truncated on screen. One banner at a time, at most one send per second per TV, no queue.
+
+No notification while asleep, locked or in the screensaver, no wake-up and no missed-message replay on wake or reconnect. Banners do not take remote focus. Reception is owner-bound; administrators and trusted HA automations can send to approved TVs. The `sent` response means socket delivery, not confirmed display. TV Assistant stores no message history; HA automation traces can still contain action text.
+
+The optional receiver uses an Android foreground service with a discreet indicator. Open the launcher after an Android reboot or force-stop to start reception again. Vendors and protected apps may block overlays or stop the service, so this is not a guaranteed critical-alert channel. Text only in this release; no images, buttons or conditional native cards. Settings are reorganized by function without resetting existing values. See the [French setup guide and YAML examples](INSTALLATION.md#notifications-home-assistant).
+
+### Platform compatibility
+
 | Component | Requirement |
 | --- | --- |
 | TV | Android 11–16, API 30–36 |
@@ -55,7 +67,7 @@ These owner-approved screenshots show a personalized example, not the default co
 
 Android 9 and 10 are not supported. Default-home behavior varies by manufacturer. The launcher never disables the system launcher automatically.
 
-**Amazon Fire TV:** [experimental APK 2.13.9 — beta 1](https://github.com/Philiphall6/tv-assistant/releases/tag/firetv-2.13.9-beta.1) is available for community testing on Fire OS with Android API 30 or newer. Read the [guide and limitations](FIRE_TV.en.md) before installing. No physical Fire TV has been validated. Vega OS is excluded and Amazon Home replacement is not guaranteed. This manual prerelease replaces neither stable APK 2.13.8 nor HACS integration 0.7.5.
+**Amazon Fire TV:** the adaptations from [experimental APK 2.13.9 — beta 1](https://github.com/Philiphall6/tv-assistant/releases/tag/firetv-2.13.9-beta.1) are retained in APK 2.14.0, but Fire OS remains experimental (Android API 30 or newer). Read the [guide and limitations](FIRE_TV.en.md) before installing. No physical Fire TV has been validated. Vega OS is excluded; Amazon Home replacement and overlays are not guaranteed.
 
 ## Installation
 

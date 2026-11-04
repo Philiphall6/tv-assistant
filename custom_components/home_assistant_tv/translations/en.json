@@ -1,4 +1,50 @@
 {
+  "services": {
+    "notify": {
+      "name": "Send a notification",
+      "description": "Show a temporary TV banner. Standby/offline messages are discarded; nothing wakes the TV or replays on wake.",
+      "fields": {
+        "device_ids": {
+          "name": "TV identifiers",
+          "description": "List of TV Assistant identifiers from the TVs tab, for example [tv_living_room]. Not HA device-registry IDs."
+        },
+        "title": {
+          "name": "Title",
+          "description": "Plain text, up to 80 characters."
+        },
+        "message": {
+          "name": "Message",
+          "description": "Plain text, up to 600 characters."
+        },
+        "duration": {
+          "name": "Duration",
+          "description": "Display duration in seconds (3–60)."
+        },
+        "position": {
+          "name": "Position",
+          "description": "Corner of the TV screen."
+        },
+        "tag": {
+          "name": "Notification identifier",
+          "description": "Optional letters, numbers, underscores or hyphens. Reuse to replace or dismiss the banner."
+        }
+      }
+    },
+    "dismiss_notification": {
+      "name": "Dismiss a notification",
+      "description": "Remove the currently visible banner with this identifier. Does not wake the TV.",
+      "fields": {
+        "device_ids": {
+          "name": "TV identifiers",
+          "description": "List of TV Assistant identifiers from the TVs tab."
+        },
+        "tag": {
+          "name": "Notification identifier",
+          "description": "The tag used when sending the banner."
+        }
+      }
+    }
+  },
   "config": {
     "step": {
       "user": {

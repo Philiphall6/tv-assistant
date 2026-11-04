@@ -7,7 +7,8 @@ except ImportError:  # Older HA versions before its schema-library migration.
     import voluptuous as vol
 from homeassistant.components import frontend, panel_custom, websocket_api
 from homeassistant.components.http import StaticPathConfig
-from homeassistant.core import callback
+from homeassistant.core import callback, SupportsResponse
+from homeassistant.exceptions import ServiceValidationError, Unauthorized
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers import config_validation as cv
 from homeassistant.loader import async_get_integration
@@ -40,9 +41,22 @@ async def async_setup_entry(hass, entry):
             StaticPathConfig("/home_assistant_tv/ui-catalog.js", str(Path(__file__).with_name("ui-catalog.js")), False),
             StaticPathConfig("/home_assistant_tv/icons.js", str(Path(__file__).with_name("icons.js")), False),
             StaticPathConfig("/home_assistant_tv/brand-icon.svg", str(Path(__file__).parent / "brand" / "icon.svg"), False)])
-        for command in (ws_list, ws_get, ws_validate, ws_save, ws_restore, ws_assign, ws_subscribe, ws_ack, ws_preview, ws_preview_result, ws_parse_card, ws_render_subscribe, ws_delete_profile, ws_forget_device):
+        for command in (ws_list, ws_get, ws_validate, ws_save, ws_restore, ws_assign, ws_subscribe, ws_ack, ws_preview, ws_preview_result, ws_parse_card, ws_render_subscribe, ws_delete_profile, ws_forget_device, ws_notification_subscribe, ws_notification_state):
             websocket_api.async_register_command(hass, command)
         hass.data[DOMAIN + "_registered"] = True
+    async def send_notification(call):
+        user = await hass.auth.async_get_user(call.context.user_id) if call.context.user_id else None
+        if call.context.user_id and (user is None or not user.is_active):
+            raise Unauthorized()
+        try:
+            return repo(hass).notifications.send(dict(call.data),
+                owner=user.id if user else None, admin=user.is_admin if user else True,
+                dismiss=call.service == "dismiss_notification")
+        except (ValueError, TypeError, OverflowError) as error:
+            raise ServiceValidationError(str(error)) from error
+    for service in ("notify", "dismiss_notification"):
+        hass.services.async_register(DOMAIN, service, send_notification,
+            supports_response=SupportsResponse.OPTIONAL)
     # Load the icon on every HA page, not only after opening the TV editor.
     frontend.add_extra_js_url(hass, icons_url)
     hass.data[DOMAIN + "_icons_url"] = icons_url
@@ -56,6 +70,8 @@ async def async_setup_entry(hass, entry):
 
 
 async def async_unload_entry(hass, entry):
+    for service in ("notify", "dismiss_notification"):
+        hass.services.async_remove(DOMAIN, service)
     repository = hass.data.pop(DOMAIN, None)
     if repository:
         repository.close()
@@ -77,6 +93,32 @@ def result(connection, msg, value):
 
 def failure(connection, msg, error):
     connection.send_error(msg["id"], "invalid_profile", str(error))
+
+
+@websocket_api.websocket_command({vol.Required("type"): DOMAIN + "/notification_subscribe",
+    vol.Required("device_id"): str, vol.Required("ready"): bool, vol.Required("session"): str})
+@callback
+def ws_notification_subscribe(hass, connection, msg):
+    try:
+        hub = repo(hass).notifications
+        key = (connection, msg["id"])
+        hub.subscribe(key, msg["device_id"], connection.user.id,
+                      lambda payload: connection.send_event(msg["id"], payload), msg["ready"], msg["session"])
+        connection.subscriptions[msg["id"]] = lambda: hub.remove(key)
+        result(connection, msg, None)
+    except (ValueError, TypeError, OverflowError) as err:
+        failure(connection, msg, err)
+
+
+@websocket_api.websocket_command({vol.Required("type"): DOMAIN + "/notification_state",
+    vol.Required("subscription"): int, vol.Required("ready"): bool, vol.Required("session"): str})
+@callback
+def ws_notification_state(hass, connection, msg):
+    try:
+        repo(hass).notifications.state((connection, msg["subscription"]), msg["ready"], msg["session"])
+        result(connection, msg, None)
+    except (ValueError, TypeError, OverflowError) as err:
+        failure(connection, msg, err)
 
 
 @websocket_api.websocket_command({vol.Required("type"): DOMAIN + "/parse_card", vol.Required("yaml"): str})

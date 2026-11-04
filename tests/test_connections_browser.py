@@ -34,6 +34,17 @@ with sync_playwright() as p:
     page.get_by_role("heading",name="Connecter une TV en 3 étapes",exact=True).wait_for()
     assert page.get_by_text("Éditeur hors ligne",exact=True).count()==1
     assert page.get_by_text("Synchronisation en attente",exact=True).count()==1
+    page.get_by_text("Envoyer une notification depuis HA",exact=True).click()
+    assert page.locator("pre").inner_text().startswith("action: home_assistant_tv.notify")
+    assert '"fixture-tv"' in page.locator("pre").inner_text()
+    assert page.get_by_text("Notifications : non reliées ou désactivées",exact=True).count()==1
+    page.set_viewport_size({"width":390,"height":844})
+    assert page.evaluate("document.documentElement.scrollWidth<=window.innerWidth")
+    page.set_viewport_size({"width":1280,"height":1000})
+    for state,label in (("ready","Notifications : réception prête"),("paused","Notifications : veille ou affichage suspendu")):
+        page.evaluate("state=>{panel.meta.devices[0].notifications=state;panel.render();}",state)
+        assert page.get_by_text(label,exact=True).count()==1
+        assert page.get_by_text("Éditeur hors ligne",exact=True).count()==1
     page.once("dialog",lambda d:d.dismiss())
     page.get_by_role("button",name="Supprimer le profil",exact=True).click()
     assert page.evaluate("calls.every(c=>!c.type.endsWith('/delete_profile'))")

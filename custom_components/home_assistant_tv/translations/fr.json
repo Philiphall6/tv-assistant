@@ -1,4 +1,50 @@
 {
+  "services": {
+    "notify": {
+      "name": "Envoyer une notification",
+      "description": "Afficher un bandeau temporaire. Messages abandonnés en veille ou hors ligne, sans réveil ni rattrapage.",
+      "fields": {
+        "device_ids": {
+          "name": "Identifiants des TV",
+          "description": "Liste des identifiants TV Assistant de l’onglet Téléviseurs, par exemple [tv_salon]. Pas les identifiants du registre d’appareils HA."
+        },
+        "title": {
+          "name": "Titre",
+          "description": "Texte brut, 80 caractères maximum."
+        },
+        "message": {
+          "name": "Message",
+          "description": "Texte brut, 600 caractères maximum."
+        },
+        "duration": {
+          "name": "Durée",
+          "description": "Durée d’affichage en secondes (3–60)."
+        },
+        "position": {
+          "name": "Position",
+          "description": "Coin de l’écran TV."
+        },
+        "tag": {
+          "name": "Identifiant de notification",
+          "description": "Facultatif : lettres, chiffres, tirets ou tirets bas. Réutilisez-le pour remplacer ou retirer le bandeau."
+        }
+      }
+    },
+    "dismiss_notification": {
+      "name": "Retirer une notification",
+      "description": "Retirer le bandeau visible portant cet identifiant. Ne réveille pas la TV.",
+      "fields": {
+        "device_ids": {
+          "name": "Identifiants des TV",
+          "description": "Liste des identifiants TV Assistant de l’onglet Téléviseurs."
+        },
+        "tag": {
+          "name": "Identifiant de notification",
+          "description": "Le tag utilisé lors de l’envoi du bandeau."
+        }
+      }
+    }
+  },
   "config": {
     "step": {
       "user": {

@@ -51,3 +51,9 @@ docker run --rm --network none -v "$PWD:/work" -w /work ghcr.io/home-assistant/h
 `CHROME_BIN` permet d’utiliser un Chromium déjà installé. Le mode audit interdit le remplacement du launcher personnel et la suite refuse un package cible qui ne se termine pas par `.audit`.
 
 Les tests de langue vérifient la priorité du choix HA sur le navigateur, les variantes régionales, le repli anglais, la conservation du brouillon et l’absence de traduction des noms personnalisés. L’instrumentation Android vérifie les ressources, les salutations, les états, les nombres et la langue vocale automatique.
+
+## Notifications et paramètres — 0.8.0 / 2.14.0
+
+Sur l’émulateur isolé Android 11/API 30, la suite complète passe, dont **255 contrôles notifications et paramètres** : politique d’affichage fermée par défaut, fenêtre de superposition réelle, absence de prise de focus et de maintien de l’écran, lancement réel du service de premier plan, extinction/réveil de l’écran, rejet des anciennes sessions et conservation des préférences. Le protocole réseau est testé avec un serveur local et un jeton fictif. L’événement d’économiseur est injecté ; ce n’est pas un test de tous les économiseurs constructeur.
+
+Les **29 tests Python**, **10 tests dans le runtime HA 2026.10.4**, cinq suites Chromium, Hassfest, les traductions et la documentation passent localement. Les tests vérifient notamment les permissions propriétaire/administrateur/automatisation, les comptes désactivés, le retrait d’une connexion et les états de réception distincts de l’éditeur. Les tests Android 16 restent à consulter dans le workflow du commit publié ; aucun Fire TV physique n’est couvert.

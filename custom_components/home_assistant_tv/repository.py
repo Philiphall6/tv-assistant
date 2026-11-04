@@ -9,6 +9,7 @@ import uuid
 from datetime import datetime, timezone
 
 from .model import ProfileError, profile_id, require, validate
+from .notifications import NotificationHub
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ class Repository:
         self.render_listeners = {}
         self.previews = {}
         self.preview_requested = {}
+        self.notifications = NotificationHub(self)
 
     async def preview(self, identity, timeout=8):
         require(identity in self.data["devices"], "TV inconnue")
@@ -69,6 +71,7 @@ class Repository:
                            "captured_at":now(), "profile":record["profile"], "revision":record.get("applied_revision")})
 
     def close(self):
+        self.notifications.close()
         for _, future in self.previews.values():
             if not future.done():future.set_exception(ProfileError("Intégration en cours de rechargement"))
         self.listeners.clear()
@@ -98,7 +101,8 @@ class Repository:
         devices = []
         for identity, record in self.data["devices"].items():
             devices.append({k: copy.deepcopy(v) for k, v in record.items() if k != "owner"} | {
-                "id": identity, "online": any(v[0] == identity for v in self.listeners.values())})
+                "id": identity, "online": any(v[0] == identity for v in self.listeners.values()),
+                "notifications": self.notifications.status(identity)})
         return {"profiles": [{"id": k, "title": v["title"], "revision": v["revision"]} for k, v in self.data["profiles"].items()], "devices": devices}
 
     def notify(self, devices=None):
@@ -177,7 +181,7 @@ class Repository:
             self.data = update
         # Stop both profile and real-card streams. Other HA subscriptions and
         # the TV's credentials are not touched. Reconnection requires approval.
-        detached, notifications = [], []
+        detached, notifications = self.notifications.forget(identity), []
         snapshot = {"device_id": identity, "device_name": old["name"],
                     "profile": old["profile"], "revision": 0, "config": None,
                     "approval_required": True, "connection_removed": True}

@@ -5,12 +5,12 @@ from pathlib import Path
 import sys
 from types import SimpleNamespace
 import unittest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from custom_components import home_assistant_tv as component
 from custom_components.home_assistant_tv.repository import Repository
-from homeassistant.exceptions import Unauthorized
+from homeassistant.exceptions import Unauthorized, ServiceValidationError
 
 
 class Connection:
@@ -31,7 +31,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         self.store=SimpleNamespace(async_save=AsyncMock(),async_load=AsyncMock(return_value=None))
         self.repo=Repository(self.store)
         self.hass=SimpleNamespace(data={component.DOMAIN:self.repo},async_create_background_task=schedule,
-                                  http=SimpleNamespace(async_register_static_paths=AsyncMock()))
+                                  http=SimpleNamespace(async_register_static_paths=AsyncMock()),
+                                  services=SimpleNamespace(async_register=MagicMock(),async_remove=MagicMock()),
+                                  auth=SimpleNamespace(async_get_user=AsyncMock()))
         self.cfg={"schema":1,"settings":{"hero_subtitle":"Test"},"cards":[]}
 
     async def call(self,handler,conn,**msg):
@@ -71,7 +73,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         self.hass.data[component.frontend.DATA_EXTRA_MODULE_URL]=modules
         with patch.object(component,"async_get_integration",new_callable=AsyncMock,return_value=SimpleNamespace(version="9.8.7")),patch.object(component,"Store",return_value=self.store),patch.object(component.websocket_api,"async_register_command",side_effect=lambda h,c:commands.append(c)),patch.object(component.panel_custom,"async_register_panel",new_callable=AsyncMock) as panel,patch.object(component.frontend,"async_remove_panel"):
             self.assertTrue(await component.async_setup_entry(self.hass,SimpleNamespace()))
-            self.assertEqual(len(commands),14)
+            self.assertEqual(len(commands),16)
             self.assertTrue(panel.call_args_list[0].kwargs["require_admin"])
             self.assertEqual(panel.call_args_list[0].kwargs["sidebar_icon"],"tv-assistant:logo")
             self.assertEqual(panel.call_args_list[0].kwargs["config"],{"integration_version":"9.8.7"})
@@ -85,9 +87,60 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             self.assertTrue(await component.async_unload_entry(self.hass,None))
             self.assertFalse(modules.urls)
             self.assertTrue(await component.async_setup_entry(self.hass,None))
-            self.assertEqual(len(commands),14)
+            self.assertEqual(len(commands),16)
             self.hass.http.async_register_static_paths.assert_awaited_once()
             self.assertEqual(modules.urls,{"/home_assistant_tv/icons.js?v=9.8.7"})
+
+    async def test_notification_subscription_ownership_sleep_and_removal(self):
+        tv=Connection(False);admin=Connection();outsider=Connection(False);outsider.user.id="outsider"
+        await self.call(component.ws_subscribe,tv,device_id="tv1",name="TV",profile="salon",config=self.cfg,apps=[])
+        await self.call(component.ws_save,admin,profile="salon",title="Salon",revision=0,config=self.cfg)
+        await self.call(component.ws_assign,admin,device_id="tv1",profile="salon",name="TV")
+        await self.call(component.ws_notification_subscribe,outsider,device_id="tv1",ready=True,session="a"*32)
+        self.assertTrue(outsider.errors)
+        receiver=Connection(False)
+        await self.call(component.ws_notification_subscribe,receiver,device_id="tv1",ready=True,session="a"*32)
+        self.assertFalse(receiver.errors)
+        hub=self.repo.notifications
+        self.assertEqual(hub.send({"device_ids":["tv1"],"message":"Test"},owner="test-user")["sent"],1)
+        await self.call(component.ws_notification_state,receiver,subscription=1,ready=False,session="b"*32)
+        hub.last_sent.clear()
+        self.assertEqual(hub.send({"device_ids":["tv1"],"message":"Missed"},admin=True)["sent"],0)
+        await self.call(component.ws_notification_state,receiver,subscription=1,ready=True,session="c"*32)
+        self.assertEqual(len(receiver.events),1)
+        await self.call(component.ws_forget_device,admin,device_id="tv1")
+        self.assertFalse(receiver.subscriptions)
+        self.assertEqual(receiver.events[-1][1],{"kind":"notifications_closed"})
+
+    async def test_notification_action_active_owner_admin_and_automation_permissions(self):
+        modules=component.frontend.UrlManager(lambda *args:None,[])
+        self.hass.data[component.frontend.DATA_EXTRA_MODULE_URL]=modules
+        with patch.object(component,"async_get_integration",new_callable=AsyncMock,return_value=SimpleNamespace(version="9.8.7")),patch.object(component,"Store",return_value=self.store),patch.object(component.websocket_api,"async_register_command"),patch.object(component.panel_custom,"async_register_panel",new_callable=AsyncMock):
+            await component.async_setup_entry(self.hass,None)
+        repo=self.hass.data[component.DOMAIN]
+        await repo.register("tv1","TV","salon","owner",self.cfg,[])
+        await repo.save("salon","Salon",self.cfg,0)
+        await repo.assign("tv1","salon","TV")
+        events=[]
+        repo.notifications.subscribe((object(),1),"tv1","owner",events.append,True,"a"*32)
+        handler=self.hass.services.async_register.call_args_list[0].args[2]
+        call=SimpleNamespace(service="notify",context=SimpleNamespace(user_id="owner"),data={"device_ids":["tv1"],"message":"Fixture","tag":"test"})
+        for active,admin,identity,allowed in ((True,False,"owner",True),(True,False,"other",False),(True,True,"admin",True),(False,True,"disabled",False)):
+            call.context.user_id=identity
+            self.hass.auth.async_get_user.return_value=SimpleNamespace(id=identity,is_active=active,is_admin=admin)
+            repo.notifications.last_sent.clear()
+            if allowed:self.assertEqual((await handler(call))["sent"],1)
+            else:
+                with self.assertRaises((ServiceValidationError,Unauthorized)):await handler(call)
+        self.hass.auth.async_get_user.return_value=None
+        with self.assertRaises(Unauthorized):await handler(call)
+        call.context.user_id=None;repo.notifications.last_sent.clear()
+        self.assertEqual((await handler(call))["sent"],1)
+        call.service="dismiss_notification";call.data={"device_ids":["tv1"],"tag":"test"}
+        self.assertEqual((await handler(call))["sent"],1)
+        self.assertEqual(events[-1]["kind"],"notification_dismiss")
+        call.data={"device_ids":["tv1"],"tag":"test","url":"https://fixture.invalid"}
+        with self.assertRaises(ServiceValidationError):await handler(call)
 
     async def test_renderer_owner_or_admin_and_no_native_ack_or_online_status(self):
         await self.repo.register("tv1","TV","salon","test-user",self.cfg,[])

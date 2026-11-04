@@ -22,6 +22,7 @@ scripts/sign-apk.sh "$TVA_UNSIGNED" "$TVA_KEYS/audit.apk"
 scripts/sign-apk.sh "$TVA_TEST_DIR/instrumentation-unsigned.apk" "$TVA_KEYS/tests.apk"
 adb -s "$ANDROID_SERIAL" install -r "$TVA_KEYS/audit.apk"
 adb -s "$ANDROID_SERIAL" install -r "$TVA_KEYS/tests.apk"
+adb -s "$ANDROID_SERIAL" shell appops set fr.maison.tvlauncher.audit SYSTEM_ALERT_WINDOW allow
 adb -s "$ANDROID_SERIAL" shell am instrument -w fr.maison.tvlauncher.tests/fr.maison.tvlauncher.PanelInstrumentation | tee build/instrumentation.log
 grep -q '^PASS: ' build/instrumentation.log
 ! grep -Eq 'FAIL:|INSTRUMENTATION_FAILED|Process crashed' build/instrumentation.log

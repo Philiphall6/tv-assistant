@@ -1,5 +1,43 @@
 # Installer TV Assistant
 
+## Notifications Home Assistant
+
+Nécessite **l’intégration 0.8.0 et l’APK 2.14.0**, ou des versions ultérieures. HACS et l’APK se mettent à jour séparément.
+
+1. Relier et approuver la TV comme indiqué ci-dessous.
+2. Sur la TV, ouvrir **Paramètres → Notifications Home Assistant**, autoriser la superposition dans Android, puis activer la réception. Cette autorisation reste locale : un profil HA ne peut pas l’activer à distance.
+3. Dans **TV Assistant → Téléviseurs**, déplier **Envoyer une notification depuis HA** pour obtenir l’exemple avec le bon identifiant de TV. Le statut de réception est indépendant de l’aperçu de l’éditeur, qui peut être hors ligne pendant une autre application.
+
+Exemple d’action HA, avec un identifiant fictif à remplacer par celui affiché dans votre éditeur :
+
+```yaml
+action: home_assistant_tv.notify
+data:
+  device_ids: [tv_exemple]
+  title: Maison
+  message: Le programme est terminé.
+  duration: 8
+  position: top_right
+  tag: lave_linge
+```
+
+Pour retirer le bandeau lorsqu’un appareil s’arrête, utiliser la même TV et le même `tag` dans une seconde automatisation :
+
+```yaml
+action: home_assistant_tv.dismiss_notification
+data:
+  device_ids: [tv_exemple]
+  tag: lave_linge
+```
+
+Positions : `top_right`, `top_left`, `bottom_right`, `bottom_left`. Durée : 3 à 60 secondes ; titre : 80 caractères ; message : 600 caractères maximum. Un nouveau bandeau remplace le précédent, sans file d’attente. Limite : un envoi par seconde et par TV. Les textes longs peuvent être tronqués à l’écran. Le `tag` permet le retrait ciblé, mais ce n’est pas une carte permanente ou conditionnelle.
+
+**Veille et confidentialité :** aucun affichage écran éteint, verrouillé ou pendant l’économiseur d’écran ; aucun réveil ni rattrapage à l’allumage, même pour un ancien message encore en transit. Aucun historique dans TV Assistant. Les notifications utilisent le jeton protégé et la connexion HTTPS/WSS existants, sans service cloud ni port entrant ajouté sur la TV. Les traces d’automatisation de HA peuvent toutefois conserver le texte de l’action.
+
+Seuls le propriétaire de la TV approuvée, un administrateur et les automatisations HA autorisées peuvent envoyer un message. Le compte de réception TV peut rester non administrateur. Une réponse `sent` indique une remise au flux connecté, **pas une garantie d’affichage Android** ; `skipped` compte les TV non reliées ou dont l’affichage est suspendu.
+
+**Limites :** première version texte uniquement, sans image ni bouton. La réception utilise un service Android facultatif avec un indicateur discret. Après un redémarrage Android ou un arrêt forcé, ouvrir le launcher une fois. Certains fabricants, réglages d’économie d’énergie et applications protégées peuvent masquer les superpositions ou arrêter le service : ne pas l’utiliser comme unique canal d’alerte critique. Une future distribution Google Play nécessitera aussi la déclaration et l’examen du service `specialUse`.
+
 ## Comprendre la connexion TV ↔ Home Assistant
 
 Les deux liaisons sont distinctes : **données HA** (états et commandes de la maison) et **éditeur TV Assistant** (profils, mise en page et aperçu). Une TV peut donc accéder à HA sans apparaître connectée dans l’éditeur.

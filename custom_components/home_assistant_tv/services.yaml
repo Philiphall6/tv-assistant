@@ -1,0 +1,45 @@
+notify:
+  fields:
+    device_ids:
+      required: true
+      example: [tv_living_room]
+      selector:
+        object:
+    title:
+      default: TV Assistant
+      selector:
+        text:
+    message:
+      required: true
+      selector:
+        text:
+          multiline: true
+    duration:
+      default: 8
+      selector:
+        number:
+          min: 3
+          max: 60
+          unit_of_measurement: s
+          mode: box
+    position:
+      default: top_right
+      selector:
+        select:
+          options: [top_right, top_left, bottom_right, bottom_left]
+    tag:
+      example: laundry
+      selector:
+        text:
+dismiss_notification:
+  fields:
+    device_ids:
+      required: true
+      example: [tv_living_room]
+      selector:
+        object:
+    tag:
+      required: true
+      example: laundry
+      selector:
+        text:

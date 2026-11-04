@@ -173,6 +173,58 @@ class RepositoryTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.store=Store();self.r=r.Repository(self.store);self.cfg={"schema":1,"settings":{"hero_subtitle":"Original"},"cards":[]}
 
+    async def notification_fixture(self):
+        await self.r.save("test","Test",self.cfg,0)
+        for identity,owner in (("tv1","owner"),("tv2","other")):
+            await self.r.register(identity,"Test TV","test",owner,self.cfg,[])
+            await self.r.assign(identity,"test","Test TV")
+        return self.r.notifications
+
+    async def test_notifications_sleep_disconnect_no_replay_or_storage(self):
+        hub=await self.notification_fixture();messages=[];key=(object(),1)
+        hub.subscribe(key,"tv1","owner",messages.append,True,"a"*32)
+        before=copy.deepcopy(self.r.data);payload={"device_ids":["tv1"],"message":"Fixture only","tag":"cycle"}
+        self.assertEqual(hub.send(payload,owner="owner"),{"sent":1,"skipped":0})
+        self.assertEqual(messages[-1]["session"],"a"*32)
+        hub.state(key,False,"b"*32);hub.last_sent.clear()
+        self.assertEqual(hub.send(payload,owner="owner"),{"sent":0,"skipped":1})
+        hub.state(key,True,"c"*32)
+        self.assertEqual(len(messages),1,"No replay at wake-up")
+        hub.remove(key)
+        self.assertEqual(hub.send(payload,owner="owner")["sent"],0)
+        hub.subscribe((object(),1),"tv1","owner",messages.append,True,"d"*32)
+        self.assertEqual(len(messages),1,"No replay at reconnect")
+        self.assertEqual(self.r.data,before,"No notification text or status stored")
+        self.assertFalse(self.r.overview()["devices"][0]["online"],"Notification receiver is not the editor")
+
+    async def test_notifications_authorization_and_forget(self):
+        hub=await self.notification_fixture();messages=[];key=(object(),1)
+        with self.assertRaises(ValueError):hub.subscribe(key,"tv1","other",messages.append,True,"a"*32)
+        hub.subscribe(key,"tv1","owner",messages.append,True,"a"*32)
+        with self.assertRaises(ValueError):hub.send({"device_ids":["tv1","tv2"],"message":"Test"},owner="owner")
+        self.assertFalse(messages,"No partial delivery on invalid targets")
+        self.assertEqual(hub.send({"device_ids":["tv1","tv2"],"message":"Test"},admin=True),{"sent":1,"skipped":1})
+        self.assertIn(key,await self.r.forget_device("tv1"))
+        self.assertEqual(messages[-1],{"kind":"notifications_closed"})
+        self.assertFalse(hub.listeners);self.assertFalse(hub.ready);self.assertFalse(hub.sessions)
+        await self.r.register("tv1","Test TV","test","owner",self.cfg,[])
+        with self.assertRaises(ValueError):hub.subscribe(key,"tv1","owner",messages.append,True,"a"*32)
+
+    async def test_notification_validation_rate_limit_and_dismiss(self):
+        hub=await self.notification_fixture();messages=[];key=(object(),1)
+        hub.subscribe(key,"tv1","owner",messages.append,True,"a"*32)
+        payload={"device_ids":["tv1"],"message":"Test","tag":"cycle"}
+        for patch in ({"device_ids":[]},{"device_ids":["../wrong"]},{"message":""},{"message":"a"*601},
+                      {"duration":True},{"duration":0},{"duration":61},{"position":"elsewhere"},
+                      {"image":"https://untrusted.invalid/a"},{"tag":"bad tag"},{"message":"\0hidden"}):
+            with self.subTest(patch=patch),self.assertRaises((ValueError,TypeError)):hub.send(payload|patch,owner="owner")
+        hub.send(payload,owner="owner")
+        with self.assertRaises(ValueError):hub.send(payload,owner="owner")
+        hub.send({"device_ids":["tv1"],"tag":"cycle"},owner="owner",dismiss=True)
+        self.assertEqual(messages[-1],{"kind":"notification_dismiss","tag":"cycle","session":"a"*32})
+        with self.assertRaises(ValueError):hub.state((object(),1),True,"b"*32)
+        hub.close();self.assertFalse(hub.listeners)
+
     async def test_profile_isolation_broadcast_and_shared_profile(self):
         for profile in ("salon","chambre"):
             await self.r.save(profile,profile,self.cfg,0)
