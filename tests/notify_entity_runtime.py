@@ -197,5 +197,16 @@ class NotifyEntityTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(sum(e.unique_id=="fast-tv_notifications" for e in entries),1)
         self.assertEqual(len(self.platform.entities),2)
 
+    async def test_forgetting_tv_preserves_device_with_another_disabled_entity(self):
+        registry=er.async_get(self.hass)
+        device_id=registry.async_get(self.entity().entity_id).device_id
+        other=registry.async_get_or_create("sensor","template","fixture-kept",device_id=device_id,
+            config_entry=self.entry,disabled_by=er.RegistryEntryDisabler.USER)
+        await self.repo.forget_device("fixture-tv")
+        await self.hass.async_block_till_done()
+        self.assertIsNotNone(dr.async_get(self.hass).async_get(device_id))
+        self.assertEqual(registry.async_get(other.entity_id).device_id,device_id)
+        self.assertIsNone(registry.async_get_entity_id("notify","home_assistant_tv","fixture-tv_notifications"))
+
 
 if __name__=="__main__":unittest.main(verbosity=2)

@@ -83,7 +83,7 @@ class NotificationEntities:
                 if (registered.domain == "notify" and registered.platform == DOMAIN
                         and registered.unique_id not in valid_unique_ids):
                     registry.async_remove(registered.entity_id)
-                    if (registered.device_id and not er.async_entries_for_device(registry, registered.device_id)
+                    if (registered.device_id and not er.async_entries_for_device(registry, registered.device_id, include_disabled_entities=True)
                             and (device := devices.async_get(registered.device_id))):
                         # Never remove another integration's device association.
                         owner_entry = getattr(device, "config_entry_id", None)

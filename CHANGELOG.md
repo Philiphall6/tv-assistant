@@ -1,5 +1,10 @@
 # Versions
 
+## Intégration 0.8.2 / Android 2.14.0 inchangé
+
+- Lors du retrait d’une connexion TV, conserver l’appareil HA si une autre entité lui reste attachée, même désactivée. Seule l’entité de notification TV Assistant est retirée. Test de non-régression ajouté.
+- Conserve le bouton de test et les entités de notification de la version 0.8.1. APK inchangé.
+
 ## Intégration 0.8.1 / Android 2.14.0 inchangé
 
 - Bouton **Tester la notification** sur chaque fiche TV, avec retour d’envoi, réception non prête ou erreur. Test de 8 secondes, ciblage d’une seule TV, protection contre les doubles clics, sans réveil ni nouvel essai automatique.
