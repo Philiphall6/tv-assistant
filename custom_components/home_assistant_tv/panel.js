@@ -1,4 +1,5 @@
 /* TV Assistant — local admin editor. No CDN, analytics, eval or HA service calls. */
+import "/home_assistant_tv/icons.js?v=0.7.5";
 import {raw as userText, isRaw, languageOf, translate} from "/home_assistant_tv/localize.js?v=0.7.1";
 const clone = value => JSON.parse(JSON.stringify(value));
 function node(tag, attrs = {}, ...children) {

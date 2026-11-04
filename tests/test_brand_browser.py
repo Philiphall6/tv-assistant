@@ -14,8 +14,30 @@ with sync_playwright() as p:
     page.on("request", lambda request: requests.append(request.url))
     # Global module loads independently of the panel and preserves other icon sets.
     page.evaluate("window.customIcons={existing:{getIcon:async()=>({path:'M0 0'})}}")
+    # Model HA's real legacy renderer latch when an icon is requested before its
+    # extra module loads. Repair must be limited to our icons, including shadows.
+    page.evaluate("""() => {
+      customElements.define('ha-icon', class extends HTMLElement {
+        constructor(){super();this.attachShadow({mode:'open'});this._icon='';this.legacy=false;this.changes=[];}
+        get icon(){return this._icon;}
+        set icon(value){
+          this._icon=value;this.changes.push(value);
+          if(value.startsWith('mdi:')) this.legacy=false;
+          else if(!window.customIcons?.[value.split(':')[0]]) this.legacy=true;
+          this.shadowRoot.innerHTML=this.legacy?'<iron-icon></iron-icon>':'<ha-svg-icon></ha-svg-icon>';
+          this.updateComplete=Promise.resolve(true);
+        }
+      });
+      const host=document.createElement('div');host.attachShadow({mode:'open'});document.body.append(host);
+      window.earlyIcon=document.createElement('ha-icon');earlyIcon.icon='tv-assistant:logo';host.shadowRoot.append(earlyIcon);
+      window.otherIcon=document.createElement('ha-icon');otherIcon.icon='other:logo';host.shadowRoot.append(otherIcon);
+    }""")
     page.add_script_tag(content=script,type="module")
     page.wait_for_function("() => !!window.customIcons['tv-assistant']")
+    page.wait_for_function("() => earlyIcon.icon==='tv-assistant:logo' && !earlyIcon.legacy")
+    assert page.evaluate("earlyIcon.changes")==['tv-assistant:logo','mdi:television','tv-assistant:logo']
+    assert page.evaluate("otherIcon.changes")==['other:logo']
+    page.evaluate("earlyIcon.parentNode.host.remove()")
     assert page.evaluate("async()=> (await customIcons.existing.getIcon()).path")=="M0 0"
     assert page.evaluate("async()=> (await customIcons['tv-assistant'].getIcon('unknown')).path")==""
     assert page.evaluate("async()=> (await customIcons['tv-assistant'].getIconList())[0].name")=="logo"

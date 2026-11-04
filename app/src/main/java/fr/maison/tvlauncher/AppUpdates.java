@@ -32,8 +32,15 @@ final class AppUpdates {
     interface Callback { void done(Result result); }
     static final class Release {
         final String version, tag;
-        Release(String version, String tag) { this.version = version; this.tag = tag; }
+        final long size, checksumsSize;
+        Release(String version, String tag) { this(version, tag, 0, 0); }
+        Release(String version, String tag, long size, long checksumsSize) {
+            this.version = version; this.tag = tag; this.size = size; this.checksumsSize = checksumsSize;
+        }
         String page() { return RELEASES + "/tag/" + tag; }
+        String name() { return "TVAssistant-" + version + ".apk"; }
+        String download() { return RELEASES + "/download/" + tag + "/" + name(); }
+        String checksums() { return RELEASES + "/download/" + tag + "/SHA256SUMS"; }
     }
 
     // Separate local preferences: never exported to HA profiles or diagnostic reports.
@@ -68,9 +75,19 @@ final class AppUpdates {
         JSONArray assets = json.getJSONArray("assets");
         if (assets.length() > 256) throw new IllegalArgumentException("Too many assets");
         Release newest = null;
+        long checksumsSize = 0;
+        java.util.HashSet<String> names = new java.util.HashSet<>();
         for (int i = 0; i < assets.length(); i++) {
             JSONObject asset = assets.getJSONObject(i);
             String name = asset.optString("name");
+            if (!names.add(name)) throw new IllegalArgumentException("Duplicate asset");
+            if ("SHA256SUMS".equals(name)) {
+                if (!"uploaded".equals(asset.optString("state")) || asset.optLong("size") <= 0
+                        || asset.optLong("size") > 65536
+                        || !(RELEASES + "/download/" + tag + "/SHA256SUMS").equals(asset.optString("browser_download_url")))
+                    throw new IllegalArgumentException("Unexpected checksum asset");
+                checksumsSize = asset.getLong("size");
+            }
             Matcher match = APK.matcher(name);
             if (!match.matches()) continue;
             if (!"uploaded".equals(asset.optString("state")) || asset.optLong("size") <= 0
@@ -78,9 +95,9 @@ final class AppUpdates {
                     || !(RELEASES + "/download/" + tag + "/" + name).equals(asset.optString("browser_download_url")))
                 throw new IllegalArgumentException("Unexpected APK asset");
             String version = match.group(1);
-            if (newest == null || compare(version, newest.version) > 0) newest = new Release(version, tag);
+            if (newest == null || compare(version, newest.version) > 0) newest = new Release(version, tag, asset.getLong("size"), 0);
         }
-        return newest;
+        return newest == null ? null : new Release(newest.version, newest.tag, newest.size, checksumsSize);
     }
     static Release cached(Context context) {
         SharedPreferences p = prefs(context);

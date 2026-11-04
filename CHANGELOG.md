@@ -1,5 +1,15 @@
 # Versions
 
+## Intégration 0.7.5 / Android 2.13.8
+
+- Téléchargement de l’APK depuis les publications stables GitHub, sur demande depuis **Mises à jour et diagnostic**, avec progression et annulation.
+- Contrôle de l’empreinte SHA-256, de la taille, du package, de la version, de la compatibilité Android et du certificat de signature. Nouvelle vérification avant l’installation, puis vérification finale par Android.
+- Installation avec confirmation Android et autorisation explicite pour TV Assistant. Aucun remplacement silencieux, aucune désinstallation et aucun transfert de jeton HA vers GitHub.
+- APK conservé uniquement dans le cache privé, partagé en lecture seule avec l’installateur système. Refus des adresses non prévues, retours HTTP non sûrs, fichiers incomplets et versions antérieures.
+- Logo du menu HA chargé aussi à l’ouverture de l’éditeur, avec correction des icônes déjà rendues avant le chargement du module. Aucun changement des icônes des autres intégrations.
+
+La mise à jour directe concerne la distribution GitHub, pas une future distribution Google Play. Les profils HA et réglages TV sont conservés.
+
 ## Intégration 0.7.4 / Android 2.13.7
 
 - Logo TV Assistant dans le menu latéral de Home Assistant, chargé sur toutes les pages et adapté à la couleur du thème.

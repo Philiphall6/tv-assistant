@@ -46,6 +46,7 @@
     <string name="ui_3111a64" formatted="false">"64 MB"</string>
     <string name="ui_9f5d0c9d" formatted="false">"IMAGE DISPLAY"</string>
     <string name="ui_ee075437" formatted="false">"GOOGLE PHOTOS ALBUM"</string>
+    <string name="ui_d7eedfc8" formatted="false">"APK downloaded and checked. You can now start Android installation."</string>
     <string name="ui_17a99533" formatted="false">"DEVICES AND FEATURES"</string>
     <string name="ui_aa400c74" formatted="false">"APPS AND FAVORITES"</string>
     <string name="ui_722ef29b" formatted="false">"Discard unsent changes?"</string>
@@ -124,6 +125,7 @@
     <string name="ui_898a318f" formatted="false">"Animations"</string>
     <string name="ui_f6cc3554" formatted="false">"Animate fan: "</string>
     <string name="ui_306f0ac5" formatted="false">"Cancel"</string>
+    <string name="ui_d7e7fc30" formatted="false">"Cancel download"</string>
     <string name="ui_7544faaa" formatted="false">"Preview"</string>
     <string name="ui_73477376" formatted="false">"Shape preview"</string>
     <string name="ui_c62e9b7f" formatted="false">"Preview · "</string>
@@ -189,6 +191,7 @@
     <string name="ui_fdfb765" formatted="false">"Approval required · an administrator must assign a profile to this TV in HA"</string>
     <string name="ui_680dce7a" formatted="false">"Android permissions"</string>
     <string name="ui_e556a39e" formatted="false">"Allow continue watching"</string>
+    <string name="ui_87843871" formatted="false">"Allow installation for TV Assistant"</string>
     <string name="ui_648994af" formatted="false">"TOP BAR"</string>
     <string name="ui_3cfe166" formatted="false">"Navigation"</string>
     <string name="ui_cef8d5d9" formatted="false">"Navigation bar"</string>
@@ -239,7 +242,9 @@
     <string name="ui_35a9d175" formatted="false">"This system does not offer this screen. ADB setup may be required; no changes were made."</string>
     <string name="ui_2dd24176" formatted="false">"Invalid HA certificate for this address. Use its valid HTTPS name. Back: Home"</string>
     <string name="ui_a4c44ce7" formatted="false">"Invalid HA certificate · check the HTTPS address"</string>
+    <string name="ui_a220a151" formatted="false">"Different signing certificate: update refused. Do not uninstall your launcher."</string>
     <string name="ui_423be27b" formatted="false">"These settings affect only the navigation bar, never the cards."</string>
+    <string name="ui_65984250" formatted="false">"This Android screen is unavailable. Use system settings or the official release page."</string>
     <string name="ui_37f0d97e" formatted="false">"This screen shows the last observed status. The HA preview may be offline while settings are open."</string>
     <string name="ui_15b07313" formatted="false">"This button remains reserved for navigation or the system."</string>
     <string name="ui_735df591" formatted="false">"Change photo"</string>
@@ -359,8 +364,10 @@
     <string name="ui_fcdb89de" formatted="false">"SLIDESHOW"</string>
     <string name="ui_392ee7e1" formatted="false">"In HA: Settings → Dashboards → Add → New dashboard. Name it TV, add cards, open its view and copy only the path (e.g. /dashboard-tv/tv)."</string>
     <string name="ui_ef27ecd7" formatted="false">"In HA → TV Assistant → TVs, compare the identifier below, then assign a saved profile using your admin account."</string>
+    <string name="ui_d4e75bb2" formatted="false">"In Android settings, allow TV Assistant to install this update. Then return here and choose Install. You may revoke this permission after installation."</string>
     <string name="ui_23e0fb69" formatted="false">"Home dashboard"</string>
     <string name="ui_831f8d8c" formatted="false">"Ask for confirmation on tap"</string>
+    <string name="ui_a3ec55da" formatted="false">"Checking the APK again before installation…"</string>
     <string name="ui_5482e523" formatted="false">"Last check from the home screen: "</string>
     <string name="ui_331636d" formatted="false">"Last known APK version: "</string>
     <string name="ui_d023603d" formatted="false">"Move down"</string>
@@ -438,6 +445,7 @@
     <string name="ui_10eb9438" formatted="false">"Send to Home Assistant?"</string>
     <string name="ui_eb966115" formatted="false">"HTTP error "</string>
     <string name="ui_8ec3d84" formatted="false">"Read error: "</string>
+    <string name="ui_2c839719" formatted="false">"Not enough free space for the update."</string>
     <string name="ui_7d41b7f9" formatted="false">"Favorite spacing"</string>
     <string name="ui_671a3a37" formatted="false">"Tab spacing"</string>
     <string name="ui_719d5b2a" formatted="false">"Export draft"</string>
@@ -454,6 +462,7 @@
     <string name="ui_b80d7ee3" formatted="false">"Favorites, continue watching and home"</string>
     <string name="ui_cfad42d5" formatted="false">"Close launcher settings"</string>
     <string name="ui_40a10cf" formatted="false">"Closed"</string>
+    <string name="ui_f802c30f" formatted="false">"Invalid file or release: installation refused."</string>
     <string name="ui_3a3f66a7" formatted="false">"File on the same HA server (.yaml or .json)"</string>
     <string name="ui_3b1c319" formatted="false">"Arrows: pointer · OK: click / hold · CH ±: scroll · Back: launcher"</string>
     <string name="ui_21805f" formatted="false">"Background"</string>
@@ -479,6 +488,7 @@
     <string name="ui_78d98f46" formatted="false">"Actual compressor frequency"</string>
     <string name="ui_c07cbe57" formatted="false">"HOME ASSISTANT GROUP"</string>
     <string name="ui_2bd9ab37" formatted="false">"GitHub is temporarily limiting requests. Try again later."</string>
+    <string name="ui_577375c1" formatted="false">"GitHub receives your IP address, but no HA token or TV identifier. Downloads happen only on request. Installation requires your Android approval and preserves settings."</string>
     <string name="ui_41a5d1a" formatted="false">"Drag frames; drag the bottom-right corner to resize. Arrows: move by 1%, Shift + arrows: resize. Frames are not part of the screenshot."</string>
     <string name="ui_27acdf38" formatted="false">"Google Photos · Synced slideshow"</string>
     <string name="ui_805e0dde" formatted="false">"Google TV takes over · ADB help"</string>
@@ -526,7 +536,11 @@
     <string name="ui_fb3901d8" formatted="false">"Unavailable"</string>
     <string name="ui_3f4384e7" formatted="false">"Information"</string>
     <string name="ui_9a3c6d3a" formatted="false">"App information"</string>
+    <string name="ui_d5cebd34" formatted="false">"Android installer unavailable. Use the official release page or try again."</string>
+    <string name="ui_3481fba7" formatted="false">"Installation cancelled or refused by Android. Your settings are preserved."</string>
     <string name="ui_3de35ec0" formatted="false">"Setup and permissions"</string>
+    <string name="ui_3c73e89b" formatted="false">"Installation completed."</string>
+    <string name="ui_9ef817c" formatted="false">"Install the downloaded update"</string>
     <string name="ui_c1a4f60f" formatted="false">"Install TV Assistant through HACS, restart HA, then add the integration in Settings → Devices &amp; services. Return to the TV home screen."</string>
     <string name="ui_18bb0958" formatted="false">"Install the TV Assistant integration in HA, then enable the connection here."</string>
     <string name="ui_2e6aa99f" formatted="false">"Interactive (otherwise display only)"</string>
@@ -543,6 +557,7 @@
     <string name="ui_d73e4c8d" formatted="false">"The full list is read in pages. Only photos to display are downloaded at TV size. The cache replaces older copies. Offline, only cached photos are shown. Synchronization runs while the launcher is visible and resumes when it opens."</string>
     <string name="ui_d87af0da" formatted="false">"Palette unavailable; custom color remains available."</string>
     <string name="ui_85f3d718" formatted="false">"Android TV continue watching is not available on this device."</string>
+    <string name="ui_8f9eb402" formatted="false">"The available version has changed. Check for updates again."</string>
     <string name="ui_8dc639ec" formatted="false">"The Android service transcribes speech, then sends the text to your HA agent using this TV\'s account."</string>
     <string name="ui_fff58d43" formatted="false">"Recognition language (auto = Android language)"</string>
     <string name="ui_fd16e867" formatted="false">"Recognition language (fr, en…)"</string>
@@ -581,6 +596,7 @@
     <string name="ui_3101bb9f" formatted="false">"Background brightness"</string>
     <string name="ui_8667f971" formatted="false">"Living room lights"</string>
     <string name="ui_2ed20815" formatted="false">"The APK and the HACS integration are updated separately."</string>
+    <string name="ui_3d6d7855" formatted="false">"The APK will be downloaded from the official repository, then its checksum, version and certificate will be checked. Android will ask you to confirm installation. No settings will be erased."</string>
     <string name="ui_5c742247" formatted="false">"The HA address has changed. Check it, then update the link below; do not create a new pairing unless the account has changed."</string>
     <string name="ui_ee1f9061" formatted="false">"Line order sets favorite order. Apps missing from a TV are ignored on that TV."</string>
     <string name="ui_88ed883d" formatted="false">"Home"</string>
@@ -880,9 +896,14 @@
     <string name="ui_28035a" formatted="false">"Type"</string>
     <string name="ui_305e85ac" formatted="false">"Type: "</string>
     <string name="ui_a291e6ec" formatted="false">"Card type"</string>
+    <string name="ui_a0297543" formatted="false">"Download cancelled. No settings changed."</string>
+    <string name="ui_b97193a" formatted="false">"Downloading APK: "</string>
+    <string name="ui_8642678d" formatted="false">"Download failed. Check your network and try again."</string>
+    <string name="ui_c2926ad0" formatted="false">"Download the update from GitHub"</string>
     <string name="ui_e7cbc04c" formatted="false">"Remote control"</string>
     <string name="ui_13b4be64" formatted="false">"Remote: arrows = pointer, OK = click, CH +/− = scroll, Menu = options, Back = Home cards. No periodic reload. Integration previews do not capture this web view."</string>
     <string name="ui_6683aeff" formatted="false">"TVs"</string>
+    <string name="ui_84a23f65" formatted="false">"A download is already in progress."</string>
     <string name="ui_135cc81d" formatted="false">"A real HA dashboard, on demand"</string>
     <string name="ui_5d49297c" formatted="false">"A previous YAML version remains available in the editor."</string>
     <string name="ui_2da2a57d" formatted="false">"A check is already in progress."</string>

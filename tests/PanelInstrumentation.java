@@ -19,6 +19,8 @@ public final class PanelInstrumentation extends Instrumentation {
             AmbientModeTest.run(this);
             android.util.Log.i("TVA-Tests", "PASS: " + AmbientModeTest.checks + " Ambient Mode checks");
             MaintenanceTest.run(this);
+            ApkUpdateTest.run(this);
+            android.util.Log.i("TVA-Tests", "PASS: " + ApkUpdateTest.checks + " APK download/installer security checks");
             android.util.Log.i("TVA-Tests", "PASS: " + MaintenanceTest.checks + " update/diagnostic/default-wallpaper checks");
             PlaybackRemoteTest.runUi(this);
             LocalizationTest.run(this);PanelRuntimeTest.run(null);checkLogo();checkInstallationBrand();AppIconRendererTest.main(new String[0]);CardConfigTest.main(new String[0]);HaWebAuthTest.run(this);HaLiveClientTest.run(this);WallpaperColorTest.run(this);AppActionsTest.run(this);HomeExperienceTest.run();PlaybackRemoteTest.run();SecurityTest.run(this);HeatPumpStateTest.main(new String[0]);EntitySearchTest.main(new String[0]);PhotoAlbumTest.run(this);result.putString("stream","PASS: "+PanelRuntimeTest.checks+" native validation/layout/logo checks, "+LocalizationTest.checks+" language checks, "+AppIconRendererTest.checks+" icon checks, "+CardConfigTest.checks+" card checks and "+HaWebAuthTest.checks+" WebView auth checks and "+HaLiveClientTest.checks+" live-protocol checks and "+WallpaperColorTest.checks+" wallpaper checks and "+AppActionsTest.checks+" app-menu checks and "+HomeExperienceTest.checks+" home/voice checks and "+PlaybackRemoteTest.checks+" playback/remote checks and "+SecurityTest.checks+" credential/HTTPS security checks and "+PhotoAlbumTest.checks+" album checks\n");finish(-1,result);

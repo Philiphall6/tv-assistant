@@ -46,6 +46,7 @@
     <string name="ui_3111a64" formatted="false">"64 Mo"</string>
     <string name="ui_9f5d0c9d" formatted="false">"AFFICHAGE DE L’IMAGE"</string>
     <string name="ui_ee075437" formatted="false">"ALBUM GOOGLE PHOTOS"</string>
+    <string name="ui_d7eedfc8" formatted="false">"APK téléchargé et contrôlé. Vous pouvez maintenant lancer l’installation Android."</string>
     <string name="ui_17a99533" formatted="false">"APPAREILS ET FONCTIONS"</string>
     <string name="ui_aa400c74" formatted="false">"APPLICATIONS ET FAVORIS"</string>
     <string name="ui_722ef29b" formatted="false">"Abandonner les modifications non envoyées ?"</string>
@@ -124,6 +125,7 @@
     <string name="ui_898a318f" formatted="false">"Animations"</string>
     <string name="ui_f6cc3554" formatted="false">"Animer le ventilateur : "</string>
     <string name="ui_306f0ac5" formatted="false">"Annuler"</string>
+    <string name="ui_d7e7fc30" formatted="false">"Annuler le téléchargement"</string>
     <string name="ui_7544faaa" formatted="false">"Aperçu"</string>
     <string name="ui_73477376" formatted="false">"Aperçu des formes"</string>
     <string name="ui_c62e9b7f" formatted="false">"Aperçu · "</string>
@@ -189,6 +191,7 @@
     <string name="ui_fdfb765" formatted="false">"Autorisation requise · un administrateur doit affecter un profil à cette TV dans HA"</string>
     <string name="ui_680dce7a" formatted="false">"Autorisations Android"</string>
     <string name="ui_e556a39e" formatted="false">"Autoriser la reprise de lecture"</string>
+    <string name="ui_87843871" formatted="false">"Autoriser l’installation pour TV Assistant"</string>
     <string name="ui_648994af" formatted="false">"BARRE SUPÉRIEURE"</string>
     <string name="ui_3cfe166" formatted="false">"Barre"</string>
     <string name="ui_cef8d5d9" formatted="false">"Barre de navigation"</string>
@@ -239,7 +242,9 @@
     <string name="ui_35a9d175" formatted="false">"Ce système ne propose pas cet écran. Une configuration ADB peut être nécessaire ; aucun changement n’a été effectué."</string>
     <string name="ui_2dd24176" formatted="false">"Certificat HA non valide pour cette adresse. Utilisez son nom HTTPS valide. Retour : Maison"</string>
     <string name="ui_a4c44ce7" formatted="false">"Certificat HA non valide · vérifiez l’adresse HTTPS"</string>
+    <string name="ui_a220a151" formatted="false">"Certificat différent : mise à jour refusée. Ne désinstallez pas votre launcher."</string>
     <string name="ui_423be27b" formatted="false">"Ces réglages concernent uniquement la barre, jamais les cartes."</string>
+    <string name="ui_65984250" formatted="false">"Cet écran Android est indisponible. Utilisez les paramètres système ou la publication officielle."</string>
     <string name="ui_37f0d97e" formatted="false">"Cet écran affiche le dernier état observé. L’aperçu HA peut être hors ligne pendant que les réglages sont ouverts."</string>
     <string name="ui_15b07313" formatted="false">"Cette touche reste réservée à la navigation ou au système."</string>
     <string name="ui_735df591" formatted="false">"Changer de photo"</string>
@@ -359,8 +364,10 @@
     <string name="ui_fcdb89de" formatted="false">"DIAPORAMA"</string>
     <string name="ui_392ee7e1" formatted="false">"Dans HA : Paramètres → Tableaux de bord → Ajouter → Nouveau tableau de bord. Nommez-le TV, ajoutez vos cartes, ouvrez sa vue et copiez seulement le chemin (par exemple /dashboard-tv/tv)."</string>
     <string name="ui_ef27ecd7" formatted="false">"Dans HA → TV Assistant → Téléviseurs, comparez l’identifiant ci-dessous puis affectez un profil enregistré avec votre compte administrateur."</string>
+    <string name="ui_d4e75bb2" formatted="false">"Dans l’écran Android, autorisez uniquement TV Assistant à installer cette mise à jour. Revenez ensuite ici et choisissez Installer. Vous pouvez retirer cette autorisation après l’installation."</string>
     <string name="ui_23e0fb69" formatted="false">"Dashboard Maison"</string>
     <string name="ui_831f8d8c" formatted="false">"Demander confirmation au clic"</string>
+    <string name="ui_a3ec55da" formatted="false">"Dernier contrôle de l’APK avant installation…"</string>
     <string name="ui_5482e523" formatted="false">"Dernier contrôle depuis l’accueil : "</string>
     <string name="ui_331636d" formatted="false">"Dernière version APK connue : "</string>
     <string name="ui_d023603d" formatted="false">"Descendre"</string>
@@ -438,6 +445,7 @@
     <string name="ui_10eb9438" formatted="false">"Envoyer à Home Assistant ?"</string>
     <string name="ui_eb966115" formatted="false">"Erreur HTTP "</string>
     <string name="ui_8ec3d84" formatted="false">"Erreur de lecture : "</string>
+    <string name="ui_2c839719" formatted="false">"Espace disponible insuffisant pour la mise à jour."</string>
     <string name="ui_7d41b7f9" formatted="false">"Espacement des favoris"</string>
     <string name="ui_671a3a37" formatted="false">"Espacement entre les onglets"</string>
     <string name="ui_719d5b2a" formatted="false">"Exporter le brouillon"</string>
@@ -454,6 +462,7 @@
     <string name="ui_b80d7ee3" formatted="false">"Favoris, reprise de lecture et maison"</string>
     <string name="ui_cfad42d5" formatted="false">"Fermer les paramètres du launcher"</string>
     <string name="ui_40a10cf" formatted="false">"Fermé"</string>
+    <string name="ui_f802c30f" formatted="false">"Fichier ou publication non conforme : installation refusée."</string>
     <string name="ui_3a3f66a7" formatted="false">"Fichier sur le même serveur HA (.yaml ou .json)"</string>
     <string name="ui_3b1c319" formatted="false">"Flèches : pointeur · OK : clic / maintenir · CH ± : défiler · Retour : launcher"</string>
     <string name="ui_21805f" formatted="false">"Fond"</string>
@@ -479,6 +488,7 @@
     <string name="ui_78d98f46" formatted="false">"Fréquence réelle du compresseur"</string>
     <string name="ui_c07cbe57" formatted="false">"GROUPE HOME ASSISTANT"</string>
     <string name="ui_2bd9ab37" formatted="false">"GitHub limite temporairement les vérifications. Réessayez plus tard."</string>
+    <string name="ui_577375c1" formatted="false">"GitHub reçoit votre adresse IP, mais aucun jeton HA ni identifiant de TV. Téléchargement sur demande uniquement. L’installation nécessite votre autorisation Android et conserve les réglages."</string>
     <string name="ui_41a5d1a" formatted="false">"Glissez les cadres ; tirez le coin inférieur droit pour redimensionner. Flèches : déplacer de 1 %, Maj + flèches : redimensionner. Les cadres ne font pas partie de la capture."</string>
     <string name="ui_27acdf38" formatted="false">"Google Photos · Diaporama synchronisé"</string>
     <string name="ui_805e0dde" formatted="false">"Google TV reprend la main · aide ADB"</string>
@@ -526,7 +536,11 @@
     <string name="ui_fb3901d8" formatted="false">"Indisponible"</string>
     <string name="ui_3f4384e7" formatted="false">"Informations"</string>
     <string name="ui_9a3c6d3a" formatted="false">"Informations sur l’application"</string>
+    <string name="ui_d5cebd34" formatted="false">"Installateur Android indisponible. Utilisez la publication officielle ou réessayez."</string>
+    <string name="ui_3481fba7" formatted="false">"Installation annulée ou refusée par Android. Vos réglages sont conservés."</string>
     <string name="ui_3de35ec0" formatted="false">"Installation et autorisations"</string>
+    <string name="ui_3c73e89b" formatted="false">"Installation terminée."</string>
+    <string name="ui_9ef817c" formatted="false">"Installer la mise à jour téléchargée"</string>
     <string name="ui_c1a4f60f" formatted="false">"Installez TV Assistant via HACS, redémarrez HA puis ajoutez l’intégration dans Paramètres → Appareils et services. Revenez ensuite à l’accueil de la TV."</string>
     <string name="ui_18bb0958" formatted="false">"Installez l’intégration TV Assistant dans HA, puis activez la liaison ici."</string>
     <string name="ui_2e6aa99f" formatted="false">"Interactive (sinon affichage seul)"</string>
@@ -543,6 +557,7 @@
     <string name="ui_d73e4c8d" formatted="false">"La liste complète est lue par pages. Seules les photos à afficher sont téléchargées en taille TV. Le cache remplace les copies les moins récentes. Hors ligne, seules les photos déjà chargées défilent. La synchronisation fonctionne lorsque le launcher est visible et reprend à son ouverture."</string>
     <string name="ui_d87af0da" formatted="false">"La palette est indisponible ; la couleur personnalisée reste utilisable."</string>
     <string name="ui_85f3d718" formatted="false">"La reprise Android TV n’est pas disponible sur cet appareil."</string>
+    <string name="ui_8f9eb402" formatted="false">"La version disponible a changé. Vérifiez de nouveau les mises à jour."</string>
     <string name="ui_8dc639ec" formatted="false">"La voix est transcrite par le service Android, puis le texte est envoyé à votre agent HA avec le compte de cette TV."</string>
     <string name="ui_fff58d43" formatted="false">"Langue de reconnaissance (auto = langue Android)"</string>
     <string name="ui_fd16e867" formatted="false">"Langue de reconnaissance (fr, en…)"</string>
@@ -581,6 +596,7 @@
     <string name="ui_3101bb9f" formatted="false">"Luminosité du fond"</string>
     <string name="ui_8667f971" formatted="false">"Lumières du salon"</string>
     <string name="ui_2ed20815" formatted="false">"L’APK et l’intégration HACS se mettent à jour séparément."</string>
+    <string name="ui_3d6d7855" formatted="false">"L’APK sera téléchargé depuis le dépôt officiel, puis son empreinte, sa version et son certificat seront contrôlés. Android vous demandera ensuite de confirmer l’installation. Aucun réglage ne sera effacé."</string>
     <string name="ui_5c742247" formatted="false">"L’adresse HA a changé. Vérifiez-la puis mettez à jour la liaison ci-dessous ; ne réassociez pas la TV si le compte n’a pas changé."</string>
     <string name="ui_ee1f9061" formatted="false">"L’ordre des lignes fixe l’ordre des favoris. Une application absente d’une TV est ignorée sur cette TV."</string>
     <string name="ui_88ed883d" formatted="false">"Maison"</string>
@@ -880,9 +896,14 @@
     <string name="ui_28035a" formatted="false">"Type"</string>
     <string name="ui_305e85ac" formatted="false">"Type : "</string>
     <string name="ui_a291e6ec" formatted="false">"Type de carte"</string>
+    <string name="ui_a0297543" formatted="false">"Téléchargement annulé. Aucun réglage modifié."</string>
+    <string name="ui_b97193a" formatted="false">"Téléchargement de l’APK : "</string>
+    <string name="ui_8642678d" formatted="false">"Téléchargement impossible. Vérifiez le réseau et réessayez."</string>
+    <string name="ui_c2926ad0" formatted="false">"Télécharger la mise à jour depuis GitHub"</string>
     <string name="ui_e7cbc04c" formatted="false">"Télécommande"</string>
     <string name="ui_13b4be64" formatted="false">"Télécommande : flèches = pointeur, OK = clic, CH +/− = défilement, Menu = options, Retour = cartes Maison. Aucun rechargement périodique. Les aperçus de l’extension ne capturent pas cette vue web."</string>
     <string name="ui_6683aeff" formatted="false">"Téléviseurs"</string>
+    <string name="ui_84a23f65" formatted="false">"Un téléchargement est déjà en cours."</string>
     <string name="ui_135cc81d" formatted="false">"Un vrai dashboard HA, à la demande"</string>
     <string name="ui_5d49297c" formatted="false">"Une version précédente du YAML reste disponible dans l’éditeur."</string>
     <string name="ui_2da2a57d" formatted="false">"Une vérification est déjà en cours."</string>

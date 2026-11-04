@@ -15,3 +15,22 @@ window.customIcons["tv-assistant"] = {
   getIcon: async name => name === "logo" ? {...logo} : {path: ""},
   getIconList: async () => [{name: "logo", keywords: ["tv", "assistant", "television"]}],
 };
+
+// HA can render the sidebar before extra modules finish loading. In that case
+// ha-icon keeps its legacy (iron-icon) renderer even after the set is registered.
+// Refresh only our already-rendered icons, using the public icon property. Do not
+// patch HA prototypes, other icon sets, user themes, or install a persistent observer.
+customElements.whenDefined("ha-icon").then(() => {
+  const visit = root => {
+    for (const element of root.querySelectorAll("*")) {
+      if (element.localName === "ha-icon" && element.icon === "tv-assistant:logo"
+          && element.shadowRoot?.querySelector("iron-icon")) {
+        element.icon = "mdi:television";
+        Promise.resolve(element.updateComplete).then(() => {
+          if (element.isConnected && element.icon === "mdi:television") element.icon = "tv-assistant:logo";
+        });
+      } else if (element.shadowRoot) visit(element.shadowRoot);
+    }
+  };
+  visit(document);
+});

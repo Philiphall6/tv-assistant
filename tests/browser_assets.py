@@ -10,7 +10,7 @@ def serve_localization(route):
     if path == "/home_assistant_tv/brand-icon.svg":
         route.fulfill(body=(ASSETS / "brand/icon.svg").read_text(), content_type="image/svg+xml")
         return True
-    if path not in {"/home_assistant_tv/localize.js", "/home_assistant_tv/ui-catalog.js"}:
+    if path not in {"/home_assistant_tv/localize.js", "/home_assistant_tv/ui-catalog.js", "/home_assistant_tv/icons.js"}:
         return False
     route.fulfill(body=(ASSETS / path.rsplit("/", 1)[1]).read_text(), content_type="application/javascript")
     return True

@@ -39,6 +39,15 @@ Android 11 à 16 sont ciblés. Installez l’APK signé avec l’outil de votre 
 
 Pour une mise à jour, utilisez `adb -s SERIAL install -r TVAssistant.apk` avec le bon appareil et une signature identique. Ne désinstallez pas d’abord l’ancienne version : cela supprime les réglages et la clé locale du jeton. Si Android signale une signature incompatible, arrêtez-vous et vérifiez la provenance de l’APK.
 
+À partir de l’APK **2.13.8**, la version GitHub du launcher propose aussi **Paramètres → Mises à jour et diagnostic** :
+
+1. Choisissez **Vérifier les mises à jour**, puis **Télécharger la mise à jour depuis GitHub**.
+2. Attendez le téléchargement et les contrôles du fichier. Le téléchargement peut être annulé.
+3. Si Android le demande, autorisez l’installation pour **TV Assistant** uniquement, puis revenez dans le launcher.
+4. Choisissez **Installer la mise à jour téléchargée** et confirmez dans l’écran Android. Vous pouvez ensuite retirer l’autorisation d’installation.
+
+La première installation de cette fonctionnalité nécessite encore l’APK ou ADB. Les mises à jour suivantes ne nécessitent plus de PC ni de navigateur sur la TV. Aucune désinstallation et aucune installation silencieuse ne sont réalisées ; vos réglages sont conservés. HACS met à jour l’intégration HA séparément. Ce mécanisme ne concerne pas une éventuelle version Play Store.
+
 ## Si le bouton Home ouvre encore Google TV
 
 Il n’existe pas de méthode universelle sur tous les fabricants. Essayez d’abord les réglages Android d’application d’accueil par défaut. Les commandes suivantes sont **avancées et manuelles**. Elles ne doivent être utilisées que sur votre appareil, après avoir confirmé le nom exact de son launcher et gardé ADB connecté.

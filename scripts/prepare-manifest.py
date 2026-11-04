@@ -16,6 +16,11 @@ if mode == "audit":
     application_name = app.get(ns + "name", "")
     if application_name.startswith("."):
         app.set(ns + "name", package + application_name)
+    for provider in app.findall("provider"):
+        name = provider.get(ns + "name", "")
+        if name.startswith("."):
+            provider.set(ns + "name", package + name)
+        provider.set(ns + "authorities", provider.get(ns + "authorities").replace(package + ".", package + ".audit."))
     for activity in app.findall("activity"):
         name = activity.get(ns + "name")
         if name.startswith("."):
