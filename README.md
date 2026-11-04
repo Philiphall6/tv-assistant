@@ -18,13 +18,34 @@ Un launcher Android TV personnalisable et un éditeur multi-TV dans Home Assista
 
 ### Accueil sur la TV
 
-![Accueil TV avec fond d’écran, carte PAC, favoris et commandes de la maison](docs/images/tv-home.jpg)
+![Accueil TV Assistant avec fond salon, météo, température, carte PAC, applications favorites et éclairages](docs/images/tv-home.jpg)
+
+Un exemple de disposition personnalisée : les informations de la maison, vos applications et les commandes restent sur le même écran.
 
 ### Éditeur dans Home Assistant
 
-![Éditeur Home Assistant avec aperçu de la TV et placement des éléments](docs/images/ha-editor.jpg)
+![Éditeur Home Assistant avec capture réelle, cadres de placement et réglages des applications favorites](docs/images/ha-editor.jpg)
 
-Captures fournies et autorisées pour publication par le propriétaire du projet. Elles illustrent une version antérieure au renommage en **TV Assistant** ; les libellés, applications et cartes visibles dépendent de votre configuration. Les métadonnées des fichiers ont été retirées.
+Déplacez et redimensionnez les éléments depuis Home Assistant. L’aperçu réel montre la disposition appliquée sur la TV ; les modifications restent en brouillon jusqu’à l’envoi.
+
+<details>
+<summary>Voir les variantes et les réglages de personnalisation</summary>
+
+### Fond TV Assistant et barre en bas
+
+![Accueil avec fond TV Assistant et barre de navigation compacte en bas](docs/images/tv-home-bottom-navigation.jpg)
+
+### Position et largeur de la barre
+
+![Réglages de la barre dans Home Assistant avec aperçu de son placement en bas de l’écran](docs/images/ha-navigation-editor.jpg)
+
+### Forme des icônes
+
+![Réglages d’apparence avec choix des formes d’icônes et aperçu des applications](docs/images/ha-appearance-editor.jpg)
+
+</details>
+
+Captures fournies et autorisées pour publication par le propriétaire du projet. Elles montrent un exemple personnalisé, pas la configuration par défaut : les libellés, applications, cartes et valeurs visibles dépendent de votre installation. Les métadonnées des fichiers ont été retirées ; aucun profil ni identifiant d’entité n’est fourni avec ces images.
 
 ## Compatibilité
 
@@ -84,7 +105,7 @@ L’APK utilise le même identifiant technique `fr.maison.tvlauncher`, pour pré
 
 Les anciens jetons sont migrés vers Android Keystore lors de leur lecture avec une adresse HTTPS valide. Les réglages locaux et jetons ne sont pas exportés dans les profils HA. Une nouvelle TV ou une réinstallation après désinstallation nécessite de ressaisir son jeton ; aucune sauvegarde Android des données de l’application n’est autorisée.
 
-Le dépôt ne contient ni jeton, clé de signature, fichier de configuration domestique, lien d’album personnel, ni ancien historique privé. Les exemples et tests utilisent des données fictives ; seules les deux captures de démonstration ci-dessus ont été expressément autorisées pour publication.
+Le dépôt ne contient ni jeton, clé de signature, fichier de configuration domestique, lien d’album personnel, ni ancien historique privé. Les exemples et tests utilisent des données fictives ; les captures de démonstration ci-dessus ont été expressément autorisées pour publication.
 
 ## Licence
 

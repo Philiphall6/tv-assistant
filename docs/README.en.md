@@ -13,11 +13,36 @@ TV Assistant combines a customizable Android TV launcher with a multi-TV editor 
 
 ## Preview
 
-![TV home screen with wallpaper, heat pump card, app favorites and home controls](images/tv-home.jpg)
+### TV home screen
 
-![Home Assistant editor with a real TV preview and movable elements](images/ha-editor.jpg)
+![TV Assistant home screen with living room wallpaper, weather, temperature, heat pump, favorite apps and lights](images/tv-home.jpg)
 
-These owner-approved screenshots show an earlier version called Home Assistant TV. File metadata has been removed. Your apps, cards and labels depend on your configuration.
+An example of a personalized layout: home information, favorite apps and controls share the same screen.
+
+### Home Assistant editor
+
+![Home Assistant editor with a real TV capture, placement outlines and favorite apps layout settings](images/ha-editor.jpg)
+
+Move and resize elements from Home Assistant. The real preview shows the layout applied on the TV; changes remain a draft until sent.
+
+<details>
+<summary>More layouts and customization settings</summary>
+
+### TV Assistant wallpaper and bottom navigation
+
+![Home screen with TV Assistant wallpaper and a compact bottom navigation bar](images/tv-home-bottom-navigation.jpg)
+
+### Navigation position and width
+
+![Navigation settings in Home Assistant with a preview of the bar at the bottom of the screen](images/ha-navigation-editor.jpg)
+
+### App icon shapes
+
+![Appearance settings with icon shape choices and a preview of the apps](images/ha-appearance-editor.jpg)
+
+</details>
+
+These owner-approved screenshots show a personalized example, not the default configuration. Labels, apps, cards and displayed values depend on your setup. File metadata has been removed; no profile configuration or entity IDs are distributed with these images.
 
 ## Requirements
 
