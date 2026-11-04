@@ -79,14 +79,15 @@ final class PanelStore {
             JSONObject backup=new JSONObject();for(Iterator<String> it=schema(c).keys();it.hasNext();){String k=it.next();backup.put(k,p.contains(k)?p.getAll().get(k):JSONObject.NULL);}
             p.edit().putString("ha_panel_backup",backup.toString()).apply();
         }
-        p.edit().putBoolean("ha_panel_enabled",true).putString("ha_panel_name",name.trim()).putString("ha_panel_profile",profile).putString("ha_panel_server",p.getString("ha_url","").trim()).putString("ha_panel_status","Liaison au retour à l’accueil…").apply();identity(c);
+        p.edit().putBoolean("ha_panel_enabled",true).putString("ha_panel_name",name.trim()).putString("ha_panel_profile",profile).putString("ha_panel_server",p.getString("ha_url","").trim()).putString("ha_panel_status","Liaison au retour à l’accueil…").apply();LinkStatus.panel(c,LinkStatus.WAITING);identity(c);
     }
     static void put(SharedPreferences.Editor e,String key,Object value){if(value==null||value==JSONObject.NULL)e.remove(key);else if(value instanceof Boolean)e.putBoolean(key,(Boolean)value);else if(value instanceof Number)e.putInt(key,((Number)value).intValue());else e.putString(key,(String)value);}
     static boolean apply(Context c,JSONObject snapshot)throws Exception {
         if(!enabled(c))return false;SharedPreferences p=CardStore.prefs(c);String profile=snapshot.getString("profile");id(profile);
         long revision=snapshot.getLong("revision");
-        if(revision<1||snapshot.isNull("config")){status(c,snapshot.optBoolean("approval_required")?I18n.t("Autorisation requise · un administrateur doit affecter un profil à cette TV dans HA"):I18n.t("TV reliée · créez ou affectez un profil dans Home Assistant"));return false;}
+        if(revision<1||snapshot.isNull("config")){LinkStatus.panel(c,snapshot.optBoolean("connection_removed")?LinkStatus.FORGOTTEN:snapshot.optBoolean("approval_required")?LinkStatus.PENDING:LinkStatus.NO_PROFILE);status(c,snapshot.optBoolean("approval_required")?I18n.t("Autorisation requise · un administrateur doit affecter un profil à cette TV dans HA"):I18n.t("TV reliée · créez ou affectez un profil dans Home Assistant"));return false;}
         JSONObject config=validate(c,snapshot.getJSONObject("config"));
+        LinkStatus.panel(c,LinkStatus.SYNCED);
         if(config.toString().equals(p.getString("ha_panel_config",""))&&profile.equals(p.getString("ha_panel_applied_profile",""))&&revision==p.getLong("ha_panel_revision",0)){status(c,"Profil "+profile+" · version "+revision);return false;}
         JSONObject settings=config.getJSONObject("settings"),backup=new JSONObject(p.getString("ha_panel_backup","{}"));
         JSONObject previousConfig=new JSONObject(p.getString("ha_panel_config","{}"));JSONObject previous=previousConfig.optJSONObject("settings");SharedPreferences.Editor e=p.edit();

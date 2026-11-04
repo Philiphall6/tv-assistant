@@ -203,6 +203,60 @@ class RepositoryTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(ValueError):await self.r.save("salon","Fail",{"schema":1,"settings":{"ha_token":"secret"}},1)
         self.assertEqual(old,self.r.data)
 
+    async def test_delete_profile_concurrency_assignments_and_atomic_storage(self):
+        await self.r.save("salon","Salon",self.cfg,0)
+        await self.r.save("other","Other",self.cfg,0)
+        await self.r.register("tv1","TV","salon","owner",self.cfg,[])
+        await self.r.assign("tv1","salon","TV")
+        with self.assertRaisesRegex(ValueError,"affecté"):
+            await self.r.delete_profile("salon",1)
+        await self.r.assign("tv1","other","TV")
+        with self.assertRaisesRegex(ValueError,"Conflit"):
+            await self.r.delete_profile("salon",0)
+        with self.assertRaises(ValueError):await self.r.delete_profile("salon",True)
+        before=copy.deepcopy(self.r.data);self.store.fail=True
+        with self.assertRaises(OSError):await self.r.delete_profile("salon",1)
+        self.assertEqual(before,self.r.data);self.store.fail=False
+        await self.r.delete_profile("salon",1)
+        self.assertNotIn("salon",self.r.data["profiles"])
+        self.assertEqual(self.store.saved,self.r.data)
+        self.assertEqual(self.r.data["devices"],before["devices"])
+        self.assertEqual(self.r.data["profiles"]["other"],before["profiles"]["other"])
+        with self.assertRaises(ValueError):await self.r.save("salon","Stale",self.cfg,1)
+
+    async def test_forget_device_detaches_only_its_streams_and_requires_new_approval(self):
+        await self.r.save("salon","Salon",self.cfg,0)
+        messages={key:[] for key in ("tv1","tv2","render1","render2")}
+        for identity in ("tv1","tv2"):
+            await self.r.register(identity,identity,"salon","owner",self.cfg,[],True)
+            await self.r.assign(identity,"salon",identity)
+            self.r.listeners[identity]=(identity,messages[identity].append)
+        self.r.render_listeners["render1"]=("tv1",messages["render1"].append)
+        self.r.render_listeners["render2"]=("tv2",messages["render2"].append)
+        before=copy.deepcopy(self.r.data);self.store.fail=True
+        with self.assertRaises(OSError):await self.r.forget_device("tv1")
+        self.assertEqual(before,self.r.data);self.assertFalse(any(messages.values()))
+        self.store.fail=False
+        preview=asyncio.create_task(self.r.preview("tv1"));await asyncio.sleep(0)
+        detached=await self.r.forget_device("tv1")
+        with self.assertRaisesRegex(ValueError,"supprimée"):await preview
+        self.assertEqual(set(detached),{"tv1","render1"})
+        self.assertNotIn("tv1",self.r.data["devices"])
+        self.assertNotIn("tv1",self.r.listeners);self.assertNotIn("render1",self.r.render_listeners)
+        self.assertTrue(messages["tv1"][-1]["approval_required"])
+        self.assertTrue(messages["tv1"][-1]["connection_removed"])
+        self.assertIsNone(messages["tv1"][-1]["config"])
+        self.assertEqual(messages["render1"][-1]["cards"],[])
+        self.assertFalse(messages["tv2"]);self.assertFalse(messages["render2"])
+        self.assertEqual(self.r.data["profiles"],before["profiles"])
+        self.r.notify()  # No orphan subscriptions referencing a removed record.
+        await self.r.register("tv1","TV","salon","owner",self.cfg,[])
+        self.assertTrue(self.r.device_snapshot("tv1")["approval_required"])
+        self.assertIsNone(self.r.device_snapshot("tv1")["config"])
+        self.assertEqual(self.r.render_snapshot("tv1")["cards"],[])
+        await self.r.assign("tv1","salon","TV")
+        self.assertEqual(self.r.device_snapshot("tv1")["config"],self.cfg)
+
     async def test_offline_restore_and_ack(self):
         await self.r.register("tv1","TV","salon","owner",self.cfg,[])
         self.assertEqual(self.r.device_snapshot("tv1")["revision"],0)
@@ -236,6 +290,17 @@ class RepositoryTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(ValueError):await self.r.register("tv1","TV","salon","other",self.cfg,[])
         with self.assertRaises(ValueError):await self.r.assign("missing","salon","TV")
         with self.assertRaises(ValueError):await self.r.register("tv2","TV","salon","owner",self.cfg,[{"package":"x.y","label":"x","command":"reboot"}])
+
+    async def test_forget_with_closed_client_still_removes_every_stream(self):
+        await self.r.register("tv","TV","salon","owner",self.cfg,[])
+        def closed(snapshot):raise RuntimeError("closed test client")
+        rendered=[]
+        self.r.listeners["native"]=("tv",closed)
+        self.r.render_listeners["web"]=("tv",rendered.append)
+        with self.assertLogs("hatv_test.repository",level="WARNING"):
+            self.assertEqual(set(await self.r.forget_device("tv")),{"native","web"})
+        self.assertFalse(self.r.listeners);self.assertFalse(self.r.render_listeners)
+        self.assertEqual(rendered[-1]["cards"],[])
 
     async def test_real_preview_is_scoped_ephemeral_and_rate_limited(self):
         jpeg=base64.b64encode(b"\xff\xd8\xff\xe0test\xff\xd9").decode()

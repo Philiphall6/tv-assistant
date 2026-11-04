@@ -96,6 +96,19 @@ public final class PanelRuntimeTest {
         if(android.graphics.Typeface.DEFAULT==null)throw new IllegalStateException("Font tests require PanelInstrumentation in a normal Android application process");
         if(args!=null&&args.length>0)try(InputStream in=new FileInputStream(args[0])){PanelStore.schema=new JSONObject(new String(SharedPhotoAlbum.bounded(in,1024*1024),StandardCharsets.UTF_8));}
         Memory memory=new Memory();Context c=memory.context();memory.values.put("ha_url","https://ha.example.invalid");memory.values.put("ha_token","test-only-secret");memory.values.put("hero_subtitle","Local");memory.values.put("custom_cards_yaml","cards: [{type: text, name: Local}]\n");
+        check(LinkStatus.panelState(memory.prefs).equals(LinkStatus.DISABLED),"HA data does not imply editor linking");
+        memory.values.put("ha_panel_enabled",true);memory.values.put("ha_panel_server","https://old.example.invalid");
+        check(LinkStatus.panelState(memory.prefs).equals(LinkStatus.SERVER_CHANGED),"changed server has actionable status");
+        memory.values.put("ha_panel_server","https://ha.example.invalid");
+        for(String state:new String[]{LinkStatus.WAITING,LinkStatus.PENDING,LinkStatus.NO_PROFILE,LinkStatus.SYNCED,LinkStatus.MISSING,LinkStatus.OWNER,LinkStatus.REFUSED,LinkStatus.TIMEOUT,LinkStatus.INVALID,LinkStatus.FORGOTTEN}){
+            LinkStatus.panel(c,state);check(LinkStatus.panelState(memory.prefs).equals(state),"state retained");
+            check(!LinkStatus.panelLabel(memory.prefs).isEmpty()&&!LinkStatus.hint(memory.prefs).isEmpty(),"status has guidance");
+            check(!LinkStatus.summary(memory.prefs,true).contains("test-only-secret"),"summary never includes credentials");
+        }
+        check(LinkStatus.errorState("unknown_command","private detail").equals(LinkStatus.MISSING),"missing integration distinguished");
+        check(LinkStatus.errorState("invalid_profile","Identifiant de TV déjà utilisé par un autre compte").equals(LinkStatus.OWNER),"owner mismatch distinguished");
+        check(LinkStatus.errorState("invalid_profile","private detail").equals(LinkStatus.REFUSED),"raw errors never displayed");
+        memory.values.remove("ha_panel_enabled");memory.values.remove("ha_panel_server");memory.values.remove("ha_panel_link_state");
         check(!PanelStore.enabled(c),"off by default");PanelStore.enable(c,"Test TV","salon");check(PanelStore.enabled(c),"explicit activation");String id=PanelStore.identity(c);check(id.equals(PanelStore.identity(c)),"stable installation identity");
         JSONObject defaults=new JSONObject();for(Iterator<String> it=PanelStore.schema.keys();it.hasNext();){String k=it.next();defaults.put(k,PanelStore.schema.getJSONObject(k).get("default"));}
         check(PanelStore.validate(c,new JSONObject().put("schema",1).put("settings",defaults)).getJSONArray("cards").length()==0,"all shared defaults valid");

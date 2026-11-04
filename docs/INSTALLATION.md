@@ -1,5 +1,24 @@
 # Installer TV Assistant
 
+## Comprendre la connexion TV ↔ Home Assistant
+
+Les deux liaisons sont distinctes : **données HA** (états et commandes de la maison) et **éditeur TV Assistant** (profils, mise en page et aperçu). Une TV peut donc accéder à HA sans apparaître connectée dans l’éditeur.
+
+1. Sur la TV, dans les réglages Home Assistant, renseigner l’adresse HTTPS et le jeton d’un utilisateur non administrateur, puis tester la connexion.
+2. Ouvrir **Édition depuis Home Assistant**, nommer la TV et activer la liaison. Revenir à l’accueil quelques secondes.
+3. Dans HA, avec votre compte administrateur, ouvrir **TV Assistant → Téléviseurs**, comparer l’identifiant avec celui affiché sur la TV, puis affecter un profil enregistré.
+
+L’écran **Édition depuis Home Assistant** distingue les deux états, donne une action à effectuer et précise la date du dernier contrôle. Il ne réalise pas un nouveau test réseau en arrière-plan. La veille, une autre application ou l’ouverture des réglages peuvent interrompre la liaison de l’éditeur : **hors ligne ne signifie pas nécessairement une panne de HA**. Le statut sur la barre d’accueil distingue désormais HA seul, l’autorisation en attente et HA avec l’éditeur relié.
+
+Un ancien nom de TV peut correspondre à une association différente, notamment après un changement de compte ou une réinstallation. Comparer les identifiants avant de supprimer une entrée ; ne jamais publier ces identifiants ou un jeton pour demander de l’aide.
+
+### Supprimer un profil ou une connexion
+
+- **Supprimer le profil** retire définitivement sa configuration et son historique après confirmation. Un profil affecté à une TV, même hors ligne, est protégé : réaffecter cette TV ou supprimer sa connexion d’abord.
+- **Téléviseurs → Supprimer la connexion** oublie cette association et arrête ses flux de profil et d’aperçu, sans supprimer le profil, réinitialiser la TV ou révoquer son jeton. Les autres TV sont conservées.
+- Pour un retrait durable, désactiver d’abord **Édition depuis Home Assistant** sur la TV. Sinon, elle peut réapparaître à sa prochaine connexion, mais devra être autorisée de nouveau par un administrateur.
+- Pour révoquer aussi l’accès aux données HA, supprimer explicitement le jeton dans la sécurité du compte Home Assistant concerné. La suppression d’une connexion dans TV Assistant ne remplace pas cette opération.
+
 ## Home Assistant et plusieurs TV
 
 [![Installer TV Assistant avec HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration)

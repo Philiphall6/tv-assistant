@@ -3,11 +3,14 @@ import asyncio
 import copy
 import base64
 import binascii
+import logging
 import time
 import uuid
 from datetime import datetime, timezone
 
 from .model import ProfileError, profile_id, require, validate
+
+_LOGGER = logging.getLogger(__name__)
 
 
 def now():
@@ -147,6 +150,54 @@ class Repository:
                 "preview_supported": bool(preview_supported)}
             await self.store.async_save(update)
             self.data = update
+
+    async def delete_profile(self, profile, expected):
+        profile_id(profile)
+        async with self.lock:
+            old = self.data["profiles"].get(profile)
+            require(old is not None, "Profil introuvable. Actualisez la liste.")
+            require(type(expected) is int and expected == old["revision"],
+                    "Conflit : ce profil a changé. Rechargez-le avant de le supprimer.")
+            require(not any(d["profile"] == profile and d.get("approved", True)
+                            for d in self.data["devices"].values()),
+                    "Ce profil est encore affecté à une TV. Réaffectez cette TV ou supprimez sa connexion avant de supprimer le profil.")
+            update = copy.deepcopy(self.data)
+            del update["profiles"][profile]
+            await self.store.async_save(update)
+            self.data = update
+
+    async def forget_device(self, identity):
+        profile_id(identity)
+        async with self.lock:
+            old = self.data["devices"].get(identity)
+            require(old is not None, "TV inconnue")
+            update = copy.deepcopy(self.data)
+            del update["devices"][identity]
+            await self.store.async_save(update)
+            self.data = update
+        # Stop both profile and real-card streams. Other HA subscriptions and
+        # the TV's credentials are not touched. Reconnection requires approval.
+        detached, notifications = [], []
+        snapshot = {"device_id": identity, "device_name": old["name"],
+                    "profile": old["profile"], "revision": 0, "config": None,
+                    "approval_required": True, "connection_removed": True}
+        for listeners, payload in ((self.listeners, snapshot), (self.render_listeners,
+                {"device_id": identity, "profile": old["profile"], "revision": 0, "cards": []})):
+            for key, (device, send) in list(listeners.items()):
+                if device == identity:
+                    listeners.pop(key)
+                    detached.append(key)
+                    notifications.append((send, copy.deepcopy(payload)))
+        pending = self.previews.get(identity)
+        if pending and not pending[1].done():
+            pending[1].set_exception(ProfileError("Connexion TV supprimée. Capture annulée."))
+        self.preview_requested.pop(identity, None)
+        for send, payload in notifications:
+            try:
+                send(payload)
+            except Exception:  # A closed client must not keep other streams authorized.
+                _LOGGER.warning("Unable to notify a detached TV client; its subscription was removed")
+        return detached
 
     async def assign(self, identity, profile, name):
         profile_id(profile)

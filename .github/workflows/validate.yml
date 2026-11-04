@@ -48,6 +48,8 @@ jobs:
       - run: pip install PyYAML playwright
       - run: python tests/test_ha_panel.py
       - run: playwright install --with-deps chromium
+      - run: python tests/test_brand_browser.py
+      - run: python tests/test_connections_browser.py
       - run: python tests/test_panel_browser.py
       - run: python tests/test_cards_browser.py
       - run: python tests/test_localization_browser.py

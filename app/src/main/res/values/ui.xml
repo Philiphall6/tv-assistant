@@ -63,6 +63,8 @@
     <string name="ui_bcba4e67" formatted="false">"Quick actions"</string>
     <string name="ui_b78fd3b5" formatted="false">"Quick actions → cards"</string>
     <string name="ui_a9046175" formatted="false">"Enable connection to the HA panel"</string>
+    <string name="ui_81ea7fa9" formatted="false">"Enable linking below to make this TV appear in the HA editor."</string>
+    <string name="ui_82adfcd2" formatted="false">"Enable linking on the TV, then refresh this list. Never enter a token in this editor."</string>
     <string name="ui_1df909fb" formatted="false">"Enabled"</string>
     <string name="ui_f1de7021" formatted="false">"Refresh real view"</string>
     <string name="ui_e101c0b" formatted="false">"Refresh connections"</string>
@@ -183,6 +185,7 @@
     <string name="ui_d5f969b7" formatted="false">"No newer version at the last successful check."</string>
     <string name="ui_f4f29807" formatted="false">"No successful check yet."</string>
     <string name="ui_73b7488e" formatted="false">"Heating allowed"</string>
+    <string name="ui_fbe14f7c" formatted="false">"Awaiting approval"</string>
     <string name="ui_fdfb765" formatted="false">"Approval required · an administrator must assign a profile to this TV in HA"</string>
     <string name="ui_680dce7a" formatted="false">"Android permissions"</string>
     <string name="ui_e556a39e" formatted="false">"Allow continue watching"</string>
@@ -231,11 +234,13 @@
     <string name="ui_b4ab6a86" formatted="false">"Native cards · visual and YAML editor · live HA states without a web page"</string>
     <string name="ui_2adc4306" formatted="false">"Custom cards and native dashboard"</string>
     <string name="ui_67cb003a" formatted="false">"Cards visible on home screen"</string>
+    <string name="ui_5d2723f5" formatted="false">"This profile is still assigned to a TV. Assign that TV to another profile or remove its connection before deleting the profile."</string>
     <string name="ui_8644e687" formatted="false">"This profile already exists"</string>
     <string name="ui_35a9d175" formatted="false">"This system does not offer this screen. ADB setup may be required; no changes were made."</string>
     <string name="ui_2dd24176" formatted="false">"Invalid HA certificate for this address. Use its valid HTTPS name. Back: Home"</string>
     <string name="ui_a4c44ce7" formatted="false">"Invalid HA certificate · check the HTTPS address"</string>
     <string name="ui_423be27b" formatted="false">"These settings affect only the navigation bar, never the cards."</string>
+    <string name="ui_37f0d97e" formatted="false">"This screen shows the last observed status. The HA preview may be offline while settings are open."</string>
     <string name="ui_15b07313" formatted="false">"This button remains reserved for navigation or the system."</string>
     <string name="ui_735df591" formatted="false">"Change photo"</string>
     <string name="ui_a9ce061" formatted="false">"Every permission is your choice. The app never removes or disables a launcher."</string>
@@ -298,12 +303,16 @@
     <string name="ui_1ed10db" formatted="false">"Confirm before sending to Assist"</string>
     <string name="ui_b3d5ec57" formatted="false">"Confirm before running: "</string>
     <string name="ui_93a859" formatted="false">"Confirm sending to custom service"</string>
+    <string name="ui_d6cf3232" formatted="false">"Conflict: this profile has changed. Reload it before deleting."</string>
+    <string name="ui_6cdf3f4b" formatted="false">"Connect a TV in 3 steps"</string>
     <string name="ui_e1b5095f" formatted="false">"Connected"</string>
     <string name="ui_54ec22e6" formatted="false">"Connected"</string>
     <string name="ui_5c4e506d" formatted="false">"Connected on home screen"</string>
     <string name="ui_2f50b734" formatted="false">"Home Assistant connection"</string>
+    <string name="ui_70e5168f" formatted="false">"TV connection removed. Preview cancelled."</string>
     <string name="ui_130d967c" formatted="false">"Connecting…"</string>
     <string name="ui_18f3f034" formatted="false">"Local connection cleared"</string>
+    <string name="ui_9fb42242" formatted="false">"Connection removed. The Home Assistant token has not been revoked."</string>
     <string name="ui_6fe185d6" formatted="false">"HA web login required · OK to sign in"</string>
     <string name="ui_ff7e7d70" formatted="false">"Waiting for Home Assistant connection"</string>
     <string name="ui_e9447f19" formatted="false">"Connection, devices and home features"</string>
@@ -349,8 +358,10 @@
     <string name="ui_c6d7e2b4" formatted="false">"Create cards in Home Assistant → Custom cards and native dashboard"</string>
     <string name="ui_fcdb89de" formatted="false">"SLIDESHOW"</string>
     <string name="ui_392ee7e1" formatted="false">"In HA: Settings → Dashboards → Add → New dashboard. Name it TV, add cards, open its view and copy only the path (e.g. /dashboard-tv/tv)."</string>
+    <string name="ui_ef27ecd7" formatted="false">"In HA → TV Assistant → TVs, compare the identifier below, then assign a saved profile using your admin account."</string>
     <string name="ui_23e0fb69" formatted="false">"Home dashboard"</string>
     <string name="ui_831f8d8c" formatted="false">"Ask for confirmation on tap"</string>
+    <string name="ui_5482e523" formatted="false">"Last check from the home screen: "</string>
     <string name="ui_331636d" formatted="false">"Last known APK version: "</string>
     <string name="ui_d023603d" formatted="false">"Move down"</string>
     <string name="ui_3448a783" formatted="false">"Move down "</string>
@@ -366,6 +377,13 @@
     <string name="ui_683c47da" formatted="false">"Apps layout"</string>
     <string name="ui_e5cb6de3" formatted="false">"Layout and text"</string>
     <string name="ui_6785e0c6" formatted="false">"Layout, fixed navigation bar, sizes and colors"</string>
+    <string name="ui_858f4a2d" formatted="false">"HA data: invalid HTTPS address"</string>
+    <string name="ui_273d9521" formatted="false">"HA data: address or token missing"</string>
+    <string name="ui_3e5c14e3" formatted="false">"HA data: connecting"</string>
+    <string name="ui_a18671a5" formatted="false">"HA data: connection lost or server unreachable"</string>
+    <string name="ui_1b2c41d9" formatted="false">"HA data: connection verified"</string>
+    <string name="ui_fe892459" formatted="false">"HA data: token rejected"</string>
+    <string name="ui_c7f8246e" formatted="false">"HA data: not yet checked from the home screen"</string>
     <string name="ui_bf19136d" formatted="false">"Duplicate"</string>
     <string name="ui_4ece54e6" formatted="false">"STARTUP"</string>
     <string name="ui_e9fd2e67" formatted="false">"Uncheck an app to hide it. Choose favorites by holding OK in the Apps tab."</string>
@@ -478,15 +496,19 @@
     <string name="ui_57f58da5" formatted="false">"Clock in the navigation bar"</string>
     <string name="ui_a7b9f251" formatted="false">"Offline"</string>
     <string name="ui_40c4d549" formatted="false">"Offline"</string>
+    <string name="ui_3f26f8e8" formatted="false">"Offline means the editor no longer receives the launcher connection. The TV may be asleep, in another app, or have linking disabled or refused. HA alone cannot determine the cause: check the link status on the TV."</string>
     <string name="ui_94b6f2e9" formatted="false">"Offline · showing last known values"</string>
+    <string name="ui_468dad5f" formatted="false">"Here, with your admin account: create and save a profile, check the TV identifier, select that profile and click “Assign this profile”. Several TVs can share a profile."</string>
     <string name="ui_4355631" formatted="false">"Icon"</string>
     <string name="ui_5b16d954" formatted="false">"Icon (mdi:lightbulb, mdi:sofa, mdi:weather-sunny…)"</string>
     <string name="ui_d2843903" formatted="false">"Tab icon (mdi:…)"</string>
     <string name="ui_fd3869af" formatted="false">"Icon mdi:…"</string>
     <string name="ui_82757062" formatted="false">"Icons"</string>
     <string name="ui_4d977e6f" formatted="false">"App icons"</string>
+    <string name="ui_6d76cbbd" formatted="false">"This TV\'s identifier: "</string>
     <string name="ui_c10af083" formatted="false">"Invalid ID"</string>
     <string name="ui_27987a7c" formatted="false">"Unique profile ID (e.g. bedroom, living-room, kitchen)"</string>
+    <string name="ui_2fb9edce" formatted="false">"Identifier to compare on the TV: {id}"</string>
     <string name="ui_4ee193b7" formatted="false">"Custom image already imported on the TV"</string>
     <string name="ui_e80b40e3" formatted="false">"Custom image saved"</string>
     <string name="ui_afeba5cb" formatted="false">"Real image of the version applied on the TV."</string>
@@ -505,6 +527,7 @@
     <string name="ui_3f4384e7" formatted="false">"Information"</string>
     <string name="ui_9a3c6d3a" formatted="false">"App information"</string>
     <string name="ui_3de35ec0" formatted="false">"Setup and permissions"</string>
+    <string name="ui_c1a4f60f" formatted="false">"Install TV Assistant through HACS, restart HA, then add the integration in Settings → Devices &amp; services. Return to the TV home screen."</string>
     <string name="ui_18bb0958" formatted="false">"Install the TV Assistant integration in HA, then enable the connection here."</string>
     <string name="ui_2e6aa99f" formatted="false">"Interactive (otherwise display only)"</string>
     <string name="ui_4d3b52c4" formatted="false">"Heating permission switch"</string>
@@ -515,6 +538,7 @@
     <string name="ui_98d11f4" formatted="false">"The bar already contains 40 tabs."</string>
     <string name="ui_d911daec" formatted="false">"Configuration changed while editing. Go back and reopen the card to avoid overwriting changes."</string>
     <string name="ui_f8b30618" formatted="false">"The Home Assistant connection will be kept."</string>
+    <string name="ui_25b0beee" formatted="false">"The connection was removed in HA. Disable linking to remain in local mode, or return home and approve this TV again in HA."</string>
     <string name="ui_37d8bf7f" formatted="false">"The latest release does not contain a stable APK."</string>
     <string name="ui_d73e4c8d" formatted="false">"The full list is read in pages. Only photos to display are downloaded at TV size. The cache replaces older copies. Offline, only cached photos are shown. Synchronization runs while the launcher is visible and resumes when it opens."</string>
     <string name="ui_d87af0da" formatted="false">"Palette unavailable; custom color remains available."</string>
@@ -530,6 +554,7 @@
     <string name="ui_b58ee423" formatted="false">"The draft will be replaced. Nothing is saved until you confirm."</string>
     <string name="ui_94fc0419" formatted="false">"The slideshow will be disabled. Google Photos originals will not be deleted."</string>
     <string name="ui_98869ebe" formatted="false">"The HA file is active. Local changes do not erase this file."</string>
+    <string name="ui_a744515b" formatted="false">"The token belongs to a different account from the original pairing. Check the account, then use “Pair this TV again” if the change was intentional."</string>
     <string name="ui_e20f0b17" formatted="false">"This HA version\'s Lovelace engine is not accessible. Open an HA dashboard, then retry."</string>
     <string name="ui_527adae7" formatted="false">"The panel could not be loaded."</string>
     <string name="ui_2d2589c" formatted="false">"The HA profile takes priority during synchronization. To keep changes, also update Layout or Appearance in HA."</string>
@@ -538,6 +563,7 @@
     <string name="ui_7eb78bde" formatted="false">"Reading and validating…"</string>
     <string name="ui_16a693" formatted="false">"HA cards, long-press menus and the home screen work without this permission. It does not replace the default launcher. Open Android settings to allow it?"</string>
     <string name="ui_8b4ed51c" formatted="false">"Changes remain a draft until sent."</string>
+    <string name="ui_85ba057a" formatted="false">"HA data and the editor use two separate connections. The profile is synchronized while the launcher is on its home screen; another app or sleep may interrupt the preview."</string>
     <string name="ui_ef94170a" formatted="false">"Icons fit the available space. Reduce the number of columns or rows to make them larger. Home screen favourites are unchanged."</string>
     <string name="ui_2fd39461" formatted="false">"Unsaved changes will be discarded."</string>
     <string name="ui_b361e5cc" formatted="false">"Photos remain a native slideshow. Albums are checked only while home is visible. Import custom images on each TV. The shared album link is stored in HA: do not publish the YAML export."</string>
@@ -555,6 +581,7 @@
     <string name="ui_3101bb9f" formatted="false">"Background brightness"</string>
     <string name="ui_8667f971" formatted="false">"Living room lights"</string>
     <string name="ui_2ed20815" formatted="false">"The APK and the HACS integration are updated separately."</string>
+    <string name="ui_5c742247" formatted="false">"The HA address has changed. Check it, then update the link below; do not create a new pairing unless the account has changed."</string>
     <string name="ui_ee1f9061" formatted="false">"Line order sets favorite order. Apps missing from a TV are ignored on that TV."</string>
     <string name="ui_88ed883d" formatted="false">"Home"</string>
     <string name="ui_64ca46e3" formatted="false">"Home connected"</string>
@@ -562,6 +589,7 @@
     <string name="ui_e898598d" formatted="false">"Home turned off"</string>
     <string name="ui_954f9790" formatted="false">"Hide"</string>
     <string name="ui_8df51bad" formatted="false">"Hide standard blocks in the draft"</string>
+    <string name="ui_7817f532" formatted="false">"Update the APK and check the profile in the HA editor. The last valid display is preserved."</string>
     <string name="ui_72f2df17" formatted="false">"Move to Home row"</string>
     <string name="ui_d1d383eb" formatted="false">"Update connection"</string>
     <string name="ui_8209d1fa" formatted="false">"Layout restored"</string>
@@ -664,10 +692,16 @@
     <string name="ui_be62de34" formatted="false">"Priority"</string>
     <string name="ui_bbc522c8" formatted="false">"Advanced procedure, from a computer"</string>
     <string name="ui_8efe2a5c" formatted="false">"Profile"</string>
+    <string name="ui_ee318fa1" formatted="false">"Profile: {profile} · applied revision: {revision} · last connection: {date}"</string>
     <string name="ui_3ced65e3" formatted="false">"HA profile active: also use Wallpaper settings in HA to sync across TVs."</string>
     <string name="ui_ef0936b0" formatted="false">"Assigned profile"</string>
     <string name="ui_3d1ac4d9" formatted="false">"Initial profile (e.g. living-room, bedroom, kitchen)"</string>
+    <string name="ui_a70c71d4" formatted="false">"Profile not found. Refresh the list."</string>
+    <string name="ui_a3eecc8a" formatted="false">"Profile rejected by the TV"</string>
+    <string name="ui_eeb5ad6b" formatted="false">"Profile deleted. Other profiles and TV settings are preserved."</string>
+    <string name="ui_afa95137" formatted="false">"Profile synchronized"</string>
     <string name="ui_550aa547" formatted="false">"Profile “{profile}” saved, version {revision}. Sent to connected TVs assigned to this profile; others will receive it when returning home."</string>
+    <string name="ui_b5aaf783" formatted="false">"Profile needs to be created"</string>
     <string name="ui_49cef8a" formatted="false">"Plum"</string>
     <string name="ui_fa9bf9b4" formatted="false">"Official release"</string>
     <string name="ui_14049fc0" formatted="false">"Leave editor?"</string>
@@ -716,6 +750,7 @@
     <string name="ui_91b3132b" formatted="false">"Back"</string>
     <string name="ui_e59f76be" formatted="false">"Back to Home cards"</string>
     <string name="ui_bf7e0132" formatted="false">"Back to home"</string>
+    <string name="ui_657a576c" formatted="false">"Return to the home screen for a few seconds, then check this status. Also check that HA and the TV use the same instance and that the integration is loaded."</string>
     <string name="ui_4cacad01" formatted="false">"Back to launcher"</string>
     <string name="ui_a03fa581" formatted="false">"Use the TV\'s local setting"</string>
     <string name="ui_3b2807cb" formatted="false">"Use local tabs"</string>
@@ -773,9 +808,16 @@
     <string name="ui_766a0981" formatted="false">"Delete"</string>
     <string name="ui_4a7af8b" formatted="false">"Delete this element from the draft?"</string>
     <string name="ui_7b5c159" formatted="false">"Delete this card from the draft?"</string>
+    <string name="ui_2496a454" formatted="false">"Permanently delete profile “{profile}” and its history? Profiles still assigned to a TV must be detached first. This does not reset any TV."</string>
     <string name="ui_595c1878" formatted="false">"Delete card?"</string>
+    <string name="ui_435afa1d" formatted="false">"Remove connection"</string>
+    <string name="ui_fe19e04e" formatted="false">"Remove connection “{tv}”? Its profile is preserved. The TV keeps its local display and HA token. If linking remains enabled on the TV, it will reappear on its next connection, without approval. To remove it permanently, first disable “Edit from Home Assistant” on the TV."</string>
+    <string name="ui_7fb52ee4" formatted="false">"Delete profile"</string>
     <string name="ui_56f4e158" formatted="false">"Delete element"</string>
     <string name="ui_b3ccfd64" formatted="false">"On each launcher, open Home Assistant settings → Edit from Home Assistant. Name the TV and enable the connection. Only explicitly linked TVs receive a profile. A TV in standby or another app appears offline; it will sync when returning home."</string>
+    <string name="ui_9a001070" formatted="false">"On the TV: Launcher settings → Home Assistant. Enter your HA HTTPS address and a non-admin user\'s token, then test the connection."</string>
+    <string name="ui_3db38a71" formatted="false">"On the TV: open “Edit from Home Assistant”, name the TV and enable linking. Return to the launcher home screen."</string>
+    <string name="ui_ec77a5d" formatted="false">"Awaiting synchronization"</string>
     <string name="ui_b109683a" formatted="false">"Syncing…"</string>
     <string name="ui_7408511f" formatted="false">"Select on the screen…"</string>
     <string name="ui_4488715e" formatted="false">"ROW TITLE"</string>
@@ -880,6 +922,7 @@
     <string name="ui_be9bf260" formatted="false">"Check the Home button"</string>
     <string name="ui_4fe9c49" formatted="false">"Check for updates"</string>
     <string name="ui_50cf22f3" formatted="false">"Check for new photos"</string>
+    <string name="ui_357541aa" formatted="false">"Check the integration version and this TV\'s pairing in HA. The TV account should not be made an administrator."</string>
     <string name="ui_330df37c" formatted="false">"Check the values and #RRGGBB colors"</string>
     <string name="ui_dbcf315d" formatted="false">"Home Assistant card YAML"</string>
     <string name="ui_d503c488" formatted="false">"Valid YAML, ready to send."</string>
@@ -897,6 +940,7 @@
     <string name="ui_14304a71" formatted="false">"text — free text"</string>
     <string name="ui_ada83347" formatted="false">"shown alongside custom cards"</string>
     <string name="ui_a8c6b990" formatted="false">"{count} card(s)"</string>
+    <string name="ui_15fd31bd" formatted="false">"“Home connected” on the TV means HA data is accessible. It does not confirm the link to this editor: that link must be enabled and approved separately."</string>
     <string name="ui_ff45a981" formatted="false">"Setup required · choose TV Assistant, then Always if Android offers it."</string>
     <string name="ui_36c832b9" formatted="false">"Right"</string>
     <string name="ui_3af9cf45" formatted="false">"Left"</string>
@@ -909,6 +953,20 @@
     <string name="ui_cce7075d" formatted="false">"TV screen"</string>
     <string name="ui_b06918c3" formatted="false">"Edit / import all local YAML"</string>
     <string name="ui_ff11f846" formatted="false">"TV editor"</string>
+    <string name="ui_dc1e2b7a" formatted="false">"TV Assistant editor: HA address changed"</string>
+    <string name="ui_19b3b24e" formatted="false">"TV Assistant editor: paired with another account"</string>
+    <string name="ui_f3eb058b" formatted="false">"TV Assistant editor: no profile received"</string>
+    <string name="ui_14b8ed29" formatted="false">"TV Assistant editor: no response"</string>
+    <string name="ui_ba4683fa" formatted="false">"TV Assistant editor: awaiting approval"</string>
+    <string name="ui_a60a80e" formatted="false">"TV Assistant editor: connection removed in HA"</string>
+    <string name="ui_c3215de3" formatted="false">"TV Assistant editor: registration refused"</string>
+    <string name="ui_48ad7326" formatted="false">"TV Assistant editor: integration missing or not loaded"</string>
+    <string name="ui_18abe822" formatted="false">"TV Assistant editor: linking disabled"</string>
+    <string name="ui_3f12dc59" formatted="false">"TV Assistant editor: waiting to connect"</string>
+    <string name="ui_4e92fc7b" formatted="false">"TV Assistant editor: incompatible profile"</string>
+    <string name="ui_e004517b" formatted="false">"TV Assistant editor: profile received and applied"</string>
+    <string name="ui_72ce2ed" formatted="false">"Editor offline"</string>
+    <string name="ui_cdda0fb5" formatted="false">"Editor connected"</string>
     <string name="ui_f476f380" formatted="false">"Visual editor"</string>
     <string name="ui_d3e1235a" formatted="false">"Visual editor · advanced options are preserved when switching to YAML"</string>
     <string name="ui_19f74e8f" formatted="false">"Edit from Home Assistant"</string>
@@ -920,6 +978,7 @@
     <string name="ui_1cb71b2c" formatted="false">"Free placement"</string>
     <string name="ui_f4160476" formatted="false">"Focus outline width"</string>
     <string name="ui_7968bdfe" formatted="false">"HA connection status"</string>
+    <string name="ui_72f909d2" formatted="false">"Status of both connections"</string>
     <string name="ui_5d903cb5" formatted="false">"Off"</string>
     <string name="ui_5d922ee1" formatted="false">"Stretch"</string>
     <string name="ui_6946ce79" formatted="false">"Stretch to screen"</string>
@@ -927,6 +986,12 @@
     <string name="ui_70af157" formatted="false">"▲  Previous apps"</string>
     <string name="ui_a8c2fafe" formatted="false">"▶  Movie night"</string>
     <string name="ui_80dba333" formatted="false">"○  Turn everything off"</string>
+    <string name="ui_5da54449" formatted="false">"● HA + editor connected"</string>
+    <string name="ui_884ed045" formatted="false">"● HA · linking"</string>
+    <string name="ui_44b3a3ca" formatted="false">"● HA · no profile"</string>
+    <string name="ui_458acc9b" formatted="false">"● HA · awaiting approval"</string>
+    <string name="ui_ee168b95" formatted="false">"● HA · editor disabled"</string>
+    <string name="ui_c0d5ef63" formatted="false">"● HA · editor not linked"</string>
     <string name="ui_81aa5914" formatted="false">"● Home connected"</string>
     <string name="ui_f570cdbf" formatted="false">"● Local mode"</string>
     <string name="ui_4503a542" formatted="false">"⚙  TV settings"</string>

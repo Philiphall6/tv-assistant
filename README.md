@@ -1,5 +1,7 @@
 # TV Assistant
 
+![Logo TV Assistant : une télévision avec sa branche connectée](custom_components/home_assistant_tv/brand/logo.png)
+
 [English](docs/README.en.md) · [Installation](docs/INSTALLATION.md) · [Télécharger l’APK](https://github.com/Philiphall6/tv-assistant/releases) · [Sécurité](SECURITY.md)
 
 [![HACS Default](https://img.shields.io/badge/HACS-Default-blue)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration)

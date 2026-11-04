@@ -63,6 +63,8 @@
     <string name="ui_bcba4e67" formatted="false">"Actions rapides"</string>
     <string name="ui_b78fd3b5" formatted="false">"Actions rapides → cartes"</string>
     <string name="ui_a9046175" formatted="false">"Activer la liaison avec le panneau HA"</string>
+    <string name="ui_81ea7fa9" formatted="false">"Activez la liaison ci-dessous pour faire apparaître cette TV dans l’éditeur HA."</string>
+    <string name="ui_82adfcd2" formatted="false">"Activez la liaison sur la TV puis actualisez cette liste. Aucun jeton ne doit être saisi dans cet éditeur."</string>
     <string name="ui_1df909fb" formatted="false">"Activée"</string>
     <string name="ui_f1de7021" formatted="false">"Actualiser la vue réelle"</string>
     <string name="ui_e101c0b" formatted="false">"Actualiser les connexions"</string>
@@ -183,6 +185,7 @@
     <string name="ui_d5f969b7" formatted="false">"Aucune version plus récente lors de la dernière vérification réussie."</string>
     <string name="ui_f4f29807" formatted="false">"Aucune vérification réussie pour le moment."</string>
     <string name="ui_73b7488e" formatted="false">"Autorisation chauffage"</string>
+    <string name="ui_fbe14f7c" formatted="false">"Autorisation en attente"</string>
     <string name="ui_fdfb765" formatted="false">"Autorisation requise · un administrateur doit affecter un profil à cette TV dans HA"</string>
     <string name="ui_680dce7a" formatted="false">"Autorisations Android"</string>
     <string name="ui_e556a39e" formatted="false">"Autoriser la reprise de lecture"</string>
@@ -231,11 +234,13 @@
     <string name="ui_b4ab6a86" formatted="false">"Cartes natives · éditeur visuel et YAML · états HA en direct, sans page web"</string>
     <string name="ui_2adc4306" formatted="false">"Cartes personnalisées et dashboard natif"</string>
     <string name="ui_67cb003a" formatted="false">"Cartes visibles à l’accueil"</string>
+    <string name="ui_5d2723f5" formatted="false">"Ce profil est encore affecté à une TV. Réaffectez cette TV ou supprimez sa connexion avant de supprimer le profil."</string>
     <string name="ui_8644e687" formatted="false">"Ce profil existe déjà"</string>
     <string name="ui_35a9d175" formatted="false">"Ce système ne propose pas cet écran. Une configuration ADB peut être nécessaire ; aucun changement n’a été effectué."</string>
     <string name="ui_2dd24176" formatted="false">"Certificat HA non valide pour cette adresse. Utilisez son nom HTTPS valide. Retour : Maison"</string>
     <string name="ui_a4c44ce7" formatted="false">"Certificat HA non valide · vérifiez l’adresse HTTPS"</string>
     <string name="ui_423be27b" formatted="false">"Ces réglages concernent uniquement la barre, jamais les cartes."</string>
+    <string name="ui_37f0d97e" formatted="false">"Cet écran affiche le dernier état observé. L’aperçu HA peut être hors ligne pendant que les réglages sont ouverts."</string>
     <string name="ui_15b07313" formatted="false">"Cette touche reste réservée à la navigation ou au système."</string>
     <string name="ui_735df591" formatted="false">"Changer de photo"</string>
     <string name="ui_a9ce061" formatted="false">"Chaque autorisation reste votre choix. Aucun launcher n’est supprimé ou désactivé par l’application."</string>
@@ -298,12 +303,16 @@
     <string name="ui_1ed10db" formatted="false">"Confirmer avant d’envoyer à Assist"</string>
     <string name="ui_b3d5ec57" formatted="false">"Confirmer avant d’exécuter : "</string>
     <string name="ui_93a859" formatted="false">"Confirmer l’envoi au service personnalisé"</string>
+    <string name="ui_d6cf3232" formatted="false">"Conflit : ce profil a changé. Rechargez-le avant de le supprimer."</string>
+    <string name="ui_6cdf3f4b" formatted="false">"Connecter une TV en 3 étapes"</string>
     <string name="ui_e1b5095f" formatted="false">"Connecté"</string>
     <string name="ui_54ec22e6" formatted="false">"Connectée"</string>
     <string name="ui_5c4e506d" formatted="false">"Connectée à l’accueil"</string>
     <string name="ui_2f50b734" formatted="false">"Connexion Home Assistant"</string>
+    <string name="ui_70e5168f" formatted="false">"Connexion TV supprimée. Capture annulée."</string>
     <string name="ui_130d967c" formatted="false">"Connexion en cours…"</string>
     <string name="ui_18f3f034" formatted="false">"Connexion locale effacée"</string>
+    <string name="ui_9fb42242" formatted="false">"Connexion supprimée. Le jeton Home Assistant n’a pas été révoqué."</string>
     <string name="ui_6fe185d6" formatted="false">"Connexion web HA nécessaire · OK pour se connecter"</string>
     <string name="ui_ff7e7d70" formatted="false">"Connexion à Home Assistant en attente"</string>
     <string name="ui_e9447f19" formatted="false">"Connexion, appareils et fonctions de la maison"</string>
@@ -349,8 +358,10 @@
     <string name="ui_c6d7e2b4" formatted="false">"Créez vos cartes dans Home Assistant → Cartes personnalisées et dashboard natif"</string>
     <string name="ui_fcdb89de" formatted="false">"DIAPORAMA"</string>
     <string name="ui_392ee7e1" formatted="false">"Dans HA : Paramètres → Tableaux de bord → Ajouter → Nouveau tableau de bord. Nommez-le TV, ajoutez vos cartes, ouvrez sa vue et copiez seulement le chemin (par exemple /dashboard-tv/tv)."</string>
+    <string name="ui_ef27ecd7" formatted="false">"Dans HA → TV Assistant → Téléviseurs, comparez l’identifiant ci-dessous puis affectez un profil enregistré avec votre compte administrateur."</string>
     <string name="ui_23e0fb69" formatted="false">"Dashboard Maison"</string>
     <string name="ui_831f8d8c" formatted="false">"Demander confirmation au clic"</string>
+    <string name="ui_5482e523" formatted="false">"Dernier contrôle depuis l’accueil : "</string>
     <string name="ui_331636d" formatted="false">"Dernière version APK connue : "</string>
     <string name="ui_d023603d" formatted="false">"Descendre"</string>
     <string name="ui_3448a783" formatted="false">"Descendre "</string>
@@ -366,6 +377,13 @@
     <string name="ui_683c47da" formatted="false">"Disposition des applications"</string>
     <string name="ui_e5cb6de3" formatted="false">"Disposition et textes"</string>
     <string name="ui_6785e0c6" formatted="false">"Disposition, barre fixe, tailles et couleurs"</string>
+    <string name="ui_858f4a2d" formatted="false">"Données HA : adresse HTTPS invalide"</string>
+    <string name="ui_273d9521" formatted="false">"Données HA : adresse ou jeton manquant"</string>
+    <string name="ui_3e5c14e3" formatted="false">"Données HA : connexion en cours"</string>
+    <string name="ui_a18671a5" formatted="false">"Données HA : connexion interrompue ou serveur inaccessible"</string>
+    <string name="ui_1b2c41d9" formatted="false">"Données HA : connexion vérifiée"</string>
+    <string name="ui_fe892459" formatted="false">"Données HA : jeton refusé"</string>
+    <string name="ui_c7f8246e" formatted="false">"Données HA : pas encore vérifiées depuis l’accueil"</string>
     <string name="ui_bf19136d" formatted="false">"Dupliquer"</string>
     <string name="ui_4ece54e6" formatted="false">"DÉMARRAGE"</string>
     <string name="ui_e9fd2e67" formatted="false">"Décochez une application pour la masquer. Les favoris se choisissent par appui long dans l’onglet Applications."</string>
@@ -478,15 +496,19 @@
     <string name="ui_57f58da5" formatted="false">"Horloge dans la barre"</string>
     <string name="ui_a7b9f251" formatted="false">"Hors connexion"</string>
     <string name="ui_40c4d549" formatted="false">"Hors ligne"</string>
+    <string name="ui_3f26f8e8" formatted="false">"Hors ligne signifie que l’éditeur ne reçoit plus la liaison du launcher. La TV peut être en veille, dans une autre application, ou avoir une liaison désactivée/refusée. HA seul ne peut pas déterminer la cause : consultez l’état de liaison sur la TV."</string>
     <string name="ui_94b6f2e9" formatted="false">"Hors ligne · dernières valeurs conservées"</string>
+    <string name="ui_468dad5f" formatted="false">"Ici, avec votre compte administrateur : créez et enregistrez un profil, vérifiez l’identifiant de la TV, choisissez ce profil puis cliquez sur « Affecter ce profil ». Plusieurs TV peuvent partager un profil."</string>
     <string name="ui_4355631" formatted="false">"Icône"</string>
     <string name="ui_5b16d954" formatted="false">"Icône (mdi:lightbulb, mdi:sofa, mdi:weather-sunny…)"</string>
     <string name="ui_d2843903" formatted="false">"Icône de l’onglet (mdi:…)"</string>
     <string name="ui_fd3869af" formatted="false">"Icône mdi:…"</string>
     <string name="ui_82757062" formatted="false">"Icônes"</string>
     <string name="ui_4d977e6f" formatted="false">"Icônes des applications"</string>
+    <string name="ui_6d76cbbd" formatted="false">"Identifiant de cette TV : "</string>
     <string name="ui_c10af083" formatted="false">"Identifiant invalide"</string>
     <string name="ui_27987a7c" formatted="false">"Identifiant unique du profil (ex. chambre, salon, cuisine)"</string>
+    <string name="ui_2fb9edce" formatted="false">"Identifiant à comparer sur la TV : {id}"</string>
     <string name="ui_4ee193b7" formatted="false">"Image personnelle déjà importée sur la TV"</string>
     <string name="ui_e80b40e3" formatted="false">"Image personnelle enregistrée"</string>
     <string name="ui_afeba5cb" formatted="false">"Image réelle de la version appliquée sur la TV."</string>
@@ -505,6 +527,7 @@
     <string name="ui_3f4384e7" formatted="false">"Informations"</string>
     <string name="ui_9a3c6d3a" formatted="false">"Informations sur l’application"</string>
     <string name="ui_3de35ec0" formatted="false">"Installation et autorisations"</string>
+    <string name="ui_c1a4f60f" formatted="false">"Installez TV Assistant via HACS, redémarrez HA puis ajoutez l’intégration dans Paramètres → Appareils et services. Revenez ensuite à l’accueil de la TV."</string>
     <string name="ui_18bb0958" formatted="false">"Installez l’intégration TV Assistant dans HA, puis activez la liaison ici."</string>
     <string name="ui_2e6aa99f" formatted="false">"Interactive (sinon affichage seul)"</string>
     <string name="ui_4d3b52c4" formatted="false">"Interrupteur autorisant le chauffage"</string>
@@ -515,6 +538,7 @@
     <string name="ui_98d11f4" formatted="false">"La barre contient déjà 40 onglets."</string>
     <string name="ui_d911daec" formatted="false">"La configuration a changé pendant l’édition. Revenez puis rouvrez la carte pour ne pas écraser ces changements."</string>
     <string name="ui_f8b30618" formatted="false">"La connexion Home Assistant sera conservée."</string>
+    <string name="ui_25b0beee" formatted="false">"La connexion a été supprimée dans HA. Désactivez la liaison pour rester en mode local, ou revenez à l’accueil puis autorisez à nouveau cette TV dans HA."</string>
     <string name="ui_37d8bf7f" formatted="false">"La dernière publication ne contient pas d’APK stable."</string>
     <string name="ui_d73e4c8d" formatted="false">"La liste complète est lue par pages. Seules les photos à afficher sont téléchargées en taille TV. Le cache remplace les copies les moins récentes. Hors ligne, seules les photos déjà chargées défilent. La synchronisation fonctionne lorsque le launcher est visible et reprend à son ouverture."</string>
     <string name="ui_d87af0da" formatted="false">"La palette est indisponible ; la couleur personnalisée reste utilisable."</string>
@@ -530,6 +554,7 @@
     <string name="ui_b58ee423" formatted="false">"Le brouillon sera remplacé. Rien n’est enregistré avant votre validation."</string>
     <string name="ui_94fc0419" formatted="false">"Le diaporama sera désactivé. Les photos de Google Photos ne seront pas supprimées."</string>
     <string name="ui_98869ebe" formatted="false">"Le fichier HA est actif. Les modifications locales n’effacent pas ce fichier."</string>
+    <string name="ui_a744515b" formatted="false">"Le jeton appartient à un autre compte que celui de l’association initiale. Vérifiez le compte, puis utilisez « Réassocier cette TV » si ce changement est volontaire."</string>
     <string name="ui_e20f0b17" formatted="false">"Le moteur Lovelace de cette version HA n’est pas accessible. Ouvrez un tableau de bord HA puis réessayez."</string>
     <string name="ui_527adae7" formatted="false">"Le panneau n’a pas pu être chargé."</string>
     <string name="ui_2d2589c" formatted="false">"Le profil HA est prioritaire lors de la synchronisation. Pour conserver vos changements, utilisez aussi l’onglet Disposition ou Apparence dans HA."</string>
@@ -538,6 +563,7 @@
     <string name="ui_7eb78bde" formatted="false">"Lecture et validation…"</string>
     <string name="ui_16a693" formatted="false">"Les cartes HA, le menu d’appui long et l’accueil fonctionnent sans cette autorisation. Elle ne remplace pas le launcher par défaut. Ouvrir les réglages Android pour l’autoriser ?"</string>
     <string name="ui_8b4ed51c" formatted="false">"Les changements restent en brouillon jusqu’à l’envoi."</string>
+    <string name="ui_85ba057a" formatted="false">"Les données HA et l’éditeur sont deux liaisons distinctes. Le profil est synchronisé lorsque le launcher est à l’accueil ; une autre application ou la veille peut interrompre l’aperçu."</string>
     <string name="ui_ef94170a" formatted="false">"Les icônes s’adaptent à la place disponible. Réduisez le nombre de colonnes ou de rangées pour les agrandir. Les favoris de l’accueil ne changent pas."</string>
     <string name="ui_2fd39461" formatted="false">"Les modifications non enregistrées seront abandonnées."</string>
     <string name="ui_b361e5cc" formatted="false">"Les photos restent un diaporama natif. L’album est vérifié uniquement lorsque l’accueil est visible. L’image personnelle doit être importée sur chaque TV. Le lien partagé de l’album est stocké dans HA : ne partagez pas l’export YAML publiquement."</string>
@@ -555,6 +581,7 @@
     <string name="ui_3101bb9f" formatted="false">"Luminosité du fond"</string>
     <string name="ui_8667f971" formatted="false">"Lumières du salon"</string>
     <string name="ui_2ed20815" formatted="false">"L’APK et l’intégration HACS se mettent à jour séparément."</string>
+    <string name="ui_5c742247" formatted="false">"L’adresse HA a changé. Vérifiez-la puis mettez à jour la liaison ci-dessous ; ne réassociez pas la TV si le compte n’a pas changé."</string>
     <string name="ui_ee1f9061" formatted="false">"L’ordre des lignes fixe l’ordre des favoris. Une application absente d’une TV est ignorée sur cette TV."</string>
     <string name="ui_88ed883d" formatted="false">"Maison"</string>
     <string name="ui_64ca46e3" formatted="false">"Maison connectée"</string>
@@ -562,6 +589,7 @@
     <string name="ui_e898598d" formatted="false">"Maison éteinte"</string>
     <string name="ui_954f9790" formatted="false">"Masquer"</string>
     <string name="ui_8df51bad" formatted="false">"Masquer les blocs classiques dans le brouillon"</string>
+    <string name="ui_7817f532" formatted="false">"Mettez l’APK à jour et vérifiez le profil dans l’éditeur HA. Le dernier affichage valide est conservé."</string>
     <string name="ui_72f2df17" formatted="false">"Mettre dans la rangée Maison"</string>
     <string name="ui_d1d383eb" formatted="false">"Mettre à jour la liaison"</string>
     <string name="ui_8209d1fa" formatted="false">"Mise en page restaurée"</string>
@@ -664,10 +692,16 @@
     <string name="ui_be62de34" formatted="false">"Priorité"</string>
     <string name="ui_bbc522c8" formatted="false">"Procédure avancée, depuis un ordinateur"</string>
     <string name="ui_8efe2a5c" formatted="false">"Profil"</string>
+    <string name="ui_ee318fa1" formatted="false">"Profil : {profile} · révision appliquée : {revision} · dernière liaison : {date}"</string>
     <string name="ui_3ced65e3" formatted="false">"Profil HA actif : utilisez également le réglage Fond d’écran dans HA pour le synchroniser entre vos TV."</string>
     <string name="ui_ef0936b0" formatted="false">"Profil affecté"</string>
     <string name="ui_3d1ac4d9" formatted="false">"Profil initial (ex. salon, chambre, cuisine)"</string>
+    <string name="ui_a70c71d4" formatted="false">"Profil introuvable. Actualisez la liste."</string>
+    <string name="ui_a3eecc8a" formatted="false">"Profil refusé par la TV"</string>
+    <string name="ui_eeb5ad6b" formatted="false">"Profil supprimé. Les autres profils et les réglages des TV sont conservés."</string>
+    <string name="ui_afa95137" formatted="false">"Profil synchronisé"</string>
     <string name="ui_550aa547" formatted="false">"Profil « {profile} » enregistré, version {revision}. Envoyé aux TV connectées affectées à ce profil ; les autres le recevront au retour à l’accueil."</string>
+    <string name="ui_b5aaf783" formatted="false">"Profil à créer"</string>
     <string name="ui_49cef8a" formatted="false">"Prune"</string>
     <string name="ui_fa9bf9b4" formatted="false">"Publication officielle"</string>
     <string name="ui_14049fc0" formatted="false">"Quitter l’éditeur ?"</string>
@@ -716,6 +750,7 @@
     <string name="ui_91b3132b" formatted="false">"Retour"</string>
     <string name="ui_e59f76be" formatted="false">"Retour aux cartes Maison"</string>
     <string name="ui_bf7e0132" formatted="false">"Retour à l’accueil"</string>
+    <string name="ui_657a576c" formatted="false">"Revenez à l’accueil pendant quelques secondes puis consultez cet état. Vérifiez aussi que HA et la TV utilisent la même instance et que l’intégration est chargée."</string>
     <string name="ui_4cacad01" formatted="false">"Revenir au launcher"</string>
     <string name="ui_a03fa581" formatted="false">"Revenir au réglage local de la TV"</string>
     <string name="ui_3b2807cb" formatted="false">"Revenir aux onglets locaux"</string>
@@ -773,9 +808,16 @@
     <string name="ui_766a0981" formatted="false">"Supprimer"</string>
     <string name="ui_4a7af8b" formatted="false">"Supprimer cet élément du brouillon ?"</string>
     <string name="ui_7b5c159" formatted="false">"Supprimer cette carte du brouillon ?"</string>
+    <string name="ui_2496a454" formatted="false">"Supprimer définitivement le profil « {profile} » et son historique ? Les profils encore affectés à une TV doivent d’abord être détachés. Cette action ne réinitialise aucune TV."</string>
     <string name="ui_595c1878" formatted="false">"Supprimer la carte ?"</string>
+    <string name="ui_435afa1d" formatted="false">"Supprimer la connexion"</string>
+    <string name="ui_fe19e04e" formatted="false">"Supprimer la connexion « {tv} » ? Son profil reste conservé. La TV garde son affichage local et son jeton HA. Si la liaison reste activée sur la TV, elle réapparaîtra à sa prochaine connexion, sans autorisation. Pour un retrait durable, désactivez d’abord « Édition depuis Home Assistant » sur la TV."</string>
+    <string name="ui_7fb52ee4" formatted="false">"Supprimer le profil"</string>
     <string name="ui_56f4e158" formatted="false">"Supprimer l’élément"</string>
     <string name="ui_b3ccfd64" formatted="false">"Sur chaque launcher : Home Assistant → Home Assistant → Édition depuis Home Assistant. Donnez un nom à la TV puis activez la liaison. Seules les TV explicitement reliées reçoivent un profil. Une TV en veille ou dans une autre application apparaît hors ligne ; elle se synchronisera au retour à l’accueil."</string>
+    <string name="ui_9a001070" formatted="false">"Sur la TV : Réglages du launcher → Home Assistant. Saisissez l’adresse HTTPS de votre HA et le jeton d’un utilisateur non administrateur, puis testez la connexion."</string>
+    <string name="ui_3db38a71" formatted="false">"Sur la TV : ouvrez « Édition depuis Home Assistant », donnez un nom à la TV et activez la liaison. Revenez à l’accueil du launcher."</string>
+    <string name="ui_ec77a5d" formatted="false">"Synchronisation en attente"</string>
     <string name="ui_b109683a" formatted="false">"Synchronisation en cours…"</string>
     <string name="ui_7408511f" formatted="false">"Sélectionner dans l’écran…"</string>
     <string name="ui_4488715e" formatted="false">"TITRE DE LA RANGÉE"</string>
@@ -880,6 +922,7 @@
     <string name="ui_be9bf260" formatted="false">"Vérifier le bouton Accueil"</string>
     <string name="ui_4fe9c49" formatted="false">"Vérifier les mises à jour"</string>
     <string name="ui_50cf22f3" formatted="false">"Vérifier les nouveautés"</string>
+    <string name="ui_357541aa" formatted="false">"Vérifiez la version de l’intégration et l’association de cette TV dans HA. Le compte TV ne doit pas devenir administrateur."</string>
     <string name="ui_330df37c" formatted="false">"Vérifiez les valeurs et les couleurs #RRGGBB"</string>
     <string name="ui_dbcf315d" formatted="false">"YAML de la carte Home Assistant"</string>
     <string name="ui_d503c488" formatted="false">"YAML valide, prêt à envoyer."</string>
@@ -897,6 +940,7 @@
     <string name="ui_14304a71" formatted="false">"text — texte libre"</string>
     <string name="ui_ada83347" formatted="false">"visibles avec les cartes personnalisées"</string>
     <string name="ui_a8c6b990" formatted="false">"{count} carte(s)"</string>
+    <string name="ui_15fd31bd" formatted="false">"« Maison connectée » sur la TV signifie que les données HA sont accessibles. Cela ne confirme pas la liaison avec cet éditeur : celle-ci doit être activée et autorisée séparément."</string>
     <string name="ui_ff45a981" formatted="false">"À configurer · choisissez TV Assistant, puis Toujours si Android le propose."</string>
     <string name="ui_36c832b9" formatted="false">"À droite"</string>
     <string name="ui_3af9cf45" formatted="false">"À gauche"</string>
@@ -909,6 +953,20 @@
     <string name="ui_cce7075d" formatted="false">"Écran TV"</string>
     <string name="ui_b06918c3" formatted="false">"Éditer / importer tout le YAML local"</string>
     <string name="ui_ff11f846" formatted="false">"Éditeur TV"</string>
+    <string name="ui_dc1e2b7a" formatted="false">"Éditeur TV Assistant : adresse HA modifiée"</string>
+    <string name="ui_19b3b24e" formatted="false">"Éditeur TV Assistant : association liée à un autre compte"</string>
+    <string name="ui_f3eb058b" formatted="false">"Éditeur TV Assistant : aucun profil reçu"</string>
+    <string name="ui_14b8ed29" formatted="false">"Éditeur TV Assistant : aucune réponse"</string>
+    <string name="ui_ba4683fa" formatted="false">"Éditeur TV Assistant : autorisation en attente"</string>
+    <string name="ui_a60a80e" formatted="false">"Éditeur TV Assistant : connexion supprimée dans HA"</string>
+    <string name="ui_c3215de3" formatted="false">"Éditeur TV Assistant : inscription refusée"</string>
+    <string name="ui_48ad7326" formatted="false">"Éditeur TV Assistant : intégration absente ou non chargée"</string>
+    <string name="ui_18abe822" formatted="false">"Éditeur TV Assistant : liaison désactivée"</string>
+    <string name="ui_3f12dc59" formatted="false">"Éditeur TV Assistant : liaison en attente"</string>
+    <string name="ui_4e92fc7b" formatted="false">"Éditeur TV Assistant : profil incompatible"</string>
+    <string name="ui_e004517b" formatted="false">"Éditeur TV Assistant : profil reçu et appliqué"</string>
+    <string name="ui_72ce2ed" formatted="false">"Éditeur hors ligne"</string>
+    <string name="ui_cdda0fb5" formatted="false">"Éditeur relié"</string>
     <string name="ui_f476f380" formatted="false">"Éditeur visuel"</string>
     <string name="ui_d3e1235a" formatted="false">"Éditeur visuel · les options avancées restent conservées lors du passage en YAML"</string>
     <string name="ui_19f74e8f" formatted="false">"Édition depuis Home Assistant"</string>
@@ -920,6 +978,7 @@
     <string name="ui_1cb71b2c" formatted="false">"Éléments libres"</string>
     <string name="ui_f4160476" formatted="false">"Épaisseur du focus"</string>
     <string name="ui_7968bdfe" formatted="false">"État de la connexion HA"</string>
+    <string name="ui_72f909d2" formatted="false">"État des deux liaisons"</string>
     <string name="ui_5d903cb5" formatted="false">"Éteint"</string>
     <string name="ui_5d922ee1" formatted="false">"Étirer"</string>
     <string name="ui_6946ce79" formatted="false">"Étirer à l’écran"</string>
@@ -927,6 +986,12 @@
     <string name="ui_70af157" formatted="false">"▲  Applications précédentes"</string>
     <string name="ui_a8c2fafe" formatted="false">"▶  Soirée cinéma"</string>
     <string name="ui_80dba333" formatted="false">"○  Tout éteindre"</string>
+    <string name="ui_5da54449" formatted="false">"● HA + éditeur reliés"</string>
+    <string name="ui_884ed045" formatted="false">"● HA · liaison en cours"</string>
+    <string name="ui_44b3a3ca" formatted="false">"● HA · sans profil"</string>
+    <string name="ui_458acc9b" formatted="false">"● HA · à autoriser"</string>
+    <string name="ui_ee168b95" formatted="false">"● HA · éditeur désactivé"</string>
+    <string name="ui_c0d5ef63" formatted="false">"● HA · éditeur non relié"</string>
     <string name="ui_81aa5914" formatted="false">"● Maison connectée"</string>
     <string name="ui_f570cdbf" formatted="false">"● Mode local"</string>
     <string name="ui_4503a542" formatted="false">"⚙  Paramètres TV"</string>

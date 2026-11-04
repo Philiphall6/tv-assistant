@@ -40,7 +40,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             tasks=self.tasks[:];self.tasks.clear();await asyncio.gather(*tasks)
 
     async def test_actual_decorators_deny_non_admin_writes(self):
-        for handler in (component.ws_save,component.ws_restore,component.ws_assign,component.ws_list,component.ws_get,component.ws_validate,component.ws_preview,component.ws_parse_card):
+        for handler in (component.ws_save,component.ws_restore,component.ws_assign,component.ws_list,component.ws_get,component.ws_validate,component.ws_preview,component.ws_parse_card,component.ws_delete_profile,component.ws_forget_device):
             with self.subTest(handler=handler.__name__),self.assertRaises(Unauthorized):
                 handler(self.hass,Connection(False),{"id":1})
         self.assertFalse(self.repo.data["profiles"])
@@ -67,16 +67,27 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_setup_static_panel_registration_and_reload(self):
         commands=[]
-        with patch.object(component,"Store",return_value=self.store),patch.object(component.websocket_api,"async_register_command",side_effect=lambda h,c:commands.append(c)),patch.object(component.panel_custom,"async_register_panel",new_callable=AsyncMock) as panel,patch.object(component.frontend,"async_remove_panel"):
+        modules=component.frontend.UrlManager(lambda *args:None,[])
+        self.hass.data[component.frontend.DATA_EXTRA_MODULE_URL]=modules
+        with patch.object(component,"async_get_integration",new_callable=AsyncMock,return_value=SimpleNamespace(version="9.8.7")),patch.object(component,"Store",return_value=self.store),patch.object(component.websocket_api,"async_register_command",side_effect=lambda h,c:commands.append(c)),patch.object(component.panel_custom,"async_register_panel",new_callable=AsyncMock) as panel,patch.object(component.frontend,"async_remove_panel"):
             self.assertTrue(await component.async_setup_entry(self.hass,SimpleNamespace()))
-            self.assertEqual(len(commands),12)
+            self.assertEqual(len(commands),14)
             self.assertTrue(panel.call_args_list[0].kwargs["require_admin"])
+            self.assertEqual(panel.call_args_list[0].kwargs["sidebar_icon"],"tv-assistant:logo")
+            self.assertEqual(panel.call_args_list[0].kwargs["config"],{"integration_version":"9.8.7"})
+            self.assertEqual(panel.call_args_list[0].kwargs["module_url"],"/home_assistant_tv/panel.js?v=9.8.7")
+            self.assertEqual(modules.urls,{"/home_assistant_tv/icons.js?v=9.8.7"})
             self.assertFalse(panel.call_args_list[1].kwargs["require_admin"])
             self.assertNotIn("sidebar_title",panel.call_args_list[1].kwargs)
-            self.assertEqual(len(self.hass.http.async_register_static_paths.call_args.args[0]),4)
+            paths=self.hass.http.async_register_static_paths.call_args.args[0]
+            self.assertEqual(len(paths),6)
+            self.assertTrue(all(Path(path.path).is_file() for path in paths))
             self.assertTrue(await component.async_unload_entry(self.hass,None))
+            self.assertFalse(modules.urls)
             self.assertTrue(await component.async_setup_entry(self.hass,None))
-            self.assertEqual(len(commands),12)
+            self.assertEqual(len(commands),14)
+            self.hass.http.async_register_static_paths.assert_awaited_once()
+            self.assertEqual(modules.urls,{"/home_assistant_tv/icons.js?v=9.8.7"})
 
     async def test_renderer_owner_or_admin_and_no_native_ack_or_online_status(self):
         await self.repo.register("tv1","TV","salon","test-user",self.cfg,[])
@@ -104,6 +115,25 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         await self.call(component.ws_parse_card,admin,yaml="type: custom:button-card\nname: PAC\nstate_display: '[[[ return 42; ]]]'")
         self.assertFalse(admin.errors)
         self.assertEqual(admin.results[-1][1]["lovelace"]["state_display"],"[[[ return 42; ]]]")
+
+    async def test_admin_forget_removes_subscriptions_and_blocks_late_ack(self):
+        tv=Connection(False);admin=Connection();renderer=Connection(False)
+        await self.call(component.ws_subscribe,tv,device_id="tv1",name="TV",profile="salon",config=self.cfg,apps=[])
+        await self.call(component.ws_save,admin,profile="salon",title="Salon",revision=0,config=self.cfg)
+        await self.call(component.ws_assign,admin,device_id="tv1",profile="salon",name="TV")
+        await self.call(component.ws_render_subscribe,renderer,device_id="tv1")
+        await self.call(component.ws_delete_profile,admin,profile="salon",revision=1)
+        self.assertTrue(admin.errors);admin.errors.clear()
+        await self.call(component.ws_forget_device,admin,device_id="tv1")
+        self.assertFalse(admin.errors)
+        self.assertFalse(tv.subscriptions);self.assertFalse(renderer.subscriptions)
+        self.assertTrue(tv.events[-1][1]["connection_removed"])
+        self.assertEqual(renderer.events[-1][1]["cards"],[])
+        await self.call(component.ws_ack,tv,profile="salon",revision=1)
+        self.assertTrue(tv.errors)
+        await self.call(component.ws_delete_profile,admin,profile="salon",revision=1)
+        self.assertNotIn("salon",self.repo.data["profiles"])
+        self.assertFalse(admin.errors)
 
     async def test_preview_requires_registered_tv_and_admin(self):
         await self.call(component.ws_preview_result,Connection(False),request_id="x",image="",width=0,height=0,error="unavailable")

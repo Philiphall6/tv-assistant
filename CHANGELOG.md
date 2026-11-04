@@ -1,5 +1,18 @@
 # Versions
 
+## Intégration 0.7.4 / Android 2.13.7
+
+- Logo TV Assistant dans le menu latéral de Home Assistant, chargé sur toutes les pages et adapté à la couleur du thème.
+- Icône officielle dans l’en-tête de l’éditeur et logo dans les présentations française et anglaise de GitHub/HACS.
+- Version de l’éditeur issue de l’intégration chargée, au lieu de l’ancien texte fixe « 0.7.1 ».
+- Documentation HACS par défaut et bouton d’installation inclus dans cette version publiée.
+- Visuels locaux fournis pour les pages d’intégration HA et les clients compatibles. HACS 2.0.5 ne lit pas encore les logos locaux dans sa liste : cette limitation externe n’est pas contournée en modifiant HACS.
+- Suppression confirmée des profils inutilisés et des connexions TV, réservée aux administrateurs. Les profils encore affectés à une TV sont protégés ; une TV supprimée doit être autorisée de nouveau si elle se reconnecte.
+- Parcours de connexion en trois étapes et états distincts pour les données HA, la liaison de l’éditeur, l’autorisation et la synchronisation du profil.
+- Sur la TV, indication explicite d’une liaison inactive, d’une intégration absente, d’un changement de compte, d’une autorisation en attente ou d’un profil incompatible, avec aide et date du dernier contrôle.
+
+Aucune suppression automatique ni révocation de jeton. Les profils et réglages existants sont conservés lors de la mise à jour.
+
 ## Intégration 0.7.3 / Android 2.13.6
 
 - Nouvel écran **Mises à jour et diagnostic** : vérification de la version de l’APK dans les publications stables officielles, option quotidienne désactivée par défaut et indication d’une version disponible. Aucun téléchargement ni installation automatique.

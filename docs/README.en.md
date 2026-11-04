@@ -1,5 +1,7 @@
 # TV Assistant
 
+![TV Assistant logo: a television with a connected branch](../custom_components/home_assistant_tv/brand/logo.png)
+
 [Français](../README.md) · [Releases and signed APK](https://github.com/Philiphall6/tv-assistant/releases) · [Security](../SECURITY.md)
 
 [![HACS Default](https://img.shields.io/badge/HACS-Default-blue)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Philiphall6&repository=tv-assistant&category=integration)
@@ -43,6 +45,12 @@ TV Assistant is available in the **default HACS catalog**. [HACS must already be
 New TVs cannot read a profile before an administrator assigns one. One profile can serve multiple TVs, or each TV can have a separate profile. See the [installation and rollback guide](INSTALLATION.md) for default-home setup and optional permissions.
 
 The button does not install anything automatically: you still confirm the download and restart. It contains no personal address or token.
+
+### Connection status and removal
+
+HA data access and the TV Assistant editor are separate connections. In the TV's **Edit from Home Assistant** settings, both statuses, the last check time and the next step are displayed. Enable linking on the TV, return to its home screen, then use your administrator account in **TV Assistant → TVs** to compare the identifier and assign a saved profile. An offline preview can also mean the TV is asleep, displaying another app or showing its settings.
+
+**Delete profile** requires confirmation and refuses profiles still assigned to a TV, including an offline TV. **Remove connection** forgets that pairing and stops its profile/card streams; it preserves the profile, other TVs and the TV's local display. It does not revoke the HA token. Disable linking on the TV first for permanent removal; otherwise it may reappear on reconnect and will require fresh administrator approval. Revoke the token separately in the HA account's security settings if its HA access must also end.
 
 ## Features and limits
 

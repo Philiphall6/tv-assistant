@@ -35,6 +35,17 @@ with sync_playwright() as p:
         print("Browser errors:",errors)
         print(page.evaluate("document.querySelector('home-assistant-tv-panel').shadowRoot.textContent.slice(-4000)"))
         raise
+    # HA supplies the installed integration version; there is no stale literal.
+    version=json.loads((root/"custom_components/home_assistant_tv/manifest.json").read_text())["version"]
+    assert page.get_by_text("Éditeur TV",exact=True).count()==1
+    page.evaluate("v=>document.querySelector('home-assistant-tv-panel').panel={config:{integration_version:v}}",version)
+    assert page.get_by_text("Éditeur TV · "+version,exact=True).count()==1
+    page.wait_for_function("() => document.querySelector('home-assistant-tv-panel').shadowRoot.querySelector('.brand-icon').naturalWidth===256")
+    assert page.locator(".brand-icon").bounding_box()["width"]==40
+    page.get_by_label("Nom du profil",exact=True).focus()
+    page.evaluate("v=>document.querySelector('home-assistant-tv-panel').panel={config:{integration_version:v}}",version)
+    assert page.get_by_label("Nom du profil",exact=True).evaluate("e=>e===e.getRootNode().activeElement")
+    page.screenshot(path="/tmp/tv-assistant-brand-header.png",full_page=True)
     page.get_by_role("button",name="Apparence",exact=True).click()
     page.get_by_label("Texte d’accueil",exact=True).fill("Mon salon personnalisé")
     page.get_by_label("Réglages à modifier",exact=True).select_option("Icônes des applications")

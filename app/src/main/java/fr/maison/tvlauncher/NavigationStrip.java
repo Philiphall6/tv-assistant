@@ -32,7 +32,7 @@ final class NavigationStrip {
         float size=layout.number("nav_logo_size",50,32,76)*scale,outer=16*scale,between=12*scale;
         float brandMin=size+16*scale,brandFull=brandMin+12*scale+textWidth(BRAND_TEXT,20*scale,true);
         float clockWidth=showClock?Math.max(textWidth("88:88",clockSize,true),textWidth(I18n.clockSample(),clockSize,true))+8*scale:0;
-        float statusWidth=showStatus?Math.max(textWidth(I18n.t("● Maison connectée"),statusSize,false),textWidth(I18n.t("● Mode local"),statusSize,false))+4*scale:0;
+        float statusWidth=showStatus?Math.max(textWidth(LinkStatus.summary(prefs,true),statusSize,false),textWidth(I18n.t("● Mode local"),statusSize,false))+4*scale:0;
         float infoFull=Math.max(clockWidth,statusWidth),infoMin=clockWidth+(showStatus?(showClock?20:12)*scale:0);
         float[] widths=new float[config.items.size()],heights=new float[widths.length];float total=0;
         for(int i=0;i<widths.length;i++){

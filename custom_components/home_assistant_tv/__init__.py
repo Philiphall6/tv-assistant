@@ -10,6 +10,7 @@ from homeassistant.components.http import StaticPathConfig
 from homeassistant.core import callback
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers import config_validation as cv
+from homeassistant.loader import async_get_integration
 
 from .model import SCHEMA, ProfileError, as_yaml, parse_yaml, parse_card_yaml, profile_id, require, validate
 from .repository import Repository
@@ -25,6 +26,9 @@ async def async_setup(hass, config):
 
 
 async def async_setup_entry(hass, entry):
+    integration = await async_get_integration(hass, DOMAIN)
+    version = integration.version
+    icons_url = f"/home_assistant_tv/icons.js?v={version}"
     store = Store(hass, 1, DOMAIN)
     repository = Repository(store, await store.async_load())
     hass.data[DOMAIN] = repository
@@ -33,13 +37,19 @@ async def async_setup_entry(hass, entry):
             StaticPathConfig("/home_assistant_tv/panel.js", str(Path(__file__).with_name("panel.js")), False),
             StaticPathConfig("/home_assistant_tv/cards.js", str(Path(__file__).with_name("cards.js")), False),
             StaticPathConfig("/home_assistant_tv/localize.js", str(Path(__file__).with_name("localize.js")), False),
-            StaticPathConfig("/home_assistant_tv/ui-catalog.js", str(Path(__file__).with_name("ui-catalog.js")), False)])
-        for command in (ws_list, ws_get, ws_validate, ws_save, ws_restore, ws_assign, ws_subscribe, ws_ack, ws_preview, ws_preview_result, ws_parse_card, ws_render_subscribe):
+            StaticPathConfig("/home_assistant_tv/ui-catalog.js", str(Path(__file__).with_name("ui-catalog.js")), False),
+            StaticPathConfig("/home_assistant_tv/icons.js", str(Path(__file__).with_name("icons.js")), False),
+            StaticPathConfig("/home_assistant_tv/brand-icon.svg", str(Path(__file__).parent / "brand" / "icon.svg"), False)])
+        for command in (ws_list, ws_get, ws_validate, ws_save, ws_restore, ws_assign, ws_subscribe, ws_ack, ws_preview, ws_preview_result, ws_parse_card, ws_render_subscribe, ws_delete_profile, ws_forget_device):
             websocket_api.async_register_command(hass, command)
         hass.data[DOMAIN + "_registered"] = True
+    # Load the icon on every HA page, not only after opening the TV editor.
+    frontend.add_extra_js_url(hass, icons_url)
+    hass.data[DOMAIN + "_icons_url"] = icons_url
     await panel_custom.async_register_panel(hass, PANEL, "home-assistant-tv-panel",
-        sidebar_title="TV Assistant", sidebar_icon="mdi:television-dashboard",
-        module_url="/home_assistant_tv/panel.js?v=0.7.3", require_admin=True)
+        sidebar_title="TV Assistant", sidebar_icon="tv-assistant:logo",
+        module_url=f"/home_assistant_tv/panel.js?v={version}",
+        config={"integration_version": version}, require_admin=True)
     await panel_custom.async_register_panel(hass, CARDS_PANEL, "home-assistant-tv-cards",
         module_url="/home_assistant_tv/cards.js?v=0.7.1", require_admin=False)
     return True
@@ -51,6 +61,8 @@ async def async_unload_entry(hass, entry):
         repository.close()
     frontend.async_remove_panel(hass, PANEL)
     frontend.async_remove_panel(hass, CARDS_PANEL)
+    if icons_url := hass.data.pop(DOMAIN + "_icons_url", None):
+        frontend.remove_extra_js_url(hass, icons_url)
     return True
 
 
@@ -193,6 +205,32 @@ async def ws_subscribe(hass, connection, msg):
         result(connection, msg, None)
         send(r.device_snapshot(msg["device_id"]))
     except (ValueError, TypeError, OverflowError) as err:
+        failure(connection, msg, err)
+
+
+@websocket_api.websocket_command({vol.Required("type"): DOMAIN + "/delete_profile",
+    vol.Required("profile"): str, vol.Required("revision"): int})
+@websocket_api.require_admin
+@websocket_api.async_response
+async def ws_delete_profile(hass, connection, msg):
+    try:
+        await repo(hass).delete_profile(msg["profile"], msg["revision"])
+        result(connection, msg, None)
+    except ProfileError as err:
+        failure(connection, msg, err)
+
+
+@websocket_api.websocket_command({vol.Required("type"): DOMAIN + "/forget_device",
+    vol.Required("device_id"): str})
+@websocket_api.require_admin
+@websocket_api.async_response
+async def ws_forget_device(hass, connection, msg):
+    try:
+        detached = await repo(hass).forget_device(msg["device_id"])
+        for subscriber, subscription_id in detached:
+            subscriber.subscriptions.pop(subscription_id, None)
+        result(connection, msg, None)
+    except ProfileError as err:
         failure(connection, msg, err)
 
 
